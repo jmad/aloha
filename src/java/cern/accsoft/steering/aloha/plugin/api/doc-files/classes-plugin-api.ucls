@@ -1,0 +1,146 @@
+<class-diagram version="0.9.86" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.ReaderProvider" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/ReaderProvider.java" binary="false">    
+    <position x="95" y="107" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.AbstractAlohaPlugin" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/AbstractAlohaPlugin.java" binary="false">    
+    <position x="593" y="45" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.AnalyzerFactory" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/AnalyzerFactory.java" binary="false">    
+    <position x="551" y="181" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.DisplaySetFactory" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/DisplaySetFactory.java" binary="false">    
+    <position x="481" y="245" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.plugin.api.SolverConfigPanelFactory" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/SolverConfigPanelFactory.java" 
+    binary="false">    
+    <position x="588" y="116" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false">    
+    <position x="321" y="42" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.AlgorithmFactory" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/AlgorithmFactory.java" binary="false">    
+    <position x="136" y="182" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="cern.accsoft.steering.aloha.plugin.api.SolverProvider" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/SolverProvider.java" binary="false">    
+    <position x="338" y="195" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactory" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/api/SensitivityMatrixContributorFactory.java" 
+    binary="false">    
+    <position x="191" y="266" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.SolverProvider" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/SolverProvider.java" binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlgorithmFactory" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlgorithmFactory.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactory" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/SensitivityMatrixContributorFactory.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AnalyzerFactory" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AnalyzerFactory.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.ReaderProvider" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/ReaderProvider.java" binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.SolverConfigPanelFactory" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/SolverConfigPanelFactory.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.DisplaySetFactory" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/DisplaySetFactory.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AbstractAlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AbstractAlohaPlugin.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" name="cern.accsoft.steering.aloha.plugin.api.AlohaPlugin" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/api/AlohaPlugin.java" binary="false"/>  
+  </realization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false"/>    
+    <operations public="false" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+	<product name="accmodel-aloha-gui" version="0.2.0"
+		directory="accmodel/aloha/accmodel-aloha-gui">
+		<dependencies>
+			<dep product="spring" />
+			<dep product="jama" />
+			<dep product="jdataviewer" />
+			<dep product="log4j" />
+			<dep product="accsoft-gui-frame" />
+			<dep product="accsoft-commons-io" />
+			<dep product="commons-cli" version="PRO" />
+			<dep product="commons-beanutils" />
+			<dep product="commons-collections" />
+			<dep product="commons-digester" />
+			<dep product="commons-logging" />
+			<dep product="accsoft-steering-commons" />
+			<dep product="accmodel-jmad-core" />
+			<dep product="accmodel-jmad-gui-nomodels" />
+			<!-- <dep product="accmodel-jmad-models-default" /> -->
+			<dep product="accmodel-jmad-models-lsa" />
+			<dep product="accmodel-jmad-models-sps" />
+			<!-- <dep product="accmodel-jmad-models-ptc" /> -->
+			<!-- <dep product="jdom" /> -->
+
+			<dep product="junit" local="true" />
+			<dep product="easymock" local="true" />
+			<dep product="easymock-class-ext" local="true" />
+		</dependencies>
+		<application name="accmodel-aloha-gui" title="aloha - response analysis">
+			<initial-heap-size>100m</initial-heap-size>
+			<max-heap-size>1024m</max-heap-size>
+			<java-vm-args>-Dcom.sun.management.jmxremote</java-vm-args>
+			<java-vm-args>-Dcern.jmad.gui.edit.cmd=nedit</java-vm-args>
+			<main-class name="cern.accsoft.steering.aloha.Aloha">
+				<arg>--input-path=/user/slops/data/SPS_DATA/OP_DATA/steering</arg>
+				<arg>--output-path=/user/slops/data/SPS_DATA/OP_DATA/aloha</arg>
+			</main-class>
+		</application>
+		<application name="accmodel-aloha-gui-rdebug" title="aloha - response analysis">
+			<initial-heap-size>100m</initial-heap-size>
+			<max-heap-size>1024m</max-heap-size>
+			<java-vm-args>-Xdebug;-Xrunjdwp:transport=dt_socket,address=1044,server=y,suspend=y
+			</java-vm-args>
+			<main-class name="cern.accsoft.steering.aloha.Aloha">
+				<arg>--input-path=/user/slops/data/SPS_DATA/OP_DATA/steering</arg>
+				<arg>--output-path=/user/slops/data/SPS_DATA/OP_DATA/aloha</arg>
+			</main-class>
+		</application>
+	</product>
+</products>

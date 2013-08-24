@@ -1,0 +1,32 @@
+\typeout{**                                           }
+\typeout{** Document Style `kftools'                  }
+\typeout{** by kf                                     }
+\typeout{**                                           }
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kftools}
+%
+\RequirePackage{graphicx}
+\RequirePackage{amsmath}
+
+%
+% include eps-file und Latex - ersetzungen dazu
+\newcommand{\insfig}[2]{
+	\begin{figure}[hbpt]
+		\begin{center}
+    \includegraphics{./figures/#1.eps}
+    \caption{#2}
+		\label{fig:#1}
+		\end{center}
+\end{figure}
+}
+
+% macros for references:
+\newcommand{\figref}[1]{Fig.\thinspace\ref{fig:#1}}
+\newcommand{\eqnref}[1]{Eq.\thinspace\eqref{eq:#1}}
+\newcommand{\eqsref}[1]{Eqs.\thinspace\eqref{eq:#1}}
+\newcommand{\charef}[1]{Chap.\thinspace\ref{cha:#1}}
+\newcommand{\appref}[1]{App.\thinspace\ref{sec:#1}}
+\newcommand{\appcref}[1]{App.\thinspace\ref{cha:#1}}
+\newcommand{\secref}[1]{Sec.\thinspace\ref{sec:#1}}
+\newcommand{\tabref}[1]{Table \ref{tab:#1}}

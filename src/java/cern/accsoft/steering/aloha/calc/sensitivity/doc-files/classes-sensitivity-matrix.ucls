@@ -1,0 +1,151 @@
+<class-diagram version="0.9.86" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixManager.java" 
+    binary="false">    
+    <position x="97" y="28" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixManagerImpl.java" 
+    binary="false">    
+    <position x="93" y="105" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributor.java" 
+    binary="false">    
+    <position x="673" y="49" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorStateImpl" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorStateImpl.java" 
+    binary="false">    
+    <position x="396" y="141" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorState" project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorState.java" 
+    binary="false">    
+    <position x="395" y="52" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.plugin.kickresp.sensitivity.KickResponseSensitivityMatrixContributor" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/kickresp/sensitivity/KickResponseSensitivityMatrixContributor.java" 
+    binary="false">    
+    <position x="672" y="219" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="cern.accsoft.steering.aloha.plugin.disp.sensitivity.DispersionSensitivityMatrixContributor" 
+    project="accmodel-aloha-gui" 
+    file="/accmodel-aloha-gui/src/java/cern/accsoft/steering/aloha/plugin/disp/sensitivity/DispersionSensitivityMatrixContributor.java" 
+    binary="false">    
+    <position x="832" y="153" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <realization>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.plugin.disp.sensitivity.DispersionSensitivityMatrixContributor" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/disp/sensitivity/DispersionSensitivityMatrixContributor.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributor.java" 
+      binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixManagerImpl.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixManager.java" 
+      binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorStateImpl" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorStateImpl.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorState" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorState.java" 
+      binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.plugin.kickresp.sensitivity.KickResponseSensitivityMatrixContributor" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/plugin/kickresp/sensitivity/KickResponseSensitivityMatrixContributor.java" 
+      binary="false"/>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributor.java" 
+      binary="false"/>  
+  </realization>  
+  <association>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixManagerImpl.java" 
+      binary="false" navigable="false">      
+      <attribute name="contributorStates"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorState" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorState.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorStateImpl" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributorStateImpl.java" 
+      binary="false" navigable="false">      
+      <attribute name="contributor">        
+        <position x="509" y="62" width="56" height="14"/>      
+      </attribute>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="accsoft-steering-aloha" 
+      name="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor" 
+      file="/accsoft-steering-aloha/src/java/cern/accsoft/steering/aloha/calc/sensitivity/SensitivityMatrixContributor.java" 
+      binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false"/>    
+    <operations public="false" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -1,0 +1,13 @@
+#TeXlipse project settings
+#Wed Jan 07 16:02:44 CET 2009
+builderNum=0
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=dvi
+tempDir=tmp
+mainTexFile=aloha-manual.tex
+outputFile=aloha-manual.dvi
+langSpell=en
+markDer=true
+srcDir=
