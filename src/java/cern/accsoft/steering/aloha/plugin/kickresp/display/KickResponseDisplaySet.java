@@ -380,7 +380,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveMonitor(int number, Monitor monitor) {
                     dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.name + " (measured)");
+                    dataSet.setName("Monitor: " + monitor.getName() + " (measured)");
                 }
 
                 @Override
@@ -446,7 +446,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveMonitor(int number, Monitor monitor) {
                     dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.name + " (model)");
+                    dataSet.setName("Monitor: " + monitor.getName() + " (model)");
                 }
 
                 @Override
@@ -464,7 +464,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveMonitor(int number, Monitor monitor) {
                     dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.name);
+                    dataSet.setName("Monitor: " + monitor.getName());
                 }
 
                 @Override
@@ -495,7 +495,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveCorrector(int number, Corrector corrector) {
                     dataSet.setColumn(number);
-                    dataSet.setName("Corrector: " + corrector.name);
+                    dataSet.setName("Corrector: " + corrector.getName());
                 }
 
                 @Override
@@ -524,7 +524,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveMonitor(int number, Monitor monitor) {
                     dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.name);
+                    dataSet.setName("Monitor: " + monitor.getName());
                 }
 
                 @Override
@@ -556,7 +556,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                 @Override
                 public void changedActiveCorrector(int number, Corrector corrector) {
                     dataSet.setColumn(number);
-                    dataSet.setName("Corrector: " + corrector.name);
+                    dataSet.setName("Corrector: " + corrector.getName());
                 }
 
                 @Override
@@ -779,7 +779,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         public void changedActiveCorrector(int number, Corrector corrector) {
             if (MatrixDsType.COLUMN.equals(dataSet.getType())) {
                 dataSet.setFixedIndex(number);
-                dataSet.setName("corrector: " + corrector.name);
+                dataSet.setName("corrector: " + corrector.getName());
             }
         }
 
@@ -787,7 +787,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         public void changedActiveMonitor(int number, Monitor monitor) {
             if (MatrixDsType.ROW.equals(dataSet.getType())) {
                 dataSet.setFixedIndex(number);
-                dataSet.setName("monitor: " + monitor.name);
+                dataSet.setName("monitor: " + monitor.getName());
             }
         }
 
@@ -977,7 +977,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         @Override
         public void changedActiveCorrector(int number, Corrector corrector) {
             dataSet.setColumn(number);
-            dataSet.setName("Corrector: " + corrector.name);
+            dataSet.setName("Corrector: " + corrector.getName());
         }
 
         @Override

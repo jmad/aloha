@@ -131,14 +131,14 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                     /* do we get values from both files? */
                     CorrectorValue correctorValueMinus = dataMinus.getCorrectorValue(corrector.getKey());
                     if (correctorValueMinus == null) {
-                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.name
-                                + "' found in minus file for corrector '" + activeCorrector.name + "'!");
+                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.getName()
+                                + "' found in minus file for corrector '" + activeCorrector.getName() + "'!");
                     }
 
                     CorrectorValue correctorValuePlus = dataPlus.getCorrectorValue(corrector.getKey());
                     if (correctorValueMinus == null) {
-                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.name
-                                + "' found in plus file for corrector '" + activeCorrector.name + "'!");
+                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.getName()
+                                + "' found in plus file for corrector '" + activeCorrector.getName() + "'!");
                     }
 
                     /* for the moment lets keep microrad. */
@@ -146,10 +146,10 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                     if (Math.abs(deltaKick) > DELTA_KICK_LIMIT) {
                         /* only one corrector is allowed to kick in one file! */
                         if (correctorKick == 0) {
-                            if (!activeCorrector.name.equals(corrector.name)) {
+                            if (!activeCorrector.getName().equals(corrector.getName())) {
                                 throw new InconsistentDataException("The corrector with nonzero kick ("
-                                        + corrector.name + ")does not correspond to the corrector in the filename("
-                                        + activeCorrector.name + ")!");
+                                        + corrector.getName() + ")does not correspond to the corrector in the filename("
+                                        + activeCorrector.getName() + ")!");
                             }
                             correctorKick = deltaKick;
                         } else {
@@ -193,7 +193,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                         /*
                          * we determine the plane from the plus-value
                          */
-                        Plane plane = monitor.plane;
+                        Plane plane = monitor.getPlane();
                         if ((monitorValuePlus != null) && (monitorValueMinus != null)) {
 
                             /*
@@ -264,7 +264,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
 
         for (int i = 0; i < responseMatrix.getRowDimension(); i++) {
             for (int j = 0; j < responseMatrix.getColumnDimension(); j++) {
-                if (activeCorrectors.get(j).plane != workingMonitors.get(i).plane) {
+                if (activeCorrectors.get(j).getPlane() != workingMonitors.get(i).getPlane()) {
                     responseMatrix.set(i, j, 0);
                 }
             }

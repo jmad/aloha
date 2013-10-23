@@ -3,140 +3,154 @@ package cern.accsoft.steering.aloha.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.ElementKeyUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.Status;
 
 public abstract class AbstractMachineElement {
 
-	private boolean active = true;
+    private boolean active = true;
 
-	public String name = null;
-	public Plane plane = null;
-	public double position = 0;
+    private final String name;
+    private final Plane plane;
+    private final BeamNumber beamNumber;
+    public double position = 0;
 
-	private double initialGain = 1;
+    private double initialGain = 1;
 
-	private double gain = initialGain;
-	private double gainError = 0.0;
+    private double gain = initialGain;
+    private double gainError = 0.0;
 
-	private Status status = Status.OK;
+    private Status status = Status.OK;
 
-	/** the listeners to the elements */
-	private List<MachineElementListener> listeners = new ArrayList<MachineElementListener>();
+    /** the listeners to the elements */
+    private List<MachineElementListener> listeners = new ArrayList<MachineElementListener>();
 
-	public AbstractMachineElement() {
-		super();
-	}
+    public AbstractMachineElement(String name, Plane plane) {
+        this.name = name;
+        this.plane = plane;
+        this.beamNumber = getBeamNumber(name);
+    }
 
-	@Override
-	public String toString() {
-		return getKey();
-	}
+    private BeamNumber getBeamNumber(String name) {
+        BeamNumber number = BeamNumber.fromElementName(name);
+        if (number == null) {
+            return BeamNumber.BEAM_1;
+        }
+        return number;
+    }
 
-	public String getKey() {
-		return ElementKeyUtil.composeKey(this.name, this.plane);
-	}
+    @Override
+    public String toString() {
+        return getKey();
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    public String getKey() {
+        return ElementKeyUtil.composeKey(this.name, this.plane, this.beamNumber);
+    }
 
-	public void setActive(boolean value) {
-		this.active = value;
-		/* when an element becomes inactive we reset the gain, just to clean up. */
-		if (!this.active) {
-			this.resetGain();
-		}
-		fireChangedActiveState();
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	public Status getStatus() {
-		return status;
-	}
+    public void setActive(boolean value) {
+        this.active = value;
+        /* when an element becomes inactive we reset the gain, just to clean up. */
+        if (!this.active) {
+            this.resetGain();
+        }
+        fireChangedActiveState();
+    }
 
-	public void setStatus(Status status) {
-		this.status = status;
-		/* per default we deactivate defect elements */
-		if (!isOk()) {
-			active = false;
-		}
-	}
+    public Status getStatus() {
+        return status;
+    }
 
-	public boolean isOk() {
-		return (status == Status.OK);
-	}
+    public void setStatus(Status status) {
+        this.status = status;
+        /* per default we deactivate defect elements */
+        if (!isOk()) {
+            active = false;
+        }
+    }
 
-	public double getInitialGain() {
-		return initialGain;
-	}
+    public boolean isOk() {
+        return (status == Status.OK);
+    }
 
-	public void setInitialGain(double initialGain) {
-		this.initialGain = initialGain;
-	}
+    public double getInitialGain() {
+        return initialGain;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setInitialGain(double initialGain) {
+        this.initialGain = initialGain;
+    }
 
-	/**
-	 * notify all listeners, that the active-state changed
-	 */
-	private void fireChangedActiveState() {
-		for (MachineElementListener listener : listeners) {
-			listener.changedActiveState(this);
-		}
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * notify all listeners that the gain changed
-	 */
-	private void fireChangedGain() {
-		for (MachineElementListener listener : listeners) {
-			listener.changedGain(this);
-		}
-	}
+    /**
+     * notify all listeners, that the active-state changed
+     */
+    private void fireChangedActiveState() {
+        for (MachineElementListener listener : listeners) {
+            listener.changedActiveState(this);
+        }
+    }
 
-	/**
-	 * adds a listener to the {@link AbstractMachineElement}
-	 * 
-	 * @param listener
-	 *            the listener to add
-	 */
-	public void addListener(MachineElementListener listener) {
-		this.listeners.add(listener);
-	}
+    /**
+     * notify all listeners that the gain changed
+     */
+    private void fireChangedGain() {
+        for (MachineElementListener listener : listeners) {
+            listener.changedGain(this);
+        }
+    }
 
-	/**
-	 * removes a listener from the {@link AbstractMachineElement}
-	 * 
-	 * @param listener
-	 *            the listener to remove
-	 */
-	public void removeListener(MachineElementListener listener) {
-		this.listeners.remove(listener);
-	}
+    /**
+     * adds a listener to the {@link AbstractMachineElement}
+     * 
+     * @param listener the listener to add
+     */
+    public void addListener(MachineElementListener listener) {
+        this.listeners.add(listener);
+    }
 
-	public void resetGain() {
-		setGain(getInitialGain());
-		setGainError(0.0);
-	}
+    /**
+     * removes a listener from the {@link AbstractMachineElement}
+     * 
+     * @param listener the listener to remove
+     */
+    public void removeListener(MachineElementListener listener) {
+        this.listeners.remove(listener);
+    }
 
-	public void setGain(double gain) {
-		this.gain = gain;
-		fireChangedGain();
-	}
+    public void resetGain() {
+        setGain(getInitialGain());
+        setGainError(0.0);
+    }
 
-	public double getGain() {
-		return gain;
-	}
+    public void setGain(double gain) {
+        this.gain = gain;
+        fireChangedGain();
+    }
 
-	public double getGainError() {
-		return this.gainError;
-	}
+    public double getGain() {
+        return gain;
+    }
 
-	public void setGainError(double gainError) {
-		this.gainError = gainError;
-	}
+    public double getGainError() {
+        return this.gainError;
+    }
+
+    public void setGainError(double gainError) {
+        this.gainError = gainError;
+    }
+
+    public Plane getPlane() {
+        return plane;
+    }
 
 }

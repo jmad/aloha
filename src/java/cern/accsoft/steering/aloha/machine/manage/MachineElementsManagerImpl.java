@@ -158,9 +158,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 if ((typePlane != null) && (!plane.equals(typePlane))) {
                     continue;
                 }
-                Corrector corrector = new Corrector();
-                corrector.name = modelCorrector.getName();
-                corrector.plane = plane;
+                Corrector corrector = new Corrector(modelCorrector.getName(), plane);
                 /*
                  * for correctors we set the status to NOT_OK, since it makes no sense to assume use them, if we have no
                  * measurements (which is most likely for most correctors)
@@ -184,9 +182,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 if ((typePlane != null) && (!plane.equals(typePlane))) {
                     continue;
                 }
-                Monitor monitor = new Monitor();
-                monitor.name = modelMonitor.getName();
-                monitor.plane = plane;
+                Monitor monitor = new Monitor(modelMonitor.getName(), plane);
                 this.monitors.add(monitor);
             }
         }
@@ -206,12 +202,13 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 DataValue monitorValue = readingData.getMonitorValue(monitor.getKey());
                 if (monitorValue != null) {
                     if (!Status.OK.equals(monitorValue.getStatus())) {
-                        logger.debug("Found bad monitor status for monitor '" + monitor.name + "' in at least one file");
+                        logger.debug("Found bad monitor status for monitor '" + monitor.getName()
+                                + "' in at least one file");
                         monitor.setStatus(Status.NOT_OK);
                         break;
                     }
                 } else {
-                    logger.debug("Setting status for monitor '" + monitor.name
+                    logger.debug("Setting status for monitor '" + monitor.getName()
                             + "' to NOT_OK, because not entries in all datas available.");
                     monitor.setStatus(Status.NOT_OK);
                     /*
@@ -230,7 +227,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public ArrayList<String> getActiveMonitorNames() {
         ArrayList<String> names = new ArrayList<String>();
         for (AbstractMachineElement monitor : getActiveMonitors()) {
-            names.add(monitor.name);
+            names.add(monitor.getName());
         }
         return names;
     }
@@ -249,7 +246,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public ArrayList<String> getActiveCorrectorNames() {
         ArrayList<String> names = new ArrayList<String>();
         for (Corrector corrector : getActiveCorrectors()) {
-            names.add(corrector.name);
+            names.add(corrector.getName());
         }
         return names;
     }
@@ -355,8 +352,8 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public List<String> getActiveCorrectorNames(Plane plane) {
         ArrayList<String> names = new ArrayList<String>();
         for (AbstractMachineElement corrector : getActiveCorrectors()) {
-            if (plane.equals(corrector.plane)) {
-                names.add(corrector.name);
+            if (plane.equals(corrector.getPlane())) {
+                names.add(corrector.getName());
             }
         }
         return names;
@@ -366,7 +363,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public List<Corrector> getActiveCorrectors(Plane plane) {
         List<Corrector> allCorrectors = new ArrayList<Corrector>();
         for (Corrector corrector : getActiveCorrectors()) {
-            if (plane.equals(corrector.plane)) {
+            if (plane.equals(corrector.getPlane())) {
                 allCorrectors.add(corrector);
             }
         }
@@ -377,8 +374,8 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public List<String> getActiveMonitorNames(Plane plane) {
         ArrayList<String> names = new ArrayList<String>();
         for (AbstractMachineElement monitor : getActiveMonitors()) {
-            if (plane.equals(monitor.plane)) {
-                names.add(monitor.name);
+            if (plane.equals(monitor.getPlane())) {
+                names.add(monitor.getName());
             }
         }
         return names;
@@ -388,7 +385,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     public List<Monitor> getActiveMonitors(Plane plane) {
         List<Monitor> allMonitors = new ArrayList<Monitor>();
         for (Monitor monitor : getActiveMonitors()) {
-            if (plane.equals(monitor.plane)) {
+            if (plane.equals(monitor.getPlane())) {
                 allMonitors.add(monitor);
             }
         }

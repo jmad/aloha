@@ -196,8 +196,8 @@ public class JMadModelOpticsData extends AbstractDynamicData implements
 		int monitorNumber = 0;
 		for (Monitor monitor : monitors) {
 			/* optics values */
-			OpticPoint point = getOpticsPoint(monitor.name);
-			Plane plane = monitor.plane;
+			OpticPoint point = getOpticsPoint(monitor.getName());
+			Plane plane = monitor.getPlane();
 			if (point == null) {
 				for (KeyPrefix keyPrefix : KeyPrefix.values()) {
 					addValue(ListPrefix.MONITORS, keyPrefix, plane, null);
@@ -208,7 +208,7 @@ public class JMadModelOpticsData extends AbstractDynamicData implements
 			}
 
 			/* position */
-			Element element = getElement(monitor.name);
+			Element element = getElement(monitor.getName());
 			if (element == null) {
 				addValue(ListPrefix.MONITORS, KeyPrefix.S_POSITION, null, null);
 			} else {

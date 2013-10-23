@@ -125,8 +125,8 @@ public class ModelKickResponseDataImpl extends AbstractDynamicData implements
 		 */
 		List<Monitor> monitors = getActiveMonitors();
 		for (AbstractMachineElement monitor : monitors) {
-			responseRequest.addMonitor(monitor.name, JMadUtil
-					.convertPlane(monitor.plane));
+			responseRequest.addMonitor(monitor.getName(), JMadUtil
+					.convertPlane(monitor.getPlane()));
 		}
 
 		/*
@@ -142,8 +142,8 @@ public class ModelKickResponseDataImpl extends AbstractDynamicData implements
 			if (kick == null) {
 				kick = 0.0;
 			}
-			responseRequest.addCorrector(corrector.name, ((kick * corrector
-					.getGain()) / 2), JMadUtil.convertPlane(corrector.plane));
+			responseRequest.addCorrector(corrector.getName(), ((kick * corrector
+					.getGain()) / 2), JMadUtil.convertPlane(corrector.getPlane()));
 		}
 
 		/*

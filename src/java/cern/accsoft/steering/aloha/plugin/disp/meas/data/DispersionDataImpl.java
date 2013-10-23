@@ -136,13 +136,13 @@ public class DispersionDataImpl extends AbstractDynamicData implements
 				monitorValue.rms = 0;
 			}
 
-			if (Plane.HORIZONTAL.equals(monitor.plane)) {
+			if (Plane.HORIZONTAL.equals(monitor.getPlane())) {
 				valuesH.add(monitorValue.getBeamPosition());
 				rmsH.add(monitorValue.rms);
 				rms.add(monitorValue.rms);
 				validityH.add(monitorValue.isOk());
 				validity.add(monitor.isOk());
-			} else if (Plane.VERTICAL.equals(monitor.plane)) {
+			} else if (Plane.VERTICAL.equals(monitor.getPlane())) {
 				valuesV.add(monitorValue.getBeamPosition());
 				rmsV.add(monitorValue.rms);
 				rms.add(monitorValue.rms);
@@ -151,7 +151,7 @@ public class DispersionDataImpl extends AbstractDynamicData implements
 			} else {
 				throw new InconsistentDataException("Monitor with key '"
 						+ monitor.getKey() + "' has an unknown plane '"
-						+ monitor.plane + "'!");
+						+ monitor.getPlane() + "'!");
 			}
 		}
 	}
