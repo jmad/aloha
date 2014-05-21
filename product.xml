@@ -6,7 +6,10 @@
 			<dep product="spring" />
 			<dep product="jama" />
 			<dep product="jdataviewer" />
+			
 			<dep product="log4j" />
+			<dep product="slf4j-api" version="1.7.5" />
+			
 			<dep product="accsoft-gui-frame" />
 			<dep product="accsoft-commons-io" />
 			<dep product="commons-cli" version="PRO" />

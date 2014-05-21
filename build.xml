@@ -29,6 +29,11 @@
 		<antcall target="unsignjars">
 			<param name="jar" value="cglib-nodep" />
 		</antcall>
+		<echo message="unsigning spring" />
+		<antcall target="unsignjars">
+			<param name="jar" value="spring*" />
+		</antcall>
+				
 		<echo message="unsigning jmad" />
 		<antcall target="unsignjars">
 			<param name="jar" value="accmodel-jmad-core" />
