@@ -33,8 +33,8 @@ public abstract class AbstractMachineElement {
         this.beamNumber = getBeamNumber(name);
     }
 
-    private BeamNumber getBeamNumber(String name) {
-        BeamNumber number = BeamNumber.fromElementName(name);
+    private BeamNumber getBeamNumber(String elementName) {
+        BeamNumber number = BeamNumber.fromElementName(elementName);
         if (number == null) {
             return BeamNumber.BEAM_1;
         }
