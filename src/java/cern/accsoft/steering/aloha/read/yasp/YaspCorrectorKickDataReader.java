@@ -7,6 +7,7 @@ import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CorrectorKickData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CorrectorKickDataImpl;
 import cern.accsoft.steering.aloha.read.CorrectorKickDataReader;
 import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
+import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.io.TextFileParser;
 import cern.accsoft.steering.util.io.impl.TextFileParserImpl;
 import cern.accsoft.steering.util.meas.data.Plane;
@@ -98,6 +99,12 @@ public class YaspCorrectorKickDataReader extends YaspFileReader implements Corre
             }
             count++;
         }
+        
+        BeamNumber beamNumber = BeamNumber.fromElementName(correctorName);
+        if (beamNumber == null) {
+            beamNumber = BeamNumber.BEAM_1;
+        }
+        data.setBeamNumber(beamNumber);
         data.setCorrectorName(correctorName);
         data.setSignToken(signToken);
         data.setPlaneToken(planeToken);

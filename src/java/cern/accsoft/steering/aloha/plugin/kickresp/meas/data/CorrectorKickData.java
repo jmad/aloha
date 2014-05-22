@@ -9,6 +9,7 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
 
+import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.yasp.ReadingData;
 
 
@@ -58,5 +59,10 @@ public interface CorrectorKickData extends ReadingData {
 	 * @return true, if 'minus' measurement.
 	 */
 	public boolean isMinus();
+
+    /**
+     * @return the beam number to which this data belongs to
+     */
+    BeamNumber getBeamNumber();
 	
 }

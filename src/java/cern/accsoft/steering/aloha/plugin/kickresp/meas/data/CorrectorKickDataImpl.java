@@ -10,6 +10,8 @@
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
 
 import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
+import cern.accsoft.steering.util.acc.BeamNumber;
+import cern.accsoft.steering.util.meas.data.ElementKeyUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.ReadingDataImpl;
 
@@ -28,6 +30,9 @@ public class CorrectorKickDataImpl extends ReadingDataImpl implements
 
 	/** the name of the kicked corrector */
 	private String correctorName = null;
+	
+	/** the beam to which this element belongs to */
+	private BeamNumber beamNumber = null;
 
 	/**
 	 * @param planeToken the planeToken to set
@@ -56,7 +61,7 @@ public class CorrectorKickDataImpl extends ReadingDataImpl implements
 
 	@Override
 	public String getCorrectorKey() {
-		return getCorrectorName() + "." + this.planeToken;
+	    return ElementKeyUtil.composeKey(this.correctorName, Plane.fromTag(this.planeToken), this.beamNumber);
 	}
 
 	@Override
@@ -87,5 +92,14 @@ public class CorrectorKickDataImpl extends ReadingDataImpl implements
 		return (signToken != null && signToken.equals(DeflectionSign.MINUS
 				.getTag()));
 	}
+
+    @Override
+    public BeamNumber getBeamNumber() {
+        return beamNumber;
+    }
+
+    public void setBeamNumber(BeamNumber beamNumber) {
+        this.beamNumber = beamNumber;
+    }
 
 }
