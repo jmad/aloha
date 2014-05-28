@@ -24,7 +24,7 @@ public class YaspCorrectorKickDataReader extends YaspFileReader implements Corre
 
     // possible elements of the filename
     private final static String FILENAME_PREFIX = "RM";
-    private final static int MIN_FILENAME_COUNT_TOKENS = 6;
+    private final static int MIN_FILENAME_COUNT_TOKENS = 5;
     private final static String FILENAME_TOKEN_DELIMITER = ".";
 
     /**
