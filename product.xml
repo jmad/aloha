@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.2.0"
+	<product name="accmodel-aloha-gui" version="0.3.0"
 		directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring" />
@@ -23,6 +23,8 @@
 			<!-- <dep product="accmodel-jmad-models-default" /> -->
 			<dep product="accmodel-jmad-models-lsa" />
 			<dep product="accmodel-jmad-models-sps" />
+			<dep product="accmodel-jmad-models-psb" />
+			<dep product="accmodel-jmad-models-anka" />
 			<!-- <dep product="accmodel-jmad-models-ptc" /> -->
 			<!-- <dep product="jdom" /> -->
 
