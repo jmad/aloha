@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.3.0"
+	<product name="accmodel-aloha-gui" version="0.3.1"
 		directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring" />
