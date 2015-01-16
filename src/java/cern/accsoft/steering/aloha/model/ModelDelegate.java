@@ -14,7 +14,6 @@ import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.trim.meas.data.TrimData;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.util.acc.BeamNumber;
-import cern.accsoft.steering.util.meas.read.filter.ReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 
 /**

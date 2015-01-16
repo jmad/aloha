@@ -11,8 +11,8 @@ package cern.accsoft.steering.aloha.gui.dv;
 
 import cern.accsoft.steering.jmad.gui.mark.MarkedElementsManager;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart;
-import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart.ChartRendererRole;
+import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.jdve.ChartRenderer;
 import cern.jdve.data.DataSet;
 import cern.jdve.data.DataSetError;

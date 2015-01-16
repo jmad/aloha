@@ -6,7 +6,6 @@ package cern.accsoft.steering.aloha.model.adapt;
 import java.util.List;
 
 import cern.accsoft.steering.jmad.model.JMadModel;
-import cern.accsoft.steering.util.acc.BeamNumber;
 
 /**
  * This interface provides some special knowledge of one (or more) specific jmad-model, which is not directly in the

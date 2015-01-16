@@ -20,8 +20,8 @@ import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
 import cern.accsoft.steering.util.gui.dv.ds.AbstractJmadDataSet;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart;
-import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart.ChartRendererRole;
+import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.jdve.data.DataSet;
 import cern.jdve.viewer.DVView;
 

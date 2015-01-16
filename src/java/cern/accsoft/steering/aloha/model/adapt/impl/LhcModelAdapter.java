@@ -8,7 +8,6 @@ import java.util.List;
 
 import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
 import cern.accsoft.steering.jmad.model.JMadModel;
-import cern.accsoft.steering.util.acc.BeamNumber;
 
 /**
  * This is the model-adapter for LHC models.

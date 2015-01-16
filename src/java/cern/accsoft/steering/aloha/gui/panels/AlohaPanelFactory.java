@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cern.accsoft.steering.aloha.calc.algorithm.Algorithm;
-import cern.accsoft.steering.aloha.gui.panels.MachineElementsPanel.Type;
 
 public abstract class AlohaPanelFactory {
 

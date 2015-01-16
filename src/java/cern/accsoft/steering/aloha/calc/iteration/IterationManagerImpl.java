@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import Jama.Matrix;
-
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
 import cern.accsoft.steering.aloha.calc.variation.VariationData;

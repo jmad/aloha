@@ -7,8 +7,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.sensitivity;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import Jama.Matrix;
@@ -22,8 +20,6 @@ import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.KickResponseMeasurementImpl;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CombinedKickResponseData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.ModelKickResponseData;
-import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
-import cern.accsoft.steering.aloha.util.ArrayUtil;
 import cern.accsoft.steering.util.TMatrix;
 
 /**

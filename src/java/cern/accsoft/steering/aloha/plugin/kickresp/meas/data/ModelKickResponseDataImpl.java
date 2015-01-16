@@ -18,7 +18,6 @@ import cern.accsoft.steering.aloha.model.ModelDelegateException;
 import cern.accsoft.steering.aloha.model.ModelDelegateListener;
 import cern.accsoft.steering.aloha.util.JMadUtil;
 import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
-import cern.accsoft.steering.jmad.tools.response.FastResponseMatrixTool;
 import cern.accsoft.steering.jmad.tools.response.FullResponseMatrixTool;
 import cern.accsoft.steering.jmad.tools.response.ResponseMatrixTool;
 import cern.accsoft.steering.jmad.tools.response.ResponseRequest;

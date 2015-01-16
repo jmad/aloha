@@ -5,9 +5,6 @@ package cern.accsoft.steering.aloha.calc.iteration;
 
 import java.util.List;
 
-import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
-import cern.accsoft.steering.aloha.calc.variation.VariationData;
-
 /**
  * keeps track of all actually calculated iterations and stores some statistics values.
  * 

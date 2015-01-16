@@ -29,7 +29,6 @@ import cern.accsoft.steering.jmad.domain.misalign.MisalignmentConfiguration;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.model.JMadModelListener;
 import cern.accsoft.steering.util.acc.BeamNumber;
-import cern.accsoft.steering.util.meas.read.filter.ReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 
 /**

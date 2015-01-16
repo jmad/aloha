@@ -14,8 +14,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import cern.accsoft.steering.jmad.util.ListUtil;
-
 /**
  * @author kfuchsbe
  */

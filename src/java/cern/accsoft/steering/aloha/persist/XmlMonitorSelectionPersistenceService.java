@@ -1,8 +1,6 @@
 package cern.accsoft.steering.aloha.persist;
 
 import cern.accsoft.steering.aloha.conf.MonitorSelection;
-import cern.accsoft.steering.jmad.util.xml.AbstractXStreamService;
-import cern.accsoft.steering.jmad.util.xml.GenericXStreamService;
 import cern.accsoft.steering.jmad.util.xml.XmlXStreamService;
 
 import com.thoughtworks.xstream.XStream;

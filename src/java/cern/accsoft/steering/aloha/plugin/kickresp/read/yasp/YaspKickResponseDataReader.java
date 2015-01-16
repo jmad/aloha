@@ -34,7 +34,6 @@ import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.Status;
 import cern.accsoft.steering.util.meas.read.ReaderException;
-import cern.accsoft.steering.util.meas.read.filter.ReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.yasp.YaspReaderException;
 

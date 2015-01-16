@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import cern.accsoft.steering.aloha.calc.algorithm.Algorithm;
-import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.meas.MeasurementManager.ModelDelegateInstance;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
 import cern.accsoft.steering.aloha.model.ModelDelegateManager;
