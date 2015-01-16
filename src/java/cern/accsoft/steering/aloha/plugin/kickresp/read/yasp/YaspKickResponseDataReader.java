@@ -37,6 +37,9 @@ import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.yasp.YaspReaderException;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
 public class YaspKickResponseDataReader implements KickResponseMaesurementReader, AlohaBeanFactoryAware,
         MachineElementsManagerAware {
 
@@ -332,10 +335,20 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
 
         if (stearingFileNames.size() == 0) {
             throw new YaspReaderException("No datafiles could be found for sign '" + sign + "' at path '" + basePath
-                    + "'! Maybe you have selected the wrong model for this data?");
+                    + "'!\n" + "Maybe you have selected the wrong model for this data?.\n"
+                    + "The Corrector names found in the model are:\n" + partition(correctorNames));
         }
 
         return stearingFileNames;
+    }
+
+    private String partition(List<String> names) {
+        List<String> sublistStrings = new ArrayList<String>();
+        Joiner sublistJoiner = Joiner.on(", ");
+        for (List<String> list : Lists.partition(names, 10)) {
+            sublistStrings.add(sublistJoiner.join(list));
+        }
+        return "[" + Joiner.on(",\n").join(sublistStrings) + "]";
     }
 
     /**

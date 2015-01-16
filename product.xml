@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.3.5"
-		directory="accmodel/aloha/accmodel-aloha-gui">
+	<product name="accmodel-aloha-gui" version="0.3.5" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring" />
 			<dep product="jama" />
 			<dep product="jdataviewer" />
-			
+
 			<dep product="log4j" />
 			<dep product="slf4j-api" version="1.7.5" />
-			
+
 			<dep product="accsoft-gui-frame" />
+			<dep product="guava" version="NEXT" />
 			<dep product="accsoft-commons-io" />
 			<dep product="commons-cli" version="PRO" />
 			<dep product="commons-beanutils" />
