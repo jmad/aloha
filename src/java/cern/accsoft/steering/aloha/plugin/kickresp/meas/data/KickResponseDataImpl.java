@@ -136,7 +136,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                     }
 
                     CorrectorValue correctorValuePlus = dataPlus.getCorrectorValue(corrector.getKey());
-                    if (correctorValueMinus == null) {
+                    if (correctorValuePlus == null) {
                         throw new InconsistentDataException("No correcor value for corrector '" + corrector.getName()
                                 + "' found in plus file for corrector '" + activeCorrector.getName() + "'!");
                     }
@@ -148,7 +148,8 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                         if (correctorKick == 0) {
                             if (!activeCorrector.getName().equals(corrector.getName())) {
                                 throw new InconsistentDataException("The corrector with nonzero kick ("
-                                        + corrector.getName() + ")does not correspond to the corrector in the filename("
+                                        + corrector.getName()
+                                        + ") does not correspond to the corrector in the filename("
                                         + activeCorrector.getName() + ")!");
                             }
                             correctorKick = deltaKick;
@@ -162,7 +163,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
 
                 if (correctorKick == 0) {
                     throw new InconsistentDataException("There is no nonzero kick in files for corrector '"
-                            + dataPlus.getCorrectorName() + "'. This is not allowed! corrector-name:");
+                            + dataPlus.getCorrectorName() + "'. This is not allowed!");
                 }
 
                 this.correctorKicks.put(activeCorrector.getKey(), toModel(correctorKick));
