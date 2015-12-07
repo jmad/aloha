@@ -33,13 +33,16 @@
 		<antcall target="unsignjars">
 			<param name="jar" value="spring-core" />
 		</antcall>
-				
+
 		<echo message="unsigning jmad" />
 		<antcall target="unsignjars">
 			<param name="jar" value="accmodel-jmad-core" />
 		</antcall>
 		<antcall target="unsignjars">
 			<param name="jar" value="accmodel-jmad-gui" />
+		</antcall>
+		<antcall target="unsignjars">
+			<param name="jar" value="accsoft-steering-commons" />
 		</antcall>
 	</target>
 
