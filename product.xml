@@ -2,7 +2,8 @@
 <products>
 	<product name="accmodel-aloha-gui" version="0.3.7" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
-			<dep product="spring" />
+			<dep product="spring-core" />
+			<dep product="spring-context" />
 			<dep product="jama" />
 			<dep product="jdataviewer" />
 
@@ -54,3 +55,4 @@
 		</application>
 	</product>
 </products>
+
