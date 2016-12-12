@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.3.12" directory="accmodel/aloha/accmodel-aloha-gui">
+	<product name="accmodel-aloha-gui" version="0.4.0" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring-core" />
 			<dep product="spring-context" />
 			<dep product="jama" />
 			<dep product="jdataviewer" />
 
-			<dep product="log4j" />
-			<dep product="slf4j-api" version="1.7.5" />
+			<dep product="slf4j-log4j12" />
 
 			<dep product="accsoft-gui-frame" />
-			<dep product="guava" version="NEXT" />
+			<dep product="guava" />
 			<dep product="accsoft-commons-io" />
-			<dep product="commons-cli" version="PRO" />
+			<dep product="commons-cli" />
 			<dep product="commons-beanutils" />
 			<dep product="commons-collections" />
 			<dep product="commons-digester" />
@@ -26,12 +25,10 @@
 			<dep product="accmodel-jmad-models-sps" />
 			<dep product="accmodel-jmad-models-psb" />
 			<dep product="accmodel-jmad-models-anka" />
-			<!-- <dep product="accmodel-jmad-models-ptc" /> -->
-			<!-- <dep product="jdom" /> -->
 
-			<dep product="junit" local="true" />
-			<dep product="easymock" local="true" />
-			<dep product="easymock-class-ext" local="true" />
+			<dep product="junit" local="true" excluded="true" />
+			<dep product="easymock" local="true" excluded="true" />
+			<dep product="easymock-class-ext" local="true" excluded="true" />
 		</dependencies>
 		<application name="accmodel-aloha-gui" title="aloha - response analysis">
 			<initial-heap-size>100m</initial-heap-size>
