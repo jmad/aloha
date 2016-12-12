@@ -75,7 +75,7 @@ public class CsvAlignmentDataReader implements AlignmentDataReader {
 	private final static int CSV_INDEX_HEADER = 0;
 	private final static int CSV_LINE_INDEX_HEADER = 0;
 	private final static int CSV_LAST_HEADER_LINE = 2;
-	private final static String CSV_KEYWORD_ALESAGE = "alésage";
+	private final static String CSV_KEYWORD_ALESAGE = "alesage";
 	private final static String CSV_KEYWORD_FAISCEAU = "faisceau";
 
 	/* common columns */
