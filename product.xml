@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.4.4" directory="accmodel/aloha/accmodel-aloha-gui">
+	<product name="accmodel-aloha-gui" version="0.4.5" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring-core" />
 			<dep product="spring-context" />
@@ -18,13 +18,15 @@
 			<dep product="commons-digester" />
 			<dep product="commons-logging" />
 			<dep product="accsoft-steering-commons" />
-			<dep product="accmodel-jmad-core" />
-			<dep product="accmodel-jmad-gui-nomodels" />
-			<dep product="accmodel-jmad-models-default" />
-			<dep product="accmodel-jmad-models-lsa" />
-			<dep product="accmodel-jmad-models-sps" />
-			<dep product="accmodel-jmad-models-psb" />
-			<dep product="accmodel-jmad-models-anka" />
+			<dep product="accmodel-jmad-gui-bare" />
+
+			<dep product="accmodel-jmad-core" version="CTX" />
+			<dep product="accmodel-jmad-models-lhc" resolvealias="false" version="PRO" />
+			<dep product="accmodel-jmad-models-psb" resolvealias="false" version="PRO" />
+			<dep product="accmodel-jmad-models-sps" resolvealias="false" version="PRO" />
+			<dep product="accmodel-jmad-models-leir" resolvealias="false" version="PRO" />
+			<dep product="accmodel-jmad-models-lhctransfer" resolvealias="false" version="PRO" />
+
 
 			<dep product="junit" local="true" excluded="true" />
 			<dep product="easymock" local="true" excluded="true" />
