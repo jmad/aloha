@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.4.6" directory="accmodel/aloha/accmodel-aloha-gui">
+	<product name="accmodel-aloha-gui" version="0.4.7" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
 			<dep product="spring-core" />
 			<dep product="spring-context" />
