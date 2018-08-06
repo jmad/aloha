@@ -85,8 +85,8 @@
 		class="cern.accsoft.steering.aloha.calc.solve.SolverManagerImpl">
 		<property name="solvers">
 			<list>
-				<ref local="svdSolver" />
-				<ref local="micadoSolver" />
+				<ref bean="svdSolver" />
+				<ref bean="micadoSolver" />
 			</list>
 		</property>
 	</bean>
@@ -142,7 +142,7 @@
 	<bean id="menuActionHandler" class="cern.accsoft.steering.aloha.gui.menus.MenuActionHandler">
 		<property name="mainFrame" ref="alohaMainFrame" />
 		<property name="workingSet" ref="helperDataManager" />
-		<property name="jmadService" ref="jmadService" />
+		<!--<property name="jmad" ref="jmad" />-->
 		<property name="modelAdapterManager" ref="modelAdapterManager" />
 		<property name="measurementManager" ref="measurementManager" />
 		<property name="modelDelegateManager" ref="measurementManager" />
@@ -151,7 +151,8 @@
 		<property name="readerManager" ref="readerManager" />
 		<property name="displaySetManager" ref="displaySetManager" />
 		<property name="preferences" ref="alohaPreferences" />
-		<lookup-method name="getJMad" bean="jmad" />
+		<property name="jMadGui" ref="jmadGui" />
+		<property name="jMadService" ref="jmadService" />
 		<lookup-method name="getFitGui" bean="fitGui" />
 	</bean>
 	<bean id="calcActionHandler" class="cern.accsoft.steering.aloha.gui.menus.CalcActionHandler">
@@ -199,7 +200,7 @@
 		<property name="sizeY" value="768" />
 		<property name="mainPanel" ref="fitPanel" />
 		<property name="mainFrame" value="false" />
-		<property name="splashScreen" ref="jmadSplashScreen" />
+		<!--<property name="splashScreen" ref="jmadSplashScreen" />-->
 		<property name="title" value="Aloha fitting" />
 	</bean>
 	<bean id="fitPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.FitPanel"
@@ -364,8 +365,7 @@
 		<lookup-method name="createMonitorsPanel" bean="monitorsPanel" />
 		<lookup-method name="createCorrectorsPanel" bean="correctorsPanel" />
 	</bean>
-	<bean id="alohaMainPanel" class="cern.accsoft.steering.aloha.gui.panels.MainPanel"
-		init-method="init">
+	<bean id="alohaMainPanel" class="cern.accsoft.steering.aloha.gui.panels.MainPanel" init-method="init">
 		<property name="alohaPanelFactory" ref="alohaPanelFactory" />
 		<property name="dataViewerPanel" ref="alohaDataViewerPanel" />
 		<property name="measurementsPanel" ref="measurementsPanel" />
@@ -373,8 +373,7 @@
 		<property name="displaySetManager" ref="displaySetManager" />
 		<property name="helperDataPanel" ref="helperDataPanel" />
 	</bean>
-	<bean id="scriptPanel" class="cern.accsoft.steering.util.gui.panels.BeanShellPanel"
-		init-method="init">
+	<bean id="scriptPanel" class="cern.accsoft.steering.util.gui.panels.BeanShellPanel" init-method="init">
 		<property name="contextObjects">
 			<map>
 				<entry key="ws" value-ref="helperDataManager" />
@@ -386,14 +385,13 @@
 		factory-method="getSplashScreen" />
 	<bean id="alohaGui" class="cern.accsoft.steering.aloha.AlohaGui"
 		init-method="init">
-		<property name="title"
-			value="aloha - Another Linear Optics Helper Application" />
+		<property name="title" value="aloha - Another Linear Optics Helper Application" />
 		<property name="sizeX" value="1024" />
 		<property name="sizeY" value="768" />
 		<property name="menuBar" ref="menuBar" />
 		<property name="toolBar" ref="toolBar" />
 		<property name="mainPanel" ref="alohaMainPanel" />
-		<property name="splashScreen" ref="splashScreen" />
+		<!--<property name="splashScreen" ref="splashScreen" />-->
 		<property name="extraConsoleTabs">
 			<map>
 				<entry key="script" value-ref="scriptPanel" />
@@ -401,55 +399,29 @@
 		</property>
 	</bean>
 
-	<bean id="alohaMainFrame" factory-bean="alohaGui" factory-method="getJFrame" />
-	<bean id="userInteractor" class="cern.accsoft.steering.util.gui.SwingUserInteractor">
-		<property name="mainFrame" ref="alohaMainFrame" />
-	</bean>
-
+	<bean id="alohaMainFrame" factory-bean="alohaGui" factory-method="getMainFrame" />
+	<!--<bean id="userInteractor" class="cern.accsoft.steering.util.gui.SwingUserInteractor" />-->
 
 	<!-- some more knowledge of specific jmad-models -->
-	<bean id="lhcModelAdapter"
-		class="cern.accsoft.steering.aloha.model.adapt.impl.LhcModelAdapter" />
-	<bean id="tiModelAdapter"
-		class="cern.accsoft.steering.aloha.model.adapt.impl.TiModelAdapter" />
-	<bean id="modelAdapterManager"
-		class="cern.accsoft.steering.aloha.model.adapt.ModelAdapterManagerImpl">
+	<bean id="lhcModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.LhcModelAdapter" />
+	<bean id="tiModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.TiModelAdapter" />
+	<bean id="modelAdapterManager" class="cern.accsoft.steering.aloha.model.adapt.ModelAdapterManagerImpl">
 		<property name="modelAdapters">
 			<list>
-				<ref local="lhcModelAdapter" />
-				<ref local="tiModelAdapter" />
+				<ref bean="lhcModelAdapter" />
+				<ref bean="tiModelAdapter" />
 			</list>
 		</property>
 	</bean>
 
 	<!-- the jmad stuff -->
-	<bean id="jmadGuiPreferences"
-		class="cern.accsoft.steering.jmad.gui.manage.impl.JMadGuiPreferencesImpl">
-		<property name="cleanupOnClose" value="false" />
-		<property name="exitOnClose" value="false" />
-		<property name="mainFrame" value="false" />
-		<property name="enabledChangeModel" value="false" />
-	</bean>
+	<bean id="jmad" class="cern.accsoft.steering.jmad.gui.JMad" factory-method="createStandaloneJMad" />
+	<bean id="jmadGui" factory-bean="jmad" factory-method="getJMadGui" />
+	<bean id="jmadService" factory-bean="jmad" factory-method="getJMadService" />
+	<bean id="jmadPreferences" factory-bean="jmad" factory-method="getJMadPreferences" />
+	<bean id="modelManager" factory-bean="jmad" factory-method="getModelManager" />
+	<bean id="markedElementsManager" factory-bean="jmad" factory-method="getMarkedElementsManager" />
+	<bean id="jmadPanelFactory" factory-bean="jmad" factory-method="getJMadPanelFactory" lazy-init="true" />
+	<!--<bean id="jmadSplashScreen" factory-bean="jmad" factory-method="getJMadGuiSplashScreen" lazy-init="true" />-->
 
-	<bean id="jmad" class="cern.accsoft.steering.jmad.gui.JMad"
-		lazy-init="true">
-		<constructor-arg ref="jmadService" />
-		<constructor-arg ref="jmadGuiPreferences" />
-		<constructor-arg ref="markedElementsManager" />
-	</bean>
-	<bean id="jmadPanelFactory" factory-bean="jmad" factory-method="getJMadPanelFactory"
-		lazy-init="true" />
-
-	<bean id="jmadSplashScreen" factory-bean="jmad" factory-method="getSplashScreen"
-		lazy-init="true" />
-
-	<bean id="jmadService" class="cern.accsoft.steering.jmad.service.JMadServiceFactory"
-		factory-method="createJMadService" />
-
-	<bean id="jmadPreferences" factory-bean="jmadService"
-		factory-method="getPreferences" />
-
-	<bean id="modelManager" factory-bean="jmadService" factory-method="getModelManager" />
-	<bean id="markedElementsManager"
-		class="cern.accsoft.steering.jmad.gui.mark.MarkedElementsManagerImpl" />
 </beans>

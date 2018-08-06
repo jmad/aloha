@@ -1,37 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="accmodel-aloha-gui" version="0.4.15" directory="accmodel/aloha/accmodel-aloha-gui">
+	<product name="accmodel-aloha-gui" version="0.5.0" directory="accmodel/aloha/accmodel-aloha-gui">
 		<dependencies>
-			<dep product="spring-core" />
-			<dep product="spring-context" />
-			<dep product="jama" />
-			<dep product="jdataviewer" />
+			<dep product="spring-core" version="PRO" />
+			<dep product="spring-context" version="PRO" />
 
-			<dep product="slf4j-log4j12" />
+			<dep product="guava" version="PRO" />
+			<dep product="jama" version="PRO" />
+			<dep product="jdataviewer" version="PRO" />
 
-			<dep product="accsoft-gui-frame" />
-			<dep product="guava" />
-			<dep product="accsoft-commons-io" />
-			<dep product="commons-cli" />
-			<dep product="commons-beanutils" />
-			<dep product="commons-collections" />
-			<dep product="commons-digester" />
-			<dep product="commons-logging" />
-			<dep product="accsoft-steering-commons" />
-			<dep product="accmodel-jmad-gui-bare" />
+			<dep product="commons-cli" version="PRO" />
+			<dep product="commons-beanutils" version="PRO" />
+			<dep product="commons-collections" version="PRO" />
+			<dep product="commons-digester" version="PRO" />
+			<dep product="commons-logging" version="PRO" />
 
-			<dep product="accmodel-jmad-core" version="CTX" />
+			<dep product="accsoft-commons-io" version="PRO" />
+			<dep product="accsoft-steering-commons" version="PRO" />
+			<dep product="accsoft-steering-commons-gui" version="DEV" />
+
+			<dep product="jmad-gui-pro" version="PRO" />
+
+			<!--<dep product="accsoft-gui-frame" />-->
+			<!--<dep product="accmodel-jmad-gui" />-->
+			<!--<dep product="accmodel-jmad-core" version="CTX" />-->
+
 			<dep product="accmodel-jmad-models-lhc" resolvealias="false" version="PRO" />
 			<dep product="accmodel-jmad-models-psb" resolvealias="false" version="PRO" />
 			<dep product="accmodel-jmad-models-sps" resolvealias="false" version="PRO" />
 			<dep product="accmodel-jmad-models-leir" resolvealias="false" version="PRO" />
 			<dep product="accmodel-jmad-models-lhctransfer" resolvealias="false" version="PRO" />
 
+			<dep product="slf4j-log4j12" version="PRO" />
 
-			<dep product="junit" local="true" excluded="true" />
-			<dep product="easymock" local="true" excluded="true" />
-			<dep product="easymock-class-ext" local="true" excluded="true" />
+			<dep product="junit" excluded="true" version="PRO" />
+			<dep product="easymock" excluded="true" version="PRO" />
+			<dep product="easymock-class-ext" excluded="true" version="PRO" />
 		</dependencies>
+		<exclusions>
+			<dep groupId="cern.accmodel.jmad" artifactId="accmodel-jmad-gui" />
+			<dep groupId="cern.accmodel.jmad" artifactId="accmodel-jmad-core" />
+		</exclusions>
 		<application name="accmodel-aloha-gui" title="aloha - response analysis">
 			<initial-heap-size>100m</initial-heap-size>
 			<max-heap-size>1024m</max-heap-size>

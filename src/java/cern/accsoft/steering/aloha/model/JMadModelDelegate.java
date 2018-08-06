@@ -49,7 +49,7 @@ public class JMadModelDelegate implements ModelDelegate {
     private final JMadModelAdapter modelAdapter;
 
     /**
-     * If true the events to the listeners are note fired, false for normal notification behavior.
+     * If true the event to the listeners are note fired, false for normal notification behavior.
      */
     private boolean suppressEvents = false;
 

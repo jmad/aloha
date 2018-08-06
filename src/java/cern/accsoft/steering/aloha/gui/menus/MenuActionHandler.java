@@ -1,18 +1,5 @@
 package cern.accsoft.steering.aloha.gui.menus;
 
-import java.awt.Frame;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.gui.frame.Task;
 import cern.accsoft.steering.aloha.app.HelperDataManager;
 import cern.accsoft.steering.aloha.app.Preferences;
@@ -35,15 +22,24 @@ import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
 import cern.accsoft.steering.aloha.read.Reader;
 import cern.accsoft.steering.aloha.read.ReaderManager;
 import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
-import cern.accsoft.steering.jmad.gui.JMad;
-import cern.accsoft.steering.jmad.gui.dialog.JMadOptionPane;
+import cern.accsoft.steering.jmad.gui.JMadGui;
 import cern.accsoft.steering.jmad.model.JMadModel;
-import cern.accsoft.steering.jmad.modeldefs.JMadModelDefinitionManager;
 import cern.accsoft.steering.jmad.service.JMadService;
 import cern.accsoft.steering.util.gui.DefaultAccsoftGui;
 import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
+import org.apache.log4j.Logger;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
+import java.awt.Frame;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * this singleton class handles the actions performed by menus and toolbars
@@ -84,14 +80,15 @@ public abstract class MenuActionHandler {
 
     private DisplaySetManager displaySetManager;
 
-    /** The service which provides all the jmad functionality */
-    private JMadService jmadService;
-
     /** a panel to provide options for the charts */
     private JPanel chartRendererPanel;
 
     /** The aloha preferences */
     private Preferences preferences;
+
+    private JMadService jMadService;
+
+    private JMadGui jMadGui;
 
     public void showChartRendererOptionsDialog() {
         if (getChartRendererPanel() != null) {
@@ -184,7 +181,7 @@ public abstract class MenuActionHandler {
                 /*
                  * If this is the first measurement, the model is choosen and created from all available definitions.
                  */
-                model = JMadOptionPane.showCreateModelDialog(mainFrame, getJmadService());
+                model = jMadGui.showCreateModelDialog();
                 if (model == null) {
                     logger.debug("No model was choosen. Aborting loading data.");
                     return;
@@ -351,7 +348,7 @@ public abstract class MenuActionHandler {
         if (PanelDialog.show(modelInstanceSelectionPanel, this.mainFrame)) {
             ModelDelegate modelDelegate = null;
             if (modelInstanceSelectionPanel.isNewInstance()) {
-                JMadModel model = getJmadService().createModel(
+                JMadModel model = jMadService.createModel(
                         modelInstanceSelectionPanel.getSelectedModelDelegate().getJMadModel().getModelDefinition());
                 try {
                     model.reset();
@@ -373,10 +370,7 @@ public abstract class MenuActionHandler {
      * shows the gui for jmad
      */
     public void showJMadGui() {
-        JMad jmad = getJMad();
-        if (jmad != null) {
-            jmad.show();
-        }
+        jMadGui.showGui();
     }
 
     /**
@@ -411,11 +405,6 @@ public abstract class MenuActionHandler {
     private MeasurementManager getMeasurementManager() {
         return this.measurementManager;
     }
-
-    /**
-     * this method is injected by spring to support lazy loading of jmad.
-     */
-    protected abstract JMad getJMad();
 
     /**
      * setter used by spring to set the main panel
@@ -506,18 +495,6 @@ public abstract class MenuActionHandler {
         return displaySetManager;
     }
 
-    public JMadModelDefinitionManager getModelDefinitionManager() {
-        return getJmadService().getModelDefinitionManager();
-    }
-
-    public void setJmadService(JMadService jmadService) {
-        this.jmadService = jmadService;
-    }
-
-    public JMadService getJmadService() {
-        return jmadService;
-    }
-
     public void setPreferences(Preferences preferences) {
         this.preferences = preferences;
     }
@@ -528,6 +505,15 @@ public abstract class MenuActionHandler {
 
     private ModelAdapterManager getModelAdapterManager() {
         return modelAdapterManager;
+    }
+
+    public void setJMadService(JMadService jMadService) {
+        this.jMadService = jMadService;
+    }
+
+    public void setJMadGui(JMadGui jMadGui) {
+        jMadGui.getJmadGuiPreferences().setExitOnClose(false);
+        this.jMadGui = jMadGui;
     }
 
 }

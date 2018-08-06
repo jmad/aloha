@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 
 import cern.accsoft.steering.aloha.gui.icons.Icon;
 import cern.accsoft.steering.jmad.gui.JMadGui;
+import cern.accsoft.steering.util.gui.DefaultAccsoftGui;
 
 /**
  * This is the extension to our default accsoft gui, which provides the correct
@@ -21,7 +22,7 @@ import cern.accsoft.steering.jmad.gui.JMadGui;
  * @author kfuchsbe
  * 
  */
-public class AlohaGui extends JMadGui {
+public class AlohaGui extends DefaultAccsoftGui {
 
 	/*
 	 * since for the moment the only special thing we have to do in here is to
@@ -29,7 +30,6 @@ public class AlohaGui extends JMadGui {
 	 * this task out of the box.
 	 */
 
-	@Override
 	protected ImageIcon getImageIcon() {
 		return Icon.MAIN.getImageIcon();
 	}

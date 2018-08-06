@@ -88,14 +88,14 @@ public interface ModelDelegate {
     public List<String> getMonitorRegexps();
 
     /**
-     * if this is set to true, then the listener events (becameDirty) are not fired. This is useful if on is modifying
+     * if this is set to true, then the listener event (becameDirty) are not fired. This is useful if on is modifying
      * the model several times during a complicated calculation (e.g. calculating the response matrix) and one wants to
      * avoid that all clients of the ModelDelegate get notified that the model bacame dirty and therefore recalculate
      * their values, although the model did not change permanently, but only temporarily.
      * <p>
      * NOTE: The client is responsible to restore the same state of the model as before!
      * 
-     * @param suppressEvents true to suppress the events, false for nominal behaviour.
+     * @param suppressEvents true to suppress the event, false for nominal behaviour.
      */
     public void setSuppressEvents(boolean suppressEvents);
 

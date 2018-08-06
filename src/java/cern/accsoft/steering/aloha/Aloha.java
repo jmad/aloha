@@ -9,9 +9,10 @@
  */
 package cern.accsoft.steering.aloha;
 
+import cern.accsoft.gui.beans.spi.SplashScreen;
 import org.apache.log4j.BasicConfigurator;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import cern.accsoft.steering.aloha.app.AlohaCommandLineParser;
 import cern.accsoft.steering.aloha.app.Preferences;
@@ -25,69 +26,45 @@ import cern.accsoft.steering.jmad.util.JMadPreferences;
  * 
  */
 public class Aloha {
-	/** the name of the gui bean */
 	private final static String BEAN_NAME_ALOHA_GUI = "alohaGui";
-
-	/** the name for the preferences bean */
 	private final static String BEAN_NAME_ALOHA_PREFERENCES = "alohaPreferences";
-
-	/** the name for the jmad preferences bean */
 	private final static String BEAN_NAME_JMAD_PREFERENCES = "jmadPreferences";
 
-	/** The application-context */
-	private ApplicationContext appCtx;
+	private final ApplicationContext appCtx;
 
-	private void init() {
-		/* show the Splash - screen */
-		SplashFactory.getSplashScreen();
-
-		/* creating the application - context. */
-		this.appCtx = new ClassPathXmlApplicationContext(
-				new String[] { "app-ctx-aloha.xml" });
-
+	private Aloha() {
+		appCtx = new AnnotationConfigApplicationContext(AlohaSpringConfiguration.class);
+		appCtx.getBean("fitGui");
 	}
 
 	private AlohaGui getGuiBean() {
-		if (this.appCtx == null) {
-			return null;
-		}
-		return (AlohaGui) this.appCtx.getBean(BEAN_NAME_ALOHA_GUI);
+		return appCtx.getBean(BEAN_NAME_ALOHA_GUI, AlohaGui.class);
 	}
 
 	private Preferences getAlohaPreferences() {
-		return (Preferences) this.appCtx.getBean(BEAN_NAME_ALOHA_PREFERENCES);
+		return appCtx.getBean(BEAN_NAME_ALOHA_PREFERENCES, Preferences.class);
 	}
 
 	private JMadPreferences getJMadPreferences() {
-		return (JMadPreferences) this.appCtx
-				.getBean(BEAN_NAME_JMAD_PREFERENCES);
-	}
-
-	/**
-	 * the main method.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		/* configure the log4j - system */
-		BasicConfigurator.configure();
-
-		Aloha aloha = new Aloha();
-		aloha.init();
-
-		/* see, if we got some interesting parameters */
-		AlohaCommandLineParser.parse(args, aloha.getAlohaPreferences(), aloha
-				.getJMadPreferences());
-
-		aloha.show();
-
+		return appCtx.getBean(BEAN_NAME_JMAD_PREFERENCES, JMadPreferences.class);
 	}
 
 	private void show() {
-		AlohaGui alohaGui = getGuiBean();
-		if (alohaGui != null) {
-			alohaGui.show();
-		}
+		getGuiBean().show();
+	}
+
+	public static void main(String[] args) {
+		BasicConfigurator.configure();
+
+		SplashScreen splashScreen = SplashFactory.getSplashScreen();
+
+		Aloha aloha = new Aloha();
+
+		/* see, if we got some interesting parameters */
+		AlohaCommandLineParser.parse(args, aloha.getAlohaPreferences(), aloha.getJMadPreferences());
+
+		aloha.show();
+		splashScreen.killSplash();
 	}
 
 }
