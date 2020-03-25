@@ -8,6 +8,7 @@ before_install:
   - chmod +x ./gradlew
 script:
   - xvfb-run ./gradlew check
+  - ./gradlew javadoc
   - ./gradlew jacocoTestReport
 deploy:
   - provider: script

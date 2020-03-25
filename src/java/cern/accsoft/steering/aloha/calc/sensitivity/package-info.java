@@ -3,7 +3,7 @@
  * big sensitivity matrix. The main classes are illustrated in the following 
  * diagram.
  * <p>
- * <img src="doc-files/classes-sensitivity-matrix.PNG">
+ * <img src="doc-files/classes-sensitivity-matrix.PNG" alt="sensitivity matrix">
  * 
  */
 package cern.accsoft.steering.aloha.calc.sensitivity;
