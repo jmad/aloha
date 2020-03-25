@@ -15,9 +15,9 @@ import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 public interface AlohaBeanFactoryAware extends BeanAware {
 
 	/**
-	 * this method is used by the {@link BeanUserConfigurator} to inject itself.
+	 * this method is used by the {@link AlohaBeanFactory} to inject itself.
 	 * 
-	 * @param beanUserConfigurator
+	 * @param alohaBeanFactory
 	 */
 	public void setAlohaBeanFactory(AlohaBeanFactory alohaBeanFactory);
 }

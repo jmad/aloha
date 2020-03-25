@@ -17,7 +17,7 @@ public interface HelperDataManagerAware extends BeanAware {
 
 	/**
 	 * through this method the {@link HelperDataManager} will be injected if the
-	 * class is configured by the {@link BeanUserConfigurator}
+	 * class is configured by the {@link AlohaBeanFactory}
 	 * 
 	 * @param helperDataManager
 	 *            the {@link HelperDataManager} to set

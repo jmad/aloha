@@ -7,9 +7,6 @@
  */
 package cern.accsoft.steering.aloha.machine.manage;
 
-import java.util.Collection;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.conf.MonitorSelection;
 import cern.accsoft.steering.aloha.machine.Corrector;
 import cern.accsoft.steering.aloha.machine.Monitor;
@@ -19,6 +16,9 @@ import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.util.meas.data.DataValue;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * this is the interface for a class, that keeps track of the active elements (correctors and monitors)
@@ -182,14 +182,14 @@ public interface MachineElementsManager extends Data {
     //
 
     /**
-     * adds a {@link DeprecatedMeasurementListener}
+     * adds a {@link MachineElementsManagerListener}
      * 
      * @param listener the listener to add
      */
     public abstract void addListener(MachineElementsManagerListener listener);
 
     /**
-     * removes a {@link DeprecatedMeasurementListener}
+     * removes a {@link MachineElementsManagerListener}
      * 
      * @param listener the listener to remove
      */
@@ -215,7 +215,7 @@ public interface MachineElementsManager extends Data {
     /**
      * set the actually displayed monitor-number
      * 
-     * @param activeCorrectorNumber
+     * @param activeMonitorNumber
      */
     public void setActiveMonitorNumber(int activeMonitorNumber);
 

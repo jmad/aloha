@@ -26,7 +26,7 @@ public interface MeasurementManagerListener {
 	/**
 	 * fired, when the active measurement changed.
 	 * 
-	 * @param measurement
+	 * @param activeMeasurement
 	 *            the newly active measurement (can be null, if the last one is
 	 *            removed!)
 	 */

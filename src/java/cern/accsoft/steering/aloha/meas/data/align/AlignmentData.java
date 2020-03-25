@@ -9,9 +9,9 @@
  */
 package cern.accsoft.steering.aloha.meas.data.align;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.data.HelperData;
+
+import java.util.List;
 
 /**
  * This interface represents alignment data. It always contains all values. Not
@@ -43,7 +43,7 @@ public interface AlignmentData extends HelperData {
 	public List<AlignmentValue> getAlignmentValues();
 
 	/**
-	 * @param alignmentValues
+	 * @param value
 	 *            the alignmentValues to set
 	 */
 	public void addAlignmentValue(AlignmentValue value);

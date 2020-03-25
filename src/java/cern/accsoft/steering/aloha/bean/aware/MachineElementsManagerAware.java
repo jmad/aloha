@@ -17,7 +17,7 @@ public interface MachineElementsManagerAware extends BeanAware {
 
 	/**
 	 * by the use of this method the {@link MachineElementsManager} is injected
-	 * if the class is configured by the {@link BeanUserConfigurator}
+	 * if the class is configured by the {@link AlohaBeanFactory}
 	 */
 	public void setMachineElementsManager(
 			MachineElementsManager machineElementsManager);

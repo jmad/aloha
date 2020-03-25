@@ -9,12 +9,12 @@
  */
 package cern.accsoft.steering.aloha.meas.data.align;
 
+import cern.accsoft.steering.aloha.meas.data.HelperDataType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cern.accsoft.steering.aloha.meas.data.HelperDataType;
 
 /**
  * The implementation of the alignment data
@@ -34,7 +34,7 @@ public class AlignmentDataImpl implements AlignmentData {
 	List<AlignmentValue> alignmentValues = new ArrayList<AlignmentValue>();
 
 	/**
-	 * @param alignmentValues
+	 * @param value
 	 *            the alignmentValues to set
 	 */
 	public void addAlignmentValue(AlignmentValue value) {

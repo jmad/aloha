@@ -9,9 +9,9 @@
  */
 package cern.accsoft.steering.aloha.plugin.trim.meas.data;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.data.Data;
+
+import java.util.List;
 
 /**
  * This interface represents trim data, which can be applied to the model.
@@ -26,7 +26,7 @@ public interface TrimData extends Data {
 	 * the given plane during the measurement.
 	 * 
 	 * This always contains all entries of the files! (e.g. in yasp-files this
-	 * might be correctors or bending magnets.) -> so it has to be checked and
+	 * might be correctors or bending magnets.) -&gt; so it has to be checked and
 	 * the user has to be warned, if not all of them can be applied.
 	 * 
 	 * @return all available corrector-values

@@ -16,7 +16,7 @@ import cern.accsoft.steering.aloha.calc.NoiseWeighter;
 public interface NoiseWeighterAware extends BeanAware {
 
 	/**
-	 * this method is used by the {@link BeanUserConfigurator} to inject the
+	 * this method is used by the {@link AlohaBeanFactory} to inject the
 	 * {@link NoiseWeighter} instance
 	 * 
 	 * @param noiseWeighter

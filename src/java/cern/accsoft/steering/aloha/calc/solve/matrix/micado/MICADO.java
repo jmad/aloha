@@ -232,7 +232,7 @@ public class MICADO {
 	 * MICADO minimization :
 	 * 
 	 * @param a
-	 *            : response matrix (correctors -> orbit)
+	 *            : response matrix (correctors -&gt; orbit)
 	 * @param b
 	 *            : input orbit (to be corrected)
 	 * @param m

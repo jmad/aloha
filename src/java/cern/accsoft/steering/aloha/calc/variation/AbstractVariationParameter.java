@@ -111,7 +111,7 @@ public abstract class AbstractVariationParameter implements VariationParameter {
 	/**
 	 * adds the given value to the parameter. (may be scaled internally)
 	 * 
-	 * @param the
+	 * @param value
 	 *            value that shall be added
 	 */
 	public final void addValueScaled(double value) {

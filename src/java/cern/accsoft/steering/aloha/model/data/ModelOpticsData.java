@@ -9,10 +9,10 @@
  */
 package cern.accsoft.steering.aloha.model.data;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.data.DynamicData;
 import cern.accsoft.steering.util.meas.data.Plane;
+
+import java.util.List;
 
 /**
  * this interface shall provide data of the model, consistent with the actual
@@ -90,7 +90,7 @@ public interface ModelOpticsData extends DynamicData {
 	public List<Double> getAllPhases(Plane plane);
 
 	/**
-	 * @param the
+	 * @param plane
 	 *            plane for which to retrieve the data
 	 * @return plane the transvers positions fo all elements
 	 */

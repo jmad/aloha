@@ -32,7 +32,7 @@ public interface AlohaBeanFactory {
 	 * configured afterwards.
 	 * 
 	 * @param <T>
-	 * @param instance
+	 * @param beanUser
 	 *            the bean to configure
 	 */
 	public <T> void configure(T beanUser);

@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.meas;
 
+import cern.accsoft.steering.aloha.model.ModelDelegate;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import cern.accsoft.steering.aloha.model.ModelDelegate;
 
 /**
  * This is the interface for a class, which keeps track of the loaded
@@ -36,7 +36,7 @@ public interface MeasurementManager {
 	public void addMeasurement(ModelAwareMeasurement measurement);
 
 	/**
-	 * @param measurement
+	 * @param index
 	 *            the measurement to remove from the manager
 	 */
 	void removeMeasurement(int index);
@@ -106,7 +106,7 @@ public interface MeasurementManager {
 		 * the constructor, which needs a model to which this instance belongs
 		 * to.
 		 * 
-		 * @param model
+		 * @param modelDelegate
 		 */
 		public ModelDelegateInstance(ModelDelegate modelDelegate) {
 			this.modelDelegate = modelDelegate;

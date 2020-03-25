@@ -1,7 +1,5 @@
 package cern.accsoft.steering.aloha.gui.panels.fit;
 
-import java.util.HashMap;
-
 import cern.accsoft.steering.aloha.calc.Calculator;
 import cern.accsoft.steering.aloha.calc.CalculatorListener;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
@@ -15,6 +13,8 @@ import cern.accsoft.steering.util.gui.dv.ds.AbstractJmadDataSet;
 import cern.accsoft.steering.util.gui.dv.ds.ListDataSet;
 import cern.accsoft.steering.util.gui.dv.ds.MatrixColumnDataSet;
 import cern.jdve.data.DataSet;
+
+import java.util.HashMap;
 
 /**
  * this class manages some datasets for displaying the fit data
@@ -168,8 +168,8 @@ public class FitDataSetManager {
     /**
      * @param modelDelegate the modelDelegate to set
      */
-    public void setModelDelegate(ModelDelegate modelDelegat) {
-        this.modelDelegate = modelDelegat;
+    public void setModelDelegate(ModelDelegate modelDelegate) {
+        this.modelDelegate = modelDelegate;
     }
 
     /**
@@ -208,7 +208,7 @@ public class FitDataSetManager {
     }
 
     /**
-     * @param calculator the calculator to set
+     * @param calculatorManager the calculator to set
      */
     public void setCalculator(Calculator calculatorManager) {
         this.calculator = calculatorManager;

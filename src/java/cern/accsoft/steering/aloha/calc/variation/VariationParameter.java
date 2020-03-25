@@ -78,14 +78,14 @@ public interface VariationParameter {
      * sets the delta
      * 
      * @param delta the new delta
-     * @see getDelta()
+     * @see #getDelta()
      */
     public abstract void setDelta(double delta);
 
     /**
      * adds the given value to the parameter. (may be scaled internally)
      * 
-     * @param the value that shall be added
+     * @param value the value that shall be added
      */
     public abstract void addValueScaled(double value);
 

@@ -3,12 +3,12 @@
  */
 package cern.accsoft.steering.aloha.read;
 
-import java.io.File;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.ModelAwareMeasurement;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
 import cern.accsoft.steering.util.meas.read.ReaderException;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * This is the interface for a reader, that directly returns a
@@ -23,7 +23,7 @@ public interface MeasurementReader<T extends ModelAwareMeasurement> extends Read
 	 * reads the file and returns a measurement that uses the model defined by
 	 * the given model-delegate
 	 * 
-	 * @param file
+	 * @param files
 	 *            the file to read
 	 * @param modelDelegate
 	 *            the model-delegate to use for the measurement.
