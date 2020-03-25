@@ -1,0 +1,165 @@
+buildscript {
+    project.ext.CERN_VM = System.getProperty('CERN_TECHNET_VM') ?: System.getenv('CERN_TECHNET_VM') ?: false
+    project.ext.DEPLOYMENT = System.getProperty('deployment') ?: false
+    project.ext.VCS_TAG = System.getProperty('TRAVIS_TAG') ?: System.getenv('TRAVIS_TAG') ?: System.getProperty('VCS_TAG')
+    project.ext.POM = [
+            groupId    : 'jmad',
+            artifactId : 'aloha',
+            description: 'Another Linear Optics Helper Application'
+    ]
+    project.ext.INFO = [
+            repo            : 'https://github.com/jmad/aloha.git',
+            url             : 'https://jmad.github.io/',
+            github          : 'https://github.com/jmad/aloha',
+            githubIssues    : 'https://github.com/jmad/aloha/issues',
+            licenseNameShort: 'Apache-2.0',
+            licenseName     : 'The Apache License, Version 2.0',
+            licenseUrl      : 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    ]
+    project.ext.BINTRAY = [
+            repo        : 'jmad-repo',
+            name        : 'aloha',
+            organization: 'jmad',
+            userName    : System.getProperty('BINTRAY_USER') ?: System.getenv('BINTRAY_USER'),
+            apiToken    : System.getProperty('BINTRAY_API_TOKEN') ?: System.getenv('BINTRAY_API_TOKEN')
+    ]
+
+    repositories {
+        if (CERN_VM) {
+            maven { url 'http://artifactory.cern.ch/gradle-plugins' }
+            maven { url 'http://artifactory.cern.ch/ds-jcenter' }
+            maven { url 'http://artifactory.cern.ch/development' }
+        } else {
+            mavenCentral()
+            /* Repo for gradle-bintray-plugin */
+            maven { url "https://repo.spring.io/plugins-release" }
+            maven { url 'https://plugins.gradle.org/m2/' }
+        }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'com.github.jk1:gradle-license-report:1.5'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'jmad'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+if (DEPLOYMENT) {
+    println 'Applying deployment scripts'
+    apply from: './scripts/bintray-deploy.gradle'
+}
+
+repositories {
+    if (CERN_VM) {
+        maven { url 'http://artifactory.cern.ch/ds-jcenter' }
+        maven { url 'http://artifactory.cern.ch/development' }
+    } else {
+        mavenCentral()
+        maven { url "https://dl.bintray.com/jmad/jmad-repo" }
+        /* Temporaty workaround for internal CERN dependencies */
+        ivy {
+            url "http://jmad.web.cern.ch/jmad/static/ws/lib/"
+            layout "pattern", { artifact "[artifact].[ext]" }
+            metadataSources { artifact() }
+        }
+    }
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-core', version: '5.2.0.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.2.0.RELEASE'
+
+    compile group: 'gov.nist.math', name: 'jama', version: '1.0.3'
+    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile group: 'cern.dm', name: 'jdataviewer', version: '1.8.8'
+
+	compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+	compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+	compile group: 'commons-digester', name: 'commons-digester', version: '2.1'
+	compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+
+
+    compile group: 'jmad', name: 'jmad-gui', version: '0.5.3'
+
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
+    testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.0.RELEASE'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+    testCompile group: 'org.easymock', name: 'easymock', version: '4.0.2'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.7'
+}
+
+sourceSets {
+    main {
+        java { srcDirs = ['src/java'] }
+        resources { srcDirs = ['src/java'] }
+    }
+
+    test {
+        java { srcDirs = ['src/test'] }
+        resources { srcDirs = ['src/test'] }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("$buildDir/reports/jacoco/report.xml")
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+javadoc { options.encoding = "UTF-8" }
+
+if(!project.tasks.findByName("javadocJar")) {
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+}
+
+if(!project.tasks.findByName("sourcesJar")) {
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+eclipse {
+    classpath {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+if (!project['CERN_VM']) {
+    println 'Applying licensing report'
+    apply plugin: 'com.github.jk1.dependency-license-report'
+
+    licenseReport {
+        renderers = [this.class.classLoader.loadClass('com.github.jk1.license.render.InventoryHtmlReportRenderer').newInstance()]
+        filters = [this.class.classLoader.loadClass('com.github.jk1.license.filter.LicenseBundleNormalizer').newInstance()]
+    }
+}
