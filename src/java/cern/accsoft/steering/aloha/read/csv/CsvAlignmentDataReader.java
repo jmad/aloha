@@ -9,16 +9,6 @@
  */
 package cern.accsoft.steering.aloha.read.csv;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentData;
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentDataImpl;
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentValue;
@@ -26,9 +16,15 @@ import cern.accsoft.steering.aloha.meas.data.align.AlignmentValueImpl;
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentValueType;
 import cern.accsoft.steering.aloha.read.AlignmentDataReader;
 import cern.accsoft.steering.util.meas.read.ReaderException;
-
 import com.csvreader.CsvReader;
-import com.csvreader.CsvReaderImpl;
+import org.apache.log4j.Logger;
+
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * This class reads alignment data from a csv file.
@@ -138,7 +134,7 @@ public class CsvAlignmentDataReader implements AlignmentDataReader {
 			throw new CsvReaderException("Could not find file '"
 					+ file.getAbsolutePath() + "'.", e);
 		}
-		CsvReader reader = new CsvReaderImpl(fileReader);
+		CsvReader reader = new CsvReader(fileReader);
 
 		try {
 			/* read all lines */
