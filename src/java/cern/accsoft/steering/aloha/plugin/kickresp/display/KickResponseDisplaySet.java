@@ -3,23 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.display;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
@@ -53,6 +36,16 @@ import cern.jdve.renderer.ContourChartRenderer;
 import cern.jdve.utils.DisplayPoint;
 import cern.jdve.viewer.DVView;
 import cern.jdve.viewer.DataView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * this is a special implementation of a DisplaySet for a kick-response measurement
@@ -61,7 +54,7 @@ import cern.jdve.viewer.DataView;
  */
 public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaBeanFactoryAware {
 
-    private final static Logger logger = Logger.getLogger(KickResponseDisplaySet.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(KickResponseDisplaySet.class);
 
     private final static String TITLE_CORRECTOR = "corrector";
     private final static String TITLE_MONITOR = "monitor";
@@ -81,10 +74,10 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
     private AlohaBeanFactory alohaBeanFactory;
 
     /** here we keep all the DsAdapters */
-    private HashMap<DS, DsAdapter> dsAdapters = new HashMap<DS, DsAdapter>();
+    private HashMap<DS, DsAdapter> dsAdapters = new HashMap<>();
 
     /** a hasmap for the datasources */
-    private HashMap<DSRC, DataSource> dataSources = new HashMap<DSRC, DataSource>();
+    private HashMap<DSRC, DataSource> dataSources = new HashMap<>();
 
     private static enum DS {
         MEASURED_CORRECTOR_RESPONSE, MODEL_CORRECTOR_RESPONSE, //
@@ -123,7 +116,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         }
 
         public static List<DS> fromType(DsType type) {
-            List<DS> values = new ArrayList<DS>();
+            List<DS> values = new ArrayList<>();
             for (DS value : DS.values()) {
                 if (value.getType().equals(type)) {
                     values.add(value);
@@ -164,7 +157,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
      * creates all DataViews
      */
     private List<DVView> createDataViews() {
-        List<DVView> dvViews = new ArrayList<DVView>();
+        List<DVView> dvViews = new ArrayList<>();
 
         Aloha2DChart chart;
 
@@ -887,7 +880,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
                 chart.addInteractor(ChartInteractor.ZOOM);
             } else {
-                logger.warn("dataSet '" + dataSet.getName()
+                LOGGER.warn("dataSet '" + dataSet.getName()
                         + "' is not an instance of DataSet3D. Cannot create matrix chart.");
             }
             return chart;
@@ -936,7 +929,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                     measurement.getMachineElementsManager().setActiveMonitorNumber(row);
 
                 } else {
-                    logger.warn("Dataset was not an instance of MatrixDataSet -> could not get Matrix-Column.");
+                    LOGGER.warn("Dataset was not an instance of MatrixDataSet -> could not get Matrix-Column.");
                 }
             }
         }

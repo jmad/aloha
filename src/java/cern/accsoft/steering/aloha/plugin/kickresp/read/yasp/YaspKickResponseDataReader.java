@@ -1,16 +1,5 @@
 package cern.accsoft.steering.aloha.plugin.kickresp.read.yasp;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -36,15 +25,23 @@ import cern.accsoft.steering.util.meas.data.Status;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.yasp.YaspReaderException;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class YaspKickResponseDataReader implements KickResponseMaesurementReader, AlohaBeanFactoryAware,
         MachineElementsManagerAware {
 
-    /** The logger for the class */
-    private static final Logger logger = Logger.getLogger(YaspKickResponseDataReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(YaspKickResponseDataReader.class);
 
     /** The measurement number (last digit in file-name) to use for reading. */
     private Integer measurementNumber = null;
@@ -121,7 +118,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
          * we use the name of the parent dir as name of the measurement
          */
         String name = file.getAbsoluteFile().getParentFile().getName();
-        logger.info("reading data from dir '" + basePath.toString() + "'");
+        LOGGER.info("reading data from dir '" + basePath.toString() + "'");
 
         NameListReadSelectionFilter selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
 
@@ -270,7 +267,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
             String key = cfPlus.getCorrectorKey();
             Corrector corrector = correctors.get(key);
             if (corrector == null) {
-                logger.warn("Measurement exists for corrector '" + cfPlus.getCorrectorName()
+                LOGGER.warn("Measurement exists for corrector '" + cfPlus.getCorrectorName()
                         + "' but we are not interested in it (because no corrector for key '" + key
                         + "' was found in the model). Perhaps wrong model was selected?");
                 /*
@@ -356,7 +353,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
      */
     private final MachineElementsManager getMachineElementsManager() {
         if (this.machineElementsManager == null) {
-            logger.warn("MachineElementsManager not set!");
+            LOGGER.warn("MachineElementsManager not set!");
         }
         return machineElementsManager;
     }

@@ -9,8 +9,6 @@
  */
 package cern.accsoft.steering.aloha.calc.solve.matrix.micado;
 
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.solve.Solver;
 import cern.accsoft.steering.aloha.calc.solve.SolverException;
@@ -18,6 +16,8 @@ import cern.accsoft.steering.aloha.calc.solve.matrix.AbstractMatrixSolver;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolver;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResult;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResultImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the implementation of the {@link Solver} interface, which uses the
@@ -30,9 +30,7 @@ import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResultImpl;
  */
 public class MicadoSolver extends AbstractMatrixSolver implements MatrixSolver,
 		MicadoSolverConfig {
-
-	/** the logger for the class */
-	private final static Logger logger = Logger.getLogger(MicadoSolver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MicadoSolver.class);
 
 	/** the name of the solver */
 	private final static String SOLVER_NAME = "MICADO";
@@ -76,7 +74,7 @@ public class MicadoSolver extends AbstractMatrixSolver implements MatrixSolver,
 		int iter = getIterations();
 		if (iter > cols) {
 			iter = cols;
-			logger.warn("Cannot perform " + getIterations()
+			LOGGER.warn("Cannot perform " + getIterations()
 					+ " iterations, since only " + iter
 					+ " parameters defined. -> Performing " + iter
 					+ " iterations.");

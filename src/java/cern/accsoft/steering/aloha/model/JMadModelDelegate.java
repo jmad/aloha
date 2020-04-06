@@ -7,11 +7,6 @@
  */
 package cern.accsoft.steering.aloha.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentData;
 import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
@@ -30,14 +25,17 @@ import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.model.JMadModelListener;
 import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kfuchsbe
  */
 public class JMadModelDelegate implements ModelDelegate {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(JMadModelDelegate.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(JMadModelDelegate.class);
 
     /** The model we work with. */
     private final JMadModel model;
@@ -54,7 +52,7 @@ public class JMadModelDelegate implements ModelDelegate {
     private boolean suppressEvents = false;
 
     /** the listeners to this delegate */
-    private List<ModelDelegateListener> listeners = new ArrayList<ModelDelegateListener>();
+    private List<ModelDelegateListener> listeners = new ArrayList<>();
 
     public JMadModelDelegate(JMadModel model, MachineElementsManager machineElementsManager,
             JMadModelAdapter modelAdapter) {
@@ -103,7 +101,7 @@ public class JMadModelDelegate implements ModelDelegate {
         try {
             getJMadModel().reset();
         } catch (JMadModelException e) {
-            logger.error("Error while resetting the model", e);
+            LOGGER.error("Error while resetting the model", e);
         }
     }
 
@@ -144,7 +142,7 @@ public class JMadModelDelegate implements ModelDelegate {
                 getJMadModel().cleanup();
             }
         } catch (JMadModelException e) {
-            logger.error("Error while claening up the model", e);
+            LOGGER.error("Error while claening up the model", e);
         }
     }
 
@@ -177,28 +175,25 @@ public class JMadModelDelegate implements ModelDelegate {
             Element element = getJMadModel().getActiveRange().getElement(name);
 
             if (element == null) {
-                logger.warn("Could not find element with name '" + name + "' in active range. Ignoring it.");
+                LOGGER.warn("Could not find element with name '" + name + "' in active range. Ignoring it.");
             }
             if (JMadElementType.CORRECTOR.isTypeOf(element)) {
                 cern.accsoft.steering.jmad.domain.elem.impl.Corrector corrector = (cern.accsoft.steering.jmad.domain.elem.impl.Corrector) element;
                 corrector.setKick(JMadUtil.convertPlane(value.getPlane()), value.getValue());
-                logger.debug("Set kick (" + value.getPlane() + ") of " + value.getValue() + " [rad] to corrector '"
+                LOGGER.debug("Set kick (" + value.getPlane() + ") of " + value.getValue() + " [rad] to corrector '"
                         + corrector.getName() + "'");
             } else if (JMadElementType.BEND.isTypeOf(element)) {
                 Bend bend = (Bend) element;
                 bend.setAngle(value.getValue());
-                logger.debug("Set angle of " + value.getValue() + " [rad] to bending magnet '" + bend.getName()
+                LOGGER.debug("Set angle of " + value.getValue() + " [rad] to bending magnet '" + bend.getName()
                         + "'. Plane (" + value.getPlane() + ") was ignored.");
             } else {
-                logger.warn("Element '" + element.getName() + "' is neither a corrector nor a bending magnet. "
+                LOGGER.warn("Element '" + element.getName() + "' is neither a corrector nor a bending magnet. "
                         + "Cannot set trim. Ignoring it.");
             }
         }
 
         fireBecameDirty();
-        //
-        // TODO some kind of undo would be nice.
-        //
     }
 
     @Override
@@ -232,7 +227,7 @@ public class JMadModelDelegate implements ModelDelegate {
     @Override
     public List<String> getMonitorRegexps() {
         if (this.modelAdapter == null) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
         return this.modelAdapter.getMonitorRegexps();
     }

@@ -5,7 +5,8 @@
  */
 package cern.accsoft.steering.aloha.calc.solve.matrix.micado;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class was copied directly from Yasp (original author jwenning) and
@@ -27,9 +28,7 @@ import org.apache.log4j.Logger;
  * @author jwenning
  */
 public class MICADO {
-
-	/** The logger for the class */
-	private final static Logger logger = Logger.getLogger(MICADO.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MICADO.class);
 
 	private static final double NUM_CUT = 1.0e-6;
 
@@ -49,8 +48,8 @@ public class MICADO {
 	 *            = iteration-1/line #
 	 */
 
-	private static final void htal(double[][] a, int m, int n, int k,
-			double beta) {
+	private static void htal(double[][] a, int m, int n, int k,
+							 double beta) {
 		int j, nc, k1, k2;
 		double h;
 
@@ -82,8 +81,8 @@ public class MICADO {
 	 * @paramk = from 0 to iteration-1/line #
 	 */
 
-	private static final void htbl(double[][] a, double[] b, int m, int n,
-			int k, double beta) {
+	private static void htbl(double[][] a, double[] b, int m, int n,
+							 int k, double beta) {
 		int k1;
 		double h;
 
@@ -111,8 +110,8 @@ public class MICADO {
 	 * @param k
 	 *            = iteration-1/line #
 	 */
-	private static final void htrl(double[][] a, double[] b, int m, int n,
-			int k, double[] rho) {
+	private static void htrl(double[][] a, double[] b, int m, int n,
+							 int k, double[] rho) {
 		int i, kk, kn, kl;
 		double beta;
 
@@ -134,12 +133,12 @@ public class MICADO {
 	 * 
 	 * @param m
 	 *            = # monitors
-	 * @param n
+	 * @param m
 	 *            = # correctors
 	 * @param k
 	 *            = iteration-1/line #
 	 */
-	private static final double htul(double[][] a, int m, int k) {
+	private static double htul(double[][] a, int m, int k) {
 		int i;
 		double sig;
 
@@ -166,7 +165,7 @@ public class MICADO {
 	 *            = # of elements of vec to consider
 	 */
 
-	private static final double micado_rms(double[] vec, int n0, int n) {
+	private static double micado_rms(double[] vec, int n0, int n) {
 		int i, imax;
 		double mean, mean2, nn;
 
@@ -206,7 +205,7 @@ public class MICADO {
 	 *            = # of elements of vec to consider
 	 */
 
-	private static final double micado_variance(double[] vec, int n0, int n) {
+	private static double micado_variance(double[] vec, int n0, int n) {
 		int i, imax;
 		double mean2, nn;
 
@@ -411,7 +410,7 @@ public class MICADO {
 					h = rho[j] - a[k][j] * a[k][j];
 
 					if (h < NUM_CUT) { // flag the suspicious elements
-						logger.warn("MICADO problem : suspected parameter. # "
+						LOGGER.warn("MICADO problem : suspected parameter. # "
 								+ j);
 						// return false;
 						continue;

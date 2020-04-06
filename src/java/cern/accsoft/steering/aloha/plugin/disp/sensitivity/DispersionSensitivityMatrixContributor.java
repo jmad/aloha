@@ -7,10 +7,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.disp.sensitivity;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -23,6 +19,10 @@ import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurementImpl;
 import cern.accsoft.steering.aloha.plugin.disp.meas.data.DispersionData;
 import cern.accsoft.steering.jmad.util.MatrixUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * This class is responsible for creating correct parts of the sensity-matrix, corresponding to the dispersion-data
@@ -31,9 +31,7 @@ import cern.accsoft.steering.jmad.util.MatrixUtil;
  */
 public class DispersionSensitivityMatrixContributor implements SensitivityMatrixContributor, NoiseWeighterAware,
         MachineElementsManagerAware {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(DispersionSensitivityMatrixContributor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DispersionSensitivityMatrixContributor.class);
 
     /** the name of this contributor */
     private final static String CONTRIBUTOR_NAME = "Dispersion";
@@ -77,7 +75,7 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
         List<Double> modelDispersionValues = getModelOpticsData().getMonitorDispersions();
         int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
 
-        logger.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensity-matrix...");
+        LOGGER.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensity-matrix...");
         Matrix sensityMatrix = new Matrix(monitorCount, monitorCount);
 
         for (int i = 0; i < monitorCount; i++) {
@@ -100,7 +98,7 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
         List<Boolean> validity = getDispersionData().getValidity();
         List<Double> rmsValues = getDispersionData().getRms();
 
-        logger.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
+        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
         Matrix sensityMatrix = new Matrix(monitorCount, 1);
 
         Matrix deltaVector = calcDeltaVector(delta);
@@ -109,7 +107,7 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
         if (normalizationFactor == null) {
             normalizationFactor = deltaVector.normF() / this.unperturbedNorm;
             if (normalizationFactor < minNorm) {
-                logger.warn("Normalization Factor for perturbed Dispersion column is smaller than " + minNorm
+                LOGGER.warn("Normalization Factor for perturbed Dispersion column is smaller than " + minNorm
                         + ". Maybe the choice for delta of the parameter was too small.");
                 normalizationFactor = 1.0;
             }

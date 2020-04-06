@@ -1,26 +1,15 @@
 package cern.accsoft.steering.aloha.gui.menus;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.gui.beans.AboutBox;
 import cern.accsoft.gui.frame.FrameManager;
 import cern.accsoft.steering.aloha.gui.icons.Icon;
 import cern.accsoft.steering.aloha.meas.MeasurementManager.ModelDelegateInstance;
 import cern.accsoft.steering.aloha.model.ModelDelegateManager;
 
-public class MenuFactory {
-    /** The logger for the class */
-    private final static Logger logger = Logger.getLogger(MenuFactory.class);
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
+public class MenuFactory {
     /* created components */
     private JToolBar toolBar = null;
     private JMenuBar menuBar = null;

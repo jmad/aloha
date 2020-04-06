@@ -3,15 +3,15 @@
  */
 package cern.accsoft.steering.aloha.calc;
 
-import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.algorithm.Algorithm;
 import cern.accsoft.steering.aloha.calc.algorithm.AlgorithmManager;
 import cern.accsoft.steering.aloha.calc.iteration.IterationManager;
 import cern.accsoft.steering.aloha.calc.solve.SolverManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 /**
  * The implementation of a class that keeps track of all available Calculators.
@@ -19,12 +19,10 @@ import cern.accsoft.steering.aloha.calc.solve.SolverManager;
  * @author tbaer
  */
 public class CalculatorImpl implements Calculator {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(CalculatorImpl.class);;
+    private final static Logger LOGGER = LoggerFactory.getLogger(CalculatorImpl.class);
 
     /** the listeners to the calculator */
-    private ArrayList<CalculatorListener> listeners = new ArrayList<CalculatorListener>();
+    private ArrayList<CalculatorListener> listeners = new ArrayList<>();
 
     /** The manager which we use to get/create algorithms for solvers */
     private AlgorithmManager algorithmManager;
@@ -64,7 +62,7 @@ public class CalculatorImpl implements Calculator {
     public void calc() throws CalculatorException {
         Algorithm activeAlgorithm = getActiveAlgorithm();
         if (activeAlgorithm == null) {
-            logger.warn("No active algorithm set. Cannot calculate.");
+            LOGGER.warn("No active algorithm set. Cannot calculate.");
             return;
         }
 
@@ -80,7 +78,7 @@ public class CalculatorImpl implements Calculator {
         /*
          * here we start the calculation and increase the iteration number
          */
-        logger.info("starting fit - iteration number " + (iteration + 1) + ".");
+        LOGGER.info("starting fit - iteration number " + (iteration + 1) + ".");
         this.deltaParameterValues = activeAlgorithm.calc();
 
         /*
@@ -109,7 +107,7 @@ public class CalculatorImpl implements Calculator {
     public void reset() throws CalculatorException {
         Algorithm activeAlgorithm = getActiveAlgorithm();
         if (activeAlgorithm == null) {
-            logger.warn("No active algorithm set. Cannot reset.");
+            LOGGER.warn("No active algorithm set. Cannot reset.");
             return;
         }
         activeAlgorithm.reset();

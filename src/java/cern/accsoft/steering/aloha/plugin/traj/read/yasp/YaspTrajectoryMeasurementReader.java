@@ -1,13 +1,5 @@
 package cern.accsoft.steering.aloha.plugin.traj.read.yasp;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -30,6 +22,13 @@ import cern.accsoft.steering.util.meas.read.filter.ReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.yasp.YaspFileReader;
 import cern.accsoft.steering.util.meas.read.yasp.YaspReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFilters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * this class is a reader for the Noise data acquired by yasp.
@@ -38,9 +37,7 @@ import cern.accsoft.steering.util.meas.yasp.browse.YaspFilters;
  */
 public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementReader, AlohaBeanFactoryAware,
         MachineElementsManagerAware {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(YaspTrajectoryMeasurementReader.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(YaspTrajectoryMeasurementReader.class);
 
     /** the selected monitors and correctors */
     private ReadSelectionFilter selection = null;
@@ -124,7 +121,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
         }
 
         if (!(measurementDatas.size() > 0)) {
-            logger.warn("No stability Files to read!?");
+            LOGGER.warn("No stability Files to read!?");
             return null;
         }
 
@@ -174,7 +171,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
     /**
      * reads all the given stabilityFiles and returns the measurement-data as a list
      * 
-     * @param readers the stability-files to read
+     * @param files the stability-files to read
      * @return the measurement-data as a list
      * @throws ReaderException
      */
@@ -192,7 +189,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
      * @return a list of stearingFiles.
      * @throws YaspReaderException
      */
-    private final List<File> readStabilityList(File stabilityListFile) throws YaspReaderException {
+    private List<File> readStabilityList(File stabilityListFile) throws YaspReaderException {
         List<File> files = new ArrayList<File>();
         YaspStabilityList stabilityList = new YaspStabilityList(stabilityListFile);
 

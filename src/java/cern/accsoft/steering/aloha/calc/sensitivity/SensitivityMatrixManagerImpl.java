@@ -7,12 +7,6 @@
  */
 package cern.accsoft.steering.aloha.calc.sensitivity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.CalculatorException;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResult;
@@ -25,6 +19,12 @@ import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.meas.MeasurementManager;
 import cern.accsoft.steering.aloha.meas.MeasurementManagerListener;
 import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class implements the methods for creating sensity-matrices and applying the fitted values. It uses several
@@ -34,9 +34,7 @@ import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactor
  * @author kfuchsbe
  */
 public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, SensitivityMatrixManagerConfig {
-
-    /** the logger of the class */
-    private final static Logger logger = Logger.getLogger(SensitivityMatrixManagerImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(SensitivityMatrixManagerImpl.class);
 
     //
     // fields used for configuration
@@ -245,7 +243,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             } else {
                 double norm = subMatrix.normF() / baseNorm;
                 if (norm < minNorm) {
-                    logger.warn("Normalization Factor for contributor is smaller than " + minNorm + ".");
+                    LOGGER.warn("Normalization Factor for contributor is smaller than " + minNorm + ".");
                     norm = 1.0;
                 }
                 config.setAutomaticNorm(norm);

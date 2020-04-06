@@ -1,17 +1,5 @@
 package cern.accsoft.steering.aloha.gui.panels;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.conf.MonitorSelection;
 import cern.accsoft.steering.aloha.gui.icons.Icon;
@@ -19,12 +7,18 @@ import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.persist.XmlMonitorSelectionPersistenceService;
 import cern.accsoft.steering.jmad.util.xml.PersistenceServiceException;
 import cern.accsoft.steering.util.gui.menu.ActionProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class MonitorsPanel extends MachineElementsPanel implements ActionProvider {
-    private static final long serialVersionUID = 1L;
-
-    /** The logger for the class */
-    private final static Logger LOGGER = Logger.getLogger(MonitorsPanel.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MonitorsPanel.class);
 
     /** The persistence service to use for loading and saving the monitor - selections */
     private XmlMonitorSelectionPersistenceService monitorPersistenceService = new XmlMonitorSelectionPersistenceService();
@@ -52,8 +46,6 @@ public class MonitorsPanel extends MachineElementsPanel implements ActionProvide
      * the action to load the selection of the monitors from a file.
      */
     private Action loadMonitorSelectionAction = new AbstractAction(null, Icon.FILE_OPEN.getImageIcon()) {
-        private static final long serialVersionUID = 1L;
-
         @Override
         public void actionPerformed(ActionEvent e) {
             loadMonitorSelection();
@@ -86,7 +78,7 @@ public class MonitorsPanel extends MachineElementsPanel implements ActionProvide
 
     @Override
     public List<Action> getActions() {
-        return Arrays.asList(new Action[] { loadMonitorSelectionAction, saveMonitorSelectionAction });
+        return Arrays.asList(loadMonitorSelectionAction, saveMonitorSelectionAction);
     }
 
     /**

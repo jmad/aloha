@@ -1,17 +1,11 @@
 /*
  * $Id: KickResponseDataImpl.java,v 1.4 2009-03-16 16:38:12 kfuchsbe Exp $
- * 
+ *
  * $Date: 2009-03-16 16:38:12 $ $Revision: 1.4 $ $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.machine.Corrector;
@@ -26,37 +20,45 @@ import cern.accsoft.steering.util.TMatrix;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.CorrectorValue;
 import cern.accsoft.steering.util.meas.data.yasp.MonitorValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * this is the basic implementation of the data of a kick-response-measurement.
- * 
+ *
  * @author kfuchsbe
  */
 public class KickResponseDataImpl extends AbstractDynamicData implements KickResponseData {
 
-    final static Logger logger = Logger.getLogger(KickResponseDataImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(KickResponseDataImpl.class);
 
     private final static double DELTA_KICK_LIMIT = 0.1;
 
-    private Map<String, CorrectorKickData> correctorKickDataPlus = new HashMap<String, CorrectorKickData>();
-    private Map<String, CorrectorKickData> correctorKickDataMinus = new HashMap<String, CorrectorKickData>();
+    private Map<String, CorrectorKickData> correctorKickDataPlus = new HashMap<>();
+    private Map<String, CorrectorKickData> correctorKickDataMinus = new HashMap<>();
 
     private Matrix responseMatrix = new Matrix(0, 0);
     private Matrix relativeRmsValues = new Matrix(0, 0);
-    private TMatrix<Boolean> validityMatrix = new TMatrix<Boolean>(0, 0, true);
+    private TMatrix<Boolean> validityMatrix = new TMatrix<>(0, 0, true);
 
-    private Map<String, Matrix> trajMatrices = new HashMap<String, Matrix>();
-    private Map<String, TMatrix<Boolean>> trajValidityMatrices = new HashMap<String, TMatrix<Boolean>>();
+    private Map<String, Matrix> trajMatrices = new HashMap<>();
+    private Map<String, TMatrix<Boolean>> trajValidityMatrices = new HashMap<>();
 
     private double toModelConversionFactor = 1.0;
 
-    /** The kick-response measurement which this data belongs to (if any) */
+    /**
+     * The kick-response measurement which this data belongs to (if any)
+     */
     private KickResponseMeasurement kickResponseMeasurement = null;
 
     /**
      * here we store the corrector kicks for the correctors
      */
-    private Map<String, Double> correctorKicks = new HashMap<String, Double>();
+    private Map<String, Double> correctorKicks = new HashMap<>();
 
     public void init() throws InconsistentDataException {
         calc();
@@ -69,7 +71,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                 calc();
                 setDirty(false);
             } catch (InconsistentDataException e) {
-                logger.error("Error while calculating response - matrix", e);
+                LOGGER.error("Error while calculating response - matrix", e);
             }
         }
         return responseMatrix;
@@ -94,19 +96,19 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
         /* number of functional Monitors */
         int activeMonitorsCount = activeMonitors.size();
 
-        logger.debug("We have " + activeCorrectorsCount + " active correctors and " + activeMonitorsCount
+        LOGGER.debug("We have " + activeCorrectorsCount + " active correctors and " + activeMonitorsCount
                 + " active Monitors. So the Response-Matrix will be a " + activeMonitorsCount + "x"
                 + activeCorrectorsCount + " Matrix.");
 
         responseMatrix = new Matrix(activeMonitorsCount, activeCorrectorsCount);
-        validityMatrix = new TMatrix<Boolean>(activeMonitorsCount, activeCorrectorsCount, false);
+        validityMatrix = new TMatrix<>(activeMonitorsCount, activeCorrectorsCount, false);
 
         /* add new empty trajectory-matrices */
         for (Plane plane : Plane.values()) {
             for (DeflectionSign sign : DeflectionSign.values()) {
                 int monitorCount = getMachineElementsManager().getActiveMonitorsCount(plane);
                 addTrajectoryMatrices(plane, sign, new Matrix(monitorCount, activeCorrectorsCount),
-                        new TMatrix<Boolean>(monitorCount, activeCorrectorsCount, false));
+                        new TMatrix<>(monitorCount, activeCorrectorsCount, false));
             }
         }
 
@@ -255,7 +257,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
         return plane.getTag() + "-" + sign.getTag();
     }
 
-    private final double toModel(double value) {
+    private double toModel(double value) {
         return this.getToModelConversionFactor() * value;
     }
 
@@ -341,7 +343,7 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
 
     /**
      * calculates the rms-values relative to the corrector-kicks
-     * 
+     *
      * @return the calculated matrix
      */
     private Matrix calcRelativeRmsValues() {

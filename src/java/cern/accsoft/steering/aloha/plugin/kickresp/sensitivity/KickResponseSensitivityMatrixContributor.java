@@ -7,8 +7,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.sensitivity;
 
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -21,6 +19,8 @@ import cern.accsoft.steering.aloha.plugin.kickresp.meas.KickResponseMeasurementI
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CombinedKickResponseData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.ModelKickResponseData;
 import cern.accsoft.steering.util.TMatrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * this class creates the parts of the sensity-matrix which correspond to kick-response measurements
@@ -29,9 +29,7 @@ import cern.accsoft.steering.util.TMatrix;
  */
 public class KickResponseSensitivityMatrixContributor extends AbstractSensitivityMatrixContributor implements
         SensitivityMatrixContributor, NoiseWeighterAware, MachineElementsManagerAware {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(KickResponseSensitivityMatrixContributor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(KickResponseSensitivityMatrixContributor.class);
 
     /** the name of this contributor */
     private final static String CONTRIBUTOR_NAME_PREFIX = "Kick-response";
@@ -74,7 +72,7 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
         Matrix responseMatrixModel = getModelKickResponseData().getResponseMatrix();
 
         int sensityRowCount = monitorCount * correctorCount;
-        logger.debug("creating " + sensityRowCount + "x" + monitorCount + " monitor-sensity-matrix...");
+        LOGGER.debug("creating " + sensityRowCount + "x" + monitorCount + " monitor-sensity-matrix...");
         Matrix sensityMatrix = new Matrix(sensityRowCount, monitorCount);
 
         for (int i = 0; i < monitorCount; i++) {
@@ -103,7 +101,7 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
         Matrix responseMatrixModel = getModelKickResponseData().getResponseMatrix();
 
         int sensityRowCount = monitorCount * correctorCount;
-        logger.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
+        LOGGER.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
         Matrix sensityMatrix = new Matrix(sensityRowCount, correctorCount);
 
         for (int i = 0; i < monitorCount; i++) {
@@ -138,7 +136,7 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
         Matrix noises = getNoises();
 
         int sensityRowCount = monitorCount * correctorCount;
-        logger.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
+        LOGGER.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
         Matrix sensityMatrix = new Matrix(sensityRowCount, 1);
 
         Matrix deltaMatrix = calcDeltaResponseMatrix(delta);
@@ -146,13 +144,13 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
         /* if no normalization-factor is given, we have to calc our own. */
         if (normalizationFactor == null) {
             if (this.unperturbedNorm < minNorm) {
-                logger.warn("unperturbed normalization factor is smaller than " + minNorm
+                LOGGER.warn("unperturbed normalization factor is smaller than " + minNorm
                         + ". -> not normalizing the matrix.");
                 normalizationFactor = 1.0;
             } else {
                 normalizationFactor = deltaMatrix.normF() / this.unperturbedNorm;
                 if (normalizationFactor < minNorm) {
-                    logger.warn("Normalization Factor for perturbed response matrix is smaller than " + minNorm
+                    LOGGER.warn("Normalization Factor for perturbed response matrix is smaller than " + minNorm
                             + ". Maybe the choice for delta of the parameter was too small.");
                     normalizationFactor = 1.0;
                 }
@@ -194,12 +192,6 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
      */
     private Matrix getNoises() {
         return this.kickResponseMeasurement.getData().getRelativeRmsValues();
-        // TrajectoryData stabilityData = getMeasurement().getData().getStabilityData();
-        // if (stabilityData != null) {
-        // return stabilityData.getRmsValues();
-        // } else {
-        // return ArrayUtil.createDefaultValueList(machineElementsManager.getActiveMonitorsCount(), 0.0);
-        // }
     }
 
     /**

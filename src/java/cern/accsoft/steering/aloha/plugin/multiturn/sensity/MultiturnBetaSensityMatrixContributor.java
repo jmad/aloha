@@ -3,11 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.sensity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -22,14 +17,18 @@ import cern.accsoft.steering.aloha.plugin.multiturn.meas.data.MultiturnVar;
 import cern.accsoft.steering.jmad.util.ListUtil;
 import cern.accsoft.steering.jmad.util.MatrixUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kfuchsbe
  */
 public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixContributor,
         MachineElementsManagerAware, NoiseWeighterAware {
-
-    private final static Logger logger = Logger.getLogger(MultiturnBetaSensityMatrixContributor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MultiturnBetaSensityMatrixContributor.class);
 
     private MultiturnMeasurement multiturnMeasurement;
 
@@ -75,7 +74,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
         List<Boolean> validity = getMultiturnMeasurement().getData().getValidityValues();
         List<Double> errorValues = getMultiturnMeasurement().getData().getValues(MultiturnVar.BETA_ERROR);
 
-        logger.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
+        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
         Matrix sensityMatrix = new Matrix(monitorCount, 1);
 
         Matrix deltaVector = calcDeltaVector(delta);
@@ -84,7 +83,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
         if (normalizationFactor == null) {
             normalizationFactor = deltaVector.normF() / this.unperturbedNorm;
             if (normalizationFactor < minNorm) {
-                logger.warn("Normalization Factor for perturbed Beta column is smaller than " + minNorm
+                LOGGER.warn("Normalization Factor for perturbed Beta column is smaller than " + minNorm
                         + ". Maybe the choice for delta of the parameter was too small.");
                 normalizationFactor = 1.0;
             }

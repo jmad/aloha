@@ -1,20 +1,5 @@
 package cern.accsoft.steering.aloha.gui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.gui.components.DoubleTableCellRenderer;
 import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
@@ -30,11 +15,18 @@ import cern.accsoft.steering.util.gui.panels.Applyable;
 import cern.accsoft.steering.util.gui.panels.TableFilterPanel;
 import cern.accsoft.steering.util.gui.table.SelectionSetTableModel;
 import cern.accsoft.steering.util.gui.table.TableModelSelectionAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MachineElementsPanel extends JPanel implements Applyable, TableModelListener {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(MachineElementsPanel.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MachineElementsPanel.class);
 
     private final static Dimension PREFERRED_SIZE = new Dimension(200, 400);
 
@@ -45,8 +37,8 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
     private boolean dataChanged = false;
     private AbstractMachineElement[] elements = null;
 
-    private ArrayList<Double> gainBuffer = new ArrayList<Double>();
-    private ArrayList<Boolean> activeBuffer = new ArrayList<Boolean>();
+    private ArrayList<Double> gainBuffer = new ArrayList<>();
+    private ArrayList<Boolean> activeBuffer = new ArrayList<>();
 
     private ElementsTableModel tableModel = null;
 
@@ -114,7 +106,7 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
         } else if (Type.CORRECTORS.equals(this.getType())) {
             this.elements = getMachineElementsManager().getAllCorrectors().toArray(new AbstractMachineElement[] {});
         } else {
-            logger.warn("unknown type '" + getType() + "'. Do not know what to do.");
+            LOGGER.warn("unknown type '" + getType() + "'. Do not know what to do.");
             return;
         }
         refresh();

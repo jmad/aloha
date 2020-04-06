@@ -9,13 +9,12 @@
  */
 package cern.accsoft.steering.aloha.export.latex;
 
+import cern.accsoft.steering.aloha.export.TextExporter;
+
+import javax.swing.table.TableModel;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.table.TableModel;
-
-import cern.accsoft.steering.aloha.export.TextExporter;
 
 /**
  * this class can export (parts of) a table model to a latex table.
@@ -26,17 +25,17 @@ import cern.accsoft.steering.aloha.export.TextExporter;
 public class TableModelLatexTextExporter implements TextExporter {
 
 	/** the default formatter */
-	private final static NumberFormat formatter = NumberFormat.getInstance();
+	private final static NumberFormat FORMATTER = NumberFormat.getInstance();
 	static {
-		formatter.setMinimumFractionDigits(1);
-		formatter.setMaximumFractionDigits(6);
+		FORMATTER.setMinimumFractionDigits(1);
+		FORMATTER.setMaximumFractionDigits(6);
 	}
 
 	/** The table model from which to retrieve the data */
 	private TableModel tableModel = null;
 
 	/** the column indizes of the model, which will be exported */
-	private List<Integer> columnIndizes = new ArrayList<Integer>();
+	private List<Integer> columnIndizes = new ArrayList<>();
 
 	/**
 	 * the default constructor, which needs a table model
@@ -81,7 +80,7 @@ public class TableModelLatexTextExporter implements TextExporter {
 				if (value != null) {
 					String strValue = null;
 					if (value instanceof Double) {
-						strValue = formatter.format(value);
+						strValue = FORMATTER.format(value);
 					} else if (value instanceof String) {
 						strValue = (String) value;
 					} else if (value instanceof Boolean) {
@@ -97,12 +96,12 @@ public class TableModelLatexTextExporter implements TextExporter {
 
 	@Override
 	public void setMaxFractionDigits(int digits) {
-		formatter.setMaximumFractionDigits(digits);
+		FORMATTER.setMaximumFractionDigits(digits);
 	}
 
 	@Override
 	public int getMaxFractionDigits() {
-		return formatter.getMaximumFractionDigits();
+		return FORMATTER.getMaximumFractionDigits();
 	}
 
 }

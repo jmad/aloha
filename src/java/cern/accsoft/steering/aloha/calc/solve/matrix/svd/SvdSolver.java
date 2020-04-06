@@ -7,8 +7,6 @@
  */
 package cern.accsoft.steering.aloha.calc.solve.matrix.svd;
 
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 import cern.accsoft.steering.aloha.calc.solve.SolverException;
@@ -17,6 +15,8 @@ import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolver;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResult;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResultImpl;
 import cern.accsoft.steering.jmad.util.MatrixUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is an implementation of the solver-interface, which uses SVD to calculate the inverse matrix
@@ -24,9 +24,7 @@ import cern.accsoft.steering.jmad.util.MatrixUtil;
  * @author kfuchsbe
  */
 public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, SvdSolverConfig {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(SvdSolver.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(SvdSolver.class);
 
     /** the name of the solver */
     private final static String SOLVER_NAME = "SVD";
@@ -46,7 +44,7 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
             matrix = inMatrix;
             vector = inVector;
         } else {
-            logger.warn("We need more matrix rows than columns for svd. Adding zero rows.");
+            LOGGER.warn("We need more matrix rows than columns for svd. Adding zero rows.");
 
             int size = inMatrix.getColumnDimension();
 
@@ -59,14 +57,14 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
             vector.setMatrix(0, inVector.getRowDimension() - 1, 0, inVector.getColumnDimension() - 1, inVector);
         }
 
-        logger.debug("starting singular value decomposition ...");
+        LOGGER.debug("starting singular value decomposition ...");
         SingularValueDecomposition svd = matrix.svd();
-        logger.debug("   ... finished.");
+        LOGGER.debug("   ... finished.");
 
         /* try to get rid of old stuff. */
         System.gc();
 
-        logger.debug("multiplying matrices ...");
+        LOGGER.debug("multiplying matrices ...");
         Matrix transformMatrix = svd.getV().times(calcInvertDiagonal(svd.getSingularValues())).times(
                 svd.getU().transpose());
         Matrix outVector = transformMatrix.times(vector);
@@ -109,7 +107,7 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
          */
         result.setParameterErrorEstimates(calcParameterErrorEstimates(transformMatrix, inVectorErrors));
 
-        logger.debug("   ... finished.");
+        LOGGER.debug("   ... finished.");
         return result;
     }
 
@@ -149,8 +147,8 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
                 skippedSingularValues += singularValues[i];
             }
         }
-        logger.info("Used singular Values: " + usedSingularValues + ".");
-        logger.info("Skipped singular Values: " + skippedSingularValues + ".");
+        LOGGER.info("Used singular Values: " + usedSingularValues + ".");
+        LOGGER.info("Skipped singular Values: " + skippedSingularValues + ".");
         return matrix;
     }
 
@@ -185,7 +183,7 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
         Matrix vector;
         if (transformMatrix.getColumnDimension() > inErrors.getRowDimension()) {
             /* seems that the in matrix was resized */
-            logger.warn("Seems that matrix was resized. Adding zero rows to error vector.");
+            LOGGER.warn("Seems that matrix was resized. Adding zero rows to error vector.");
             int size = transformMatrix.getColumnDimension();
 
             /* resize the input-vector */

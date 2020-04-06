@@ -1,10 +1,5 @@
 package cern.accsoft.steering.aloha.plugin.xxx.sensitivity;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.sensitivity.AbstractSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.sensitivity.PerturbedColumn;
@@ -14,11 +9,14 @@ import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
 import cern.accsoft.steering.jmad.domain.optics.Optic;
 import cern.accsoft.steering.jmad.domain.var.enums.MadxTwissVariable;
 import cern.accsoft.steering.jmad.model.JMadModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Ti8CollimatorConstraintsContributor extends AbstractSensitivityMatrixContributor {
-
-	/** The logger for the class */
-	private final static Logger LOGGER = Logger.getLogger(Ti8CollimatorConstraintsContributor.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(Ti8CollimatorConstraintsContributor.class);
 
 	/** the minimal norm */
 	private final static double MIN_NORM = 0.0000001;

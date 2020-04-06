@@ -29,13 +29,12 @@ import cern.accsoft.steering.util.gui.DefaultAccsoftGui;
 import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.awt.Frame;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ import java.util.List;
 public abstract class MenuActionHandler {
 
     /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(MenuActionHandler.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MenuActionHandler.class);
 
     /** The file chooser, which will be instantiated the first time it will be used and reused afterwards */
     private JFileChooser fileChooser = null;
@@ -116,7 +115,7 @@ public abstract class MenuActionHandler {
         int returnValue = fileChooser.showOpenDialog(mainFrame);
         if (returnValue != JFileChooser.APPROVE_OPTION) {
             /* if not ok pressed, then we have nothing to do. */
-            logger.debug("Opening of file aborted by user.");
+            LOGGER.debug("Opening of file aborted by user.");
             return;
         }
         List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
@@ -155,7 +154,7 @@ public abstract class MenuActionHandler {
         }
 
         if (reader == null) {
-            logger.debug("User selected no valid reader. Aborting.");
+            LOGGER.debug("User selected no valid reader. Aborting.");
             return;
         }
 
@@ -183,7 +182,7 @@ public abstract class MenuActionHandler {
                  */
                 model = jMadGui.showCreateModelDialog();
                 if (model == null) {
-                    logger.debug("No model was choosen. Aborting loading data.");
+                    LOGGER.debug("No model was choosen. Aborting loading data.");
                     return;
                 }
 
@@ -195,7 +194,7 @@ public abstract class MenuActionHandler {
                 modelDelegate = showSelectModelDelegateDialog();
             }
             if ((model == null) && (modelDelegate == null)) {
-                logger.debug("No model was choosen. Aborting loading data.");
+                LOGGER.debug("No model was choosen. Aborting loading data.");
                 return;
             }
 
@@ -206,7 +205,7 @@ public abstract class MenuActionHandler {
             if (((MeasurementReader<?>) reader).requiresOptions()) {
                 options = new MeasurementReaderOptions();
                 if (!PanelDialog.show(new MeasurementReaderOptionsPanel(options), mainFrame, true)) {
-                    logger.debug("Options aborted. Aborting loading data.");
+                    LOGGER.debug("Options aborted. Aborting loading data.");
                     return;
                 }
             }
@@ -222,14 +221,14 @@ public abstract class MenuActionHandler {
             try {
                 data = ((HelperDataReader<?>) reader).read(files);
             } catch (ReaderException e) {
-                logger.error("Error while reading data", e);
+                LOGGER.error("Error while reading data", e);
                 JOptionPane.showMessageDialog(mainFrame, "Could not read data from files <br>'" + files.toString()
                         + "'.\n" + "Exception was: '" + e.getMessage() + "'", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             getWorkingSet().putData(data);
         } else {
-            logger.error("Unknown instance of reader '" + reader.getClass().getCanonicalName()
+            LOGGER.error("Unknown instance of reader '" + reader.getClass().getCanonicalName()
                     + "'. Do not know what to do.");
         }
     }
@@ -258,23 +257,23 @@ public abstract class MenuActionHandler {
 
             if (modelDelegate == null) {
                 if (model == null) {
-                    logger.error("No model was choosen, aborting.");
+                    LOGGER.error("No model was choosen, aborting.");
                 }
                 try {
                     model.reset();
                 } catch (JMadModelException e) {
-                    logger.error("Error while initializing model. aborting.", e);
+                    LOGGER.error("Error while initializing model. aborting.", e);
                     return null;
                 }
                 modelDelegate = createModelDelegate(model);
             }
 
-            logger.info("Start loading data .");
+            LOGGER.info("Start loading data .");
             ModelAwareMeasurement measurement;
             try {
                 measurement = ((MeasurementReader<?>) reader).read(files, modelDelegate, options);
             } catch (ReaderException e) {
-                logger.error("Error while reading measurement", e);
+                LOGGER.error("Error while reading measurement", e);
                 JOptionPane.showMessageDialog(mainFrame,
                         "<html>Could not read Measurement from files <br>'" + files.toString() + "'.<br>"
                                 + "Exception was: '" + e.getMessage() + "'</html>", "Error", JOptionPane.ERROR_MESSAGE);
@@ -283,7 +282,7 @@ public abstract class MenuActionHandler {
             }
             getMeasurementManager().addMeasurement(measurement);
             getDisplaySetManager().display(measurement);
-            logger.info("Data successfully loaded.");
+            LOGGER.info("Data successfully loaded.");
             return null;
         }
 
@@ -302,7 +301,7 @@ public abstract class MenuActionHandler {
             try {
                 measurementNumber = Integer.parseInt(response);
             } catch (NumberFormatException e) {
-                logger.error("Could not parse measurement-number, using 1");
+                LOGGER.error("Could not parse measurement-number, using 1");
                 measurementNumber = 1;
             }
         }
@@ -354,7 +353,7 @@ public abstract class MenuActionHandler {
                     model.reset();
                     modelDelegate = createModelDelegate(model);
                 } catch (JMadModelException e) {
-                    logger.error("Error while creating new model.", e);
+                    LOGGER.error("Error while creating new model.", e);
                 }
             } else {
                 modelDelegate = modelInstanceSelectionPanel.getSelectedModelDelegate();
@@ -376,9 +375,9 @@ public abstract class MenuActionHandler {
     /**
      * @return the actual {@link HelperDataManager}
      */
-    private final HelperDataManager getWorkingSet() {
+    private HelperDataManager getWorkingSet() {
         if (this.workingSet == null) {
-            logger.warn("workingSet not set! Maybe config error!");
+            LOGGER.warn("workingSet not set! Maybe config error!");
         }
         return this.workingSet;
     }
@@ -395,7 +394,7 @@ public abstract class MenuActionHandler {
     /**
      * @return the actual preferences
      */
-    private final Preferences getPreferences() {
+    private Preferences getPreferences() {
         return this.preferences;
     }
 
@@ -445,7 +444,7 @@ public abstract class MenuActionHandler {
      */
     private JMadModelAdapter getModelAdapter(JMadModel model) {
         if (getModelAdapterManager() == null) {
-            logger.warn("ModelAdapterManager not set. Mazbe config error?");
+            LOGGER.warn("ModelAdapterManager not set. Mazbe config error?");
             return null;
         }
         return getModelAdapterManager().getModelAdapter(model);

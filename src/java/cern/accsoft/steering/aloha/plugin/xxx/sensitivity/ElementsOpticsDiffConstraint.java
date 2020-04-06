@@ -1,10 +1,10 @@
 package cern.accsoft.steering.aloha.plugin.xxx.sensitivity;
 
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.jmad.domain.optics.Optic;
 import cern.accsoft.steering.jmad.domain.optics.OpticPoint;
 import cern.accsoft.steering.jmad.domain.var.enums.MadxTwissVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * represents a constraint between two elements in the optics. It has a value
@@ -15,9 +15,7 @@ import cern.accsoft.steering.jmad.domain.var.enums.MadxTwissVariable;
  * 
  */
 public class ElementsOpticsDiffConstraint implements OpticsConstraint {
-
-	/** The logger for the class */
-	private final static Logger LOGGER = Logger.getLogger(ElementsOpticsDiffConstraint.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ElementsOpticsDiffConstraint.class);
 
 	/** the name of the first element for the diff */
 	private String firstElementName;

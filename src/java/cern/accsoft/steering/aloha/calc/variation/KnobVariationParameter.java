@@ -1,9 +1,5 @@
 package cern.accsoft.steering.aloha.calc.variation;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.calc.algorithm.Algorithm;
 import cern.accsoft.steering.aloha.meas.MeasurementManager.ModelDelegateInstance;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
@@ -12,6 +8,10 @@ import cern.accsoft.steering.jmad.domain.knob.Knob;
 import cern.accsoft.steering.jmad.domain.knob.KnobType;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.model.KnobManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * This class encapsulates the functionality to vary parameters of the madx-model by a {@link Algorithm}. It
@@ -22,9 +22,7 @@ import cern.accsoft.steering.jmad.model.KnobManager;
  * @author kfuchsbe
  */
 public class KnobVariationParameter extends AbstractVariationParameter implements VariationParameter {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(KnobVariationParameter.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(KnobVariationParameter.class);
 
     /** The model knob-type to which to apply */
     private KnobType knobType = null;
@@ -60,7 +58,7 @@ public class KnobVariationParameter extends AbstractVariationParameter implement
             if (knob != null) {
                 knob.setOffset(getActualOffset());
             } else {
-                logger.warn("could not find knob of type '" + this.knobType + "' and key '" + this.knobKey
+                LOGGER.warn("could not find knob of type '" + this.knobType + "' and key '" + this.knobKey
                         + "' in model + '" + instance.toString() + "'. Cannot apply value.");
             }
         }

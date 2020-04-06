@@ -7,11 +7,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -21,11 +16,15 @@ import cern.accsoft.steering.aloha.machine.Corrector;
 import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener;
-import cern.accsoft.steering.aloha.meas.data.DynamicDataListener;
 import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
 import cern.accsoft.steering.aloha.util.ArrayUtil;
 import cern.accsoft.steering.aloha.util.ZeroUtil;
 import cern.accsoft.steering.util.TMatrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * the implementation of the combined data from model and measurement
@@ -36,7 +35,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
         NoiseWeighterAware {
 
     /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(CombinedKickResponseDataImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CombinedKickResponseDataImpl.class);
 
     /** the class, which takes care of the correct weighting of the noise */
     private NoiseWeighter noiseWeighter;
@@ -60,10 +59,10 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
     private Matrix differenceMatrix = new Matrix(1, 1);
     private Matrix relativeDiffMatrix = new Matrix(1, 1);
 
-    private ArrayList<Double> monitorDifferenceRms = new ArrayList<Double>();
-    private ArrayList<Double> correctorDifferenceRms = new ArrayList<Double>();
-    private ArrayList<Double> monitorRelativeDiffRms = new ArrayList<Double>();
-    private ArrayList<Double> correctorRelativeDiffRms = new ArrayList<Double>();
+    private ArrayList<Double> monitorDifferenceRms = new ArrayList<>();
+    private ArrayList<Double> correctorDifferenceRms = new ArrayList<>();
+    private ArrayList<Double> monitorRelativeDiffRms = new ArrayList<>();
+    private ArrayList<Double> correctorRelativeDiffRms = new ArrayList<>();
 
     /**
      * ensures, that the data is up to date
@@ -84,7 +83,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
         try {
             vector = calcDifferenceVector();
         } catch (CalculatorException e) {
-            logger.error("Error while calculating difference vector.", e);
+            LOGGER.error("Error while calculating difference vector.", e);
         }
         if (vector != null) {
             this.differenceVector = vector;
@@ -92,7 +91,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
         calcDifferenceRms();
         double fitQuality = calcFitQuality();
 
-        logger.info("[Kick-response] norm of relative difference-matrix / sqrt(#elements) = " + fitQuality);
+        LOGGER.info("[Kick-response] norm of relative difference-matrix / sqrt(#elements) = " + fitQuality);
     }
 
     /**
@@ -105,59 +104,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
         if (getKickResponseData() == null) {
             return null;
         }
-        logger.debug("calculating difference - vector ...");
-        // Matrix measurementResponse = getKickResponseData().getResponseMatrix();
-        // Matrix responseMatrixModel = getModelKickResponseData()
-        // .getResponseMatrix();
-        // List<Double> monitorNoises = getMonitorNoises();
-        // TMatrix<Boolean> validityMatrix = getKickResponseData()
-        // .getValidityMatrix();
-        //
-        // if ((measurementResponse == null) || (responseMatrixModel == null)
-        // || (monitorNoises == null)) {
-        // throw new CalculatorException(
-        // "One or more arguments are null! Cannot calculate Vector!");
-        // }
-        //
-        // int monitorCount = measurementResponse.getRowDimension();
-        // int correctorCount = measurementResponse.getColumnDimension();
-        //
-        // /* some checks */
-        // if ((correctorCount != responseMatrixModel.getColumnDimension())
-        // || (monitorCount != responseMatrixModel.getRowDimension())) {
-        // throw new CalculatorException(
-        // "Model- and Measurement- Response-matrices are not the same dimenion:"
-        // + "measurement: " + monitorCount + "x"
-        // + correctorCount + "; model: "
-        // + responseMatrixModel.getRowDimension() + "x"
-        // + responseMatrixModel.getColumnDimension() + ".");
-        // }
-        //
-        // if (monitorCount != monitorNoises.size()) {
-        // throw new CalculatorException(
-        // "Number of Monitor noise-values is different from Row-dimension of Response-matrix.");
-        // }
-        //
-        // /* define matrix with known initial capacity */
-        // Matrix vector = new Matrix(responseMatrixModel.getColumnDimension()
-        // * responseMatrixModel.getRowDimension(), 1);
-        //
-        // /* the actual calculation */
-        // for (int i = 0; i < monitorCount; i++) {
-        // double noise = monitorNoises.get(i);
-        // for (int j = 0; j < correctorCount; j++) {
-        //
-        // /* do not take into account defect monitors/correctors */
-        // if (!validityMatrix.get(i, j)) {
-        // continue;
-        // }
-        //
-        // double value = getNoiseWeighter().calcNoisyValue(
-        // (measurementResponse.get(i, j) - responseMatrixModel
-        // .get(i, j)), noise);
-        // vector.set((i * correctorCount) + j, 0, value);
-        // }
-        // }
+        LOGGER.debug("calculating difference - vector ...");
 
         /*
          * we simply flatten out the relative difference matrix
@@ -174,7 +121,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
             }
         }
 
-        logger.debug("   ... finished.");
+        LOGGER.debug("   ... finished.");
         return vector;
     }
 
@@ -419,12 +366,7 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
     public void setModelKickResponseData(ModelKickResponseData modelKickResponseData) {
         this.modelKickResponseData = modelKickResponseData;
         if (modelKickResponseData != null) {
-            modelKickResponseData.addListener(new DynamicDataListener() {
-                @Override
-                public void becameDirty() {
-                    setDirty(true);
-                }
-            });
+            modelKickResponseData.addListener(() -> setDirty(true));
         }
     }
 

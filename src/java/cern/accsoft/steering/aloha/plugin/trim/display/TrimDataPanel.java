@@ -9,18 +9,15 @@
  */
 package cern.accsoft.steering.aloha.plugin.trim.display;
 
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.model.ModelDelegate;
 import cern.accsoft.steering.aloha.plugin.trim.meas.TrimMeasurement;
 import cern.accsoft.steering.aloha.plugin.trim.meas.data.TrimData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * this class represents a panel, which provides buttons to apply trims to the
@@ -30,10 +27,7 @@ import cern.accsoft.steering.aloha.plugin.trim.meas.data.TrimData;
  * 
  */
 public class TrimDataPanel extends JPanel {
-	private static final long serialVersionUID = 978358494322205794L;
-
-	/** the logger for the class */
-	private final static Logger logger = Logger.getLogger(TrimDataPanel.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TrimDataPanel.class);
 
 	/** the measurement this panel belongs to */
 	private TrimMeasurement measurement;
@@ -52,15 +46,13 @@ public class TrimDataPanel extends JPanel {
 
 		JButton btn;
 		btn = new JButton(new AbstractAction("apply") {
-			private static final long serialVersionUID = -2655964987670987110L;
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (getModelDelegate() == null) {
 					return;
 				}
 				if (getTrimData() == null) {
-					logger.warn("No trim data loaded. Nothing to do!");
+					LOGGER.warn("No trim data loaded. Nothing to do!");
 					return;
 				}
 				getModelDelegate().applyTrim(getTrimData());

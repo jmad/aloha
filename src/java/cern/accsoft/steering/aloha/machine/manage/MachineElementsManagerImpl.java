@@ -7,13 +7,6 @@
  */
 package cern.accsoft.steering.aloha.machine.manage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import cern.accsoft.steering.aloha.conf.MonitorSelection;
 import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
 import cern.accsoft.steering.aloha.machine.Corrector;
@@ -30,6 +23,13 @@ import cern.accsoft.steering.util.meas.data.DataValue;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.Status;
 import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * the basic implementation of a class, that keeps track of active monitors and correctors.
@@ -37,18 +37,16 @@ import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
  * @author kfuchsbe
  */
 public class MachineElementsManagerImpl implements MachineElementsManager {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(MachineElementsManagerImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MachineElementsManagerImpl.class);
 
     /** the list of all correctors */
-    private List<Corrector> correctors = new ArrayList<Corrector>();
+    private List<Corrector> correctors = new ArrayList<>();
 
     /** the list of all monitors */
-    private List<Monitor> monitors = new ArrayList<Monitor>();
+    private List<Monitor> monitors = new ArrayList<>();
 
     /** the listeners to this class */
-    private List<MachineElementsManagerListener> listeners = new ArrayList<MachineElementsManagerListener>();
+    private List<MachineElementsManagerListener> listeners = new ArrayList<>();
 
     /* the actual corrector/monitor, which is displayed at the moment. */
     private int activeCorrectorNumber = 0;
@@ -78,7 +76,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     private MarkerXProvider monitorHVBorderProvider = new MarkerXProvider() {
         @Override
         public List<Double> getXPositions(String elementName) {
-            List<Double> xValues = new ArrayList<Double>();
+            List<Double> xValues = new ArrayList<>();
             if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
                 int allMonitorsCount = getActiveMonitorsCount();
                 int horMonitorsCount = getActiveMonitorsCount(Plane.HORIZONTAL);
@@ -96,7 +94,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     private MarkerXProvider correctorHVBorderProvider = new MarkerXProvider() {
         @Override
         public List<Double> getXPositions(String elementName) {
-            List<Double> xValues = new ArrayList<Double>();
+            List<Double> xValues = new ArrayList<>();
             if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
                 int allCorrectorsCount = getActiveCorrectorsCount();
                 int horCorrectorsCount = getActiveCorrectorsCount(Plane.HORIZONTAL);
@@ -202,13 +200,13 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 DataValue monitorValue = readingData.getMonitorValue(monitor.getKey());
                 if (monitorValue != null) {
                     if (!Status.OK.equals(monitorValue.getStatus())) {
-                        logger.debug("Found bad monitor status for monitor '" + monitor.getName()
+                        LOGGER.debug("Found bad monitor status for monitor '" + monitor.getName()
                                 + "' in at least one file");
                         monitor.setStatus(Status.NOT_OK);
                         break;
                     }
                 } else {
-                    logger.debug("Setting status for monitor '" + monitor.getName()
+                    LOGGER.debug("Setting status for monitor '" + monitor.getName()
                             + "' to NOT_OK, because not entries in all datas available.");
                     monitor.setStatus(Status.NOT_OK);
                     /*
@@ -225,7 +223,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public ArrayList<String> getActiveMonitorNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for (AbstractMachineElement monitor : getActiveMonitors()) {
             names.add(monitor.getName());
         }
@@ -244,7 +242,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public ArrayList<String> getActiveCorrectorNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for (Corrector corrector : getActiveCorrectors()) {
             names.add(corrector.getName());
         }
@@ -253,7 +251,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<Monitor> getActiveMonitors() {
-        ArrayList<Monitor> workingMonitors = new ArrayList<Monitor>();
+        ArrayList<Monitor> workingMonitors = new ArrayList<>();
         List<Monitor> allMonitors = getAllMonitors();
 
         for (Monitor monitor : allMonitors) {
@@ -266,7 +264,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<Corrector> getActiveCorrectors() {
-        ArrayList<Corrector> activeCorrectors = new ArrayList<Corrector>();
+        ArrayList<Corrector> activeCorrectors = new ArrayList<>();
         List<Corrector> allCorrectors = getAllCorrectors();
 
         for (Corrector corrector : allCorrectors) {
@@ -350,7 +348,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<String> getActiveCorrectorNames(Plane plane) {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for (AbstractMachineElement corrector : getActiveCorrectors()) {
             if (plane.equals(corrector.getPlane())) {
                 names.add(corrector.getName());
@@ -361,7 +359,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<Corrector> getActiveCorrectors(Plane plane) {
-        List<Corrector> allCorrectors = new ArrayList<Corrector>();
+        List<Corrector> allCorrectors = new ArrayList<>();
         for (Corrector corrector : getActiveCorrectors()) {
             if (plane.equals(corrector.getPlane())) {
                 allCorrectors.add(corrector);
@@ -372,7 +370,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<String> getActiveMonitorNames(Plane plane) {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for (AbstractMachineElement monitor : getActiveMonitors()) {
             if (plane.equals(monitor.getPlane())) {
                 names.add(monitor.getName());
@@ -383,7 +381,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<Monitor> getActiveMonitors(Plane plane) {
-        List<Monitor> allMonitors = new ArrayList<Monitor>();
+        List<Monitor> allMonitors = new ArrayList<>();
         for (Monitor monitor : getActiveMonitors()) {
             if (plane.equals(monitor.getPlane())) {
                 allMonitors.add(monitor);

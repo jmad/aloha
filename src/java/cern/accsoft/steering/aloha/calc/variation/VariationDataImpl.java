@@ -7,28 +7,28 @@
  */
 package cern.accsoft.steering.aloha.calc.variation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 /**
  * @author kfuchsbe
  */
 public class VariationDataImpl implements VariationData {
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(VariationDataImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(VariationDataImpl.class);
 
     /** the additional parameters which will be varied during fitting */
-    private Map<String, VariationParameter> variationParameters = new LinkedHashMap<String, VariationParameter>();
+    private Map<String, VariationParameter> variationParameters = new LinkedHashMap<>();
 
     /** the variation parameters which are not varied in the current fitting. */
-    private Map<String, VariationParameter> fixedVariationParameters = new LinkedHashMap<String, VariationParameter>();
+    private Map<String, VariationParameter> fixedVariationParameters = new LinkedHashMap<>();
 
     /** the listeners to this data */
-    private List<VariationDataListener> listeners = new ArrayList<VariationDataListener>();
+    private List<VariationDataListener> listeners = new ArrayList<>();
 
     @Override
     public void addVariationParameter(VariationParameter parameter) {
@@ -43,7 +43,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterInitialValues() {
-        ArrayList<Double> values = new ArrayList<Double>();
+        ArrayList<Double> values = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             values.add(param.getActiveMeasurementInitialValue());
         }
@@ -52,7 +52,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterValues() {
-        ArrayList<Double> values = new ArrayList<Double>();
+        ArrayList<Double> values = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             values.add(param.getActiveMeasurementAbsoluteValue());
         }
@@ -61,7 +61,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterValueErrors() {
-        ArrayList<Double> errors = new ArrayList<Double>();
+        ArrayList<Double> errors = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             errors.add(param.getError());
         }
@@ -70,7 +70,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<VariationParameter> getVariationParameters() {
-        return new ArrayList<VariationParameter>(variationParameters.values());
+        return new ArrayList<>(variationParameters.values());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public ArrayList<String> getVariationParameterNames() {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             names.add(param.getName());
         }
@@ -140,7 +140,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<VariationParameter> getFixedVariationParameters() {
-        return new ArrayList<VariationParameter>(this.fixedVariationParameters.values());
+        return new ArrayList<>(this.fixedVariationParameters.values());
     }
 
     /**
@@ -153,7 +153,7 @@ public class VariationDataImpl implements VariationData {
     private void moveParameter(String key, Map<String, VariationParameter> source, Map<String, VariationParameter> dest) {
         VariationParameter parameter = source.get(key);
         if (parameter == null) {
-            logger.warn("No variation parameter with the key '" + key + "' found.");
+            LOGGER.warn("No variation parameter with the key '" + key + "' found.");
             return;
         }
         source.remove(key);
@@ -163,7 +163,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterChanges() {
-        ArrayList<Double> changes = new ArrayList<Double>();
+        ArrayList<Double> changes = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             changes.add(param.getOffsetChange());
         }
@@ -172,7 +172,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterRelativeChanges() {
-        ArrayList<Double> changes = new ArrayList<Double>();
+        ArrayList<Double> changes = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             changes.add(param.getActiveMeasurementRelativeChange());
         }
@@ -181,7 +181,7 @@ public class VariationDataImpl implements VariationData {
 
     @Override
     public List<Double> getVariationParameterRelativeErrors() {
-        ArrayList<Double> errors = new ArrayList<Double>();
+        ArrayList<Double> errors = new ArrayList<>();
         for (VariationParameter param : variationParameters.values()) {
             Double initialValue = param.getActiveMeasurementInitialValue();
             if ((initialValue != null) && (Math.abs(initialValue) > 1e-8)) {
