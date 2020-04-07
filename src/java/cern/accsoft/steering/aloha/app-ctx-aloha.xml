@@ -1,427 +1,408 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:oxm="http://www.springframework.org/schema/oxm"
-	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
-	http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-1.5.xsd">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<!-- this bean is used for instantiating and configuring beans -->
-	<bean id="alohaBeanFactory" class="cern.accsoft.steering.aloha.bean.AlohaBeanFactoryImpl">
-		<property name="noiseWeighter" ref="noiseWeighter" />
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="helperDataManager" ref="helperDataManager" />
-		<property name="chartFactory" ref="chartFactory" />
-		<property name="measurementManager" ref="measurementManager" />
-		<property name="variationData" ref="variationData" />
-		<property name="sensityMatrixManager" ref="sensityMatrixManager" />
-	</bean>
+    <!-- this bean is used for instantiating and configuring beans -->
+    <bean id="alohaBeanFactory" class="cern.accsoft.steering.aloha.bean.AlohaBeanFactoryImpl">
+        <property name="noiseWeighter" ref="noiseWeighter"/>
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="helperDataManager" ref="helperDataManager"/>
+        <property name="chartFactory" ref="chartFactory"/>
+        <property name="measurementManager" ref="measurementManager"/>
+        <property name="variationData" ref="variationData"/>
+        <property name="sensityMatrixManager" ref="sensityMatrixManager"/>
+    </bean>
 
-	<!-- this bean searches for all the plugins and installs them -->
-	<bean id="pluginManager" class="cern.accsoft.steering.aloha.plugin.PluginManagerImpl"
-		init-method="init">
-		<property name="alohaBeanFactory" ref="alohaBeanFactory" />
-		<property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager" />
-		<property name="displaySetManager" ref="displaySetManager" />
-		<property name="readerManager" ref="readerManager" />
-		<property name="analyzerManager" ref="analyzerManager" />
-		<property name="algorithmManager" ref="algorithmManager" />
-		<property name="solverManager" ref="solverManager" />
-		<property name="solverConfigPanelManager" ref="solverConfigPanelManager" />
-	</bean>
+    <!-- this bean searches for all the plugins and installs them -->
+    <bean id="pluginManager" class="cern.accsoft.steering.aloha.plugin.PluginManagerImpl"
+          init-method="init">
+        <property name="alohaBeanFactory" ref="alohaBeanFactory"/>
+        <property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager"/>
+        <property name="displaySetManager" ref="displaySetManager"/>
+        <property name="readerManager" ref="readerManager"/>
+        <property name="analyzerManager" ref="analyzerManager"/>
+        <property name="algorithmManager" ref="algorithmManager"/>
+        <property name="solverManager" ref="solverManager"/>
+        <property name="solverConfigPanelManager" ref="solverConfigPanelManager"/>
+    </bean>
 
-	<!-- the preferences -->
-	<bean id="alohaPreferences" class="cern.accsoft.steering.aloha.app.PreferencesImpl" />
+    <!-- the preferences -->
+    <bean id="alohaPreferences" class="cern.accsoft.steering.aloha.app.PreferencesImpl"/>
 
-	<!-- YASP raw-data readers -->
-	<bean id="yaspReadingDataReader"
-		class="cern.accsoft.steering.util.meas.read.yasp.YaspFileReader" />
+    <!-- YASP raw-data readers -->
+    <bean id="yaspReadingDataReader"
+          class="cern.accsoft.steering.util.meas.read.yasp.YaspFileReader"/>
 
 
+    <!-- other readers -->
+    <bean id="csvAlignmentDataReader"
+          class="cern.accsoft.steering.aloha.read.csv.CsvAlignmentDataReader"/>
 
-	<!-- other readers -->
-	<bean id="csvAlignmentDataReader"
-		class="cern.accsoft.steering.aloha.read.csv.CsvAlignmentDataReader" />
+    <!-- management of the readers -->
+    <bean id="readerManager" class="cern.accsoft.steering.aloha.read.ReaderManagerImpl">
+        <property name="readers">
+            <list>
+                <ref bean="csvAlignmentDataReader"/>
+            </list>
+        </property>
+    </bean>
 
-	<!-- management of the readers -->
-	<bean id="readerManager" class="cern.accsoft.steering.aloha.read.ReaderManagerImpl">
-		<property name="readers">
-			<list>
-				<ref bean="csvAlignmentDataReader" />
-			</list>
-		</property>
-	</bean>
-
-	<!-- model-data -->
-	<bean id="variationData"
-		class="cern.accsoft.steering.aloha.calc.variation.VariationDataImpl" />
-
-
-	<!-- The managers which keep track of helping-data, machineElements, measurements -->
-	<bean id="helperDataManager" class="cern.accsoft.steering.aloha.app.HelperDataManagerImpl" />
-	<bean id="machineElementsManager"
-		class="cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerImpl" />
-	<bean id="measurementManager" class="cern.accsoft.steering.aloha.meas.MeasurementManagerImpl">
-		<property name="modelManager" ref="modelManager" />
-	</bean>
+    <!-- model-data -->
+    <bean id="variationData"
+          class="cern.accsoft.steering.aloha.calc.variation.VariationDataImpl"/>
 
 
-	<!-- the dataSetManager. It provides some DataSets of interest -->
-	<bean id="dataSetManager"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.FitDataSetManager">
-		<property name="calculator" ref="calculator" />
-		<property name="sensityMatrixManager" ref="sensityMatrixManager" />
-		<property name="variationData" ref="variationData" />
-		<property name="machineElementsManager" ref="machineElementsManager" />
-	</bean>
-
-	<!-- the stuff for creating the sensity-matrix and for fitting -->
-	<bean id="svdSolver"
-		class="cern.accsoft.steering.aloha.calc.solve.matrix.svd.SvdSolver" />
-	<bean id="micadoSolver"
-		class="cern.accsoft.steering.aloha.calc.solve.matrix.micado.MicadoSolver" />
-	<bean id="solverManager"
-		class="cern.accsoft.steering.aloha.calc.solve.SolverManagerImpl">
-		<property name="solvers">
-			<list>
-				<ref bean="svdSolver" />
-				<ref bean="micadoSolver" />
-			</list>
-		</property>
-	</bean>
-	<bean id="calculator" class="cern.accsoft.steering.aloha.calc.CalculatorImpl">
-		<property name="algorithmManager" ref="algorithmManager" />
-		<property name="solverManager" ref="solverManager" />
-		<property name="iterationManager" ref="iterationManager" />
-	</bean>
-	<bean id="algorithmManager"
-		class="cern.accsoft.steering.aloha.calc.algorithm.AlgorithmManagerImpl" />
-	<bean id="noiseWeighter" class="cern.accsoft.steering.aloha.calc.NoiseWeighterImpl" />
-	<bean id="sensityMatrixManager"
-		class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl">
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="variationData" ref="variationData" />
-		<property name="measurementManager" ref="measurementManager" />
-		<property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager" />
-	</bean>
-	<bean id="sensityMatrixContributorFactoryManager"
-		class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorFactoryManagerImpl" />
-	<bean id="iterationManager"
-		class="cern.accsoft.steering.aloha.calc.iteration.IterationManagerImpl">
-		<property name="sensitivityMatrixManager" ref="sensityMatrixManager" />
-		<property name="variationData" ref="variationData" />
-	</bean>
-
-	<!-- Analyzers -->
-	<!-- <bean id="normalizedResponseAnalyzer" class="cern.accsoft.steering.aloha.analysis.NormalizedResponseAnalyzer" 
-		init-method="init"> <property name="workingSet" ref="workingSet" /> <property 
-		name="modelDelegate" ref="modelDelegate" /> <property name="machineElementsManager" 
-		ref="machineElementsManager" /> <property name="modelOpticsData" ref="modelOpticsData" 
-		/> <property name="chartFactory" ref="chartFactory" /> </bean> <bean id="normalizedResponseDiffAnalyzer" 
-		class="cern.accsoft.steering.aloha.analysis.NormalizedResponseDiffAnalyzer" 
-		init-method="init"> <property name="workingSet" ref="workingSet" /> <property 
-		name="machineElementsManager" ref="machineElementsManager" /> <property name="modelOpticsData" 
-		ref="modelOpticsData" /> <property name="chartFactory" ref="chartFactory" 
-		/> </bean> -->
-	<!-- <bean id="alignmentDataAnalyzer" class="cern.accsoft.steering.aloha.analysis.AlignmentDataAnalyzer" 
-		init-method="init"> <property name="chartFactory" ref="chartFactory" /> </bean> -->
-
-	<bean id="analyzerManager"
-		class="cern.accsoft.steering.aloha.analyzer.AnalyzerManagerImpl" />
-
-	<!-- Menu and toolbar -->
-	<bean id="menuFactory" class="cern.accsoft.steering.aloha.gui.menus.MenuFactory">
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="menuActionHandler" ref="menuActionHandler" />
-	</bean>
-	<bean id="menuBar" factory-bean="menuFactory" factory-method="getMenuBar" />
-	<bean id="toolBar" factory-bean="menuFactory" factory-method="getToolBar" />
-
-	<!-- ActionHandler -->
-	<bean id="menuActionHandler" class="cern.accsoft.steering.aloha.gui.menus.MenuActionHandler">
-		<property name="mainFrame" ref="alohaMainFrame" />
-		<property name="workingSet" ref="helperDataManager" />
-		<!--<property name="jmad" ref="jmad" />-->
-		<property name="modelAdapterManager" ref="modelAdapterManager" />
-		<property name="measurementManager" ref="measurementManager" />
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="chartRendererPanel" ref="chartRendererPanel" />
-		<property name="readerManager" ref="readerManager" />
-		<property name="displaySetManager" ref="displaySetManager" />
-		<property name="preferences" ref="alohaPreferences" />
-		<property name="jMadGui" ref="jmadGui" />
-		<property name="jMadService" ref="jmadService" />
-		<lookup-method name="getFitGui" bean="fitGui" />
-	</bean>
-	<bean id="calcActionHandler" class="cern.accsoft.steering.aloha.gui.menus.CalcActionHandler">
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="calculator" ref="calculator" />
-		<property name="mainPanel" ref="alohaMainPanel" />
-	</bean>
-
-	<!-- edit-handlers for the tables -->
-	<bean id="elementsEditHandler"
-		class="cern.accsoft.steering.aloha.gui.edit.VaryElementsEditHandler">
-		<property name="variationData" ref="variationData" />
-		<property name="modelDelegateManager" ref="measurementManager" />
-	</bean>
-	<bean id="knobsEditHandler"
-		class="cern.accsoft.steering.aloha.gui.edit.VaryStrengthsEditHandler">
-		<property name="variationData" ref="variationData" />
-		<property name="modelDelegateManager" ref="measurementManager" />
-	</bean>
-	<bean id="twissPropertyEditHandler"
-		class="cern.accsoft.steering.aloha.gui.edit.VaryBeanPropertyEditHandler">
-		<property name="variationData" ref="variationData" />
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="knobType" value="TWISS_INITIAL_CONDITION" />
-	</bean>
-	<bean id="misalignmentPropertyEditHandler"
-		class="cern.accsoft.steering.aloha.gui.edit.VaryBeanPropertyEditHandler">
-		<property name="variationData" ref="variationData" />
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="knobType" value="MISALIGNMENT" />
-	</bean>
-
-	<!-- charts & factory -->
-	<bean id="aloha2DChart" scope="prototype"
-		class="cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart">
-		<property name="markedElementsManager" ref="markedElementsManager" />
-	</bean>
-	<bean id="chartFactory" class="cern.accsoft.steering.aloha.gui.dv.ChartFactoryImpl">
-		<lookup-method name="createAloha2DChart" bean="aloha2DChart" />
-	</bean>
-	<!-- panels -->
-	<bean id="fitGui" class="cern.accsoft.steering.util.gui.DefaultAccsoftGui"
-		lazy-init="true" init-method="init">
-		<property name="sizeX" value="1024" />
-		<property name="sizeY" value="768" />
-		<property name="mainPanel" ref="fitPanel" />
-		<property name="mainFrame" value="false" />
-		<!--<property name="splashScreen" ref="jmadSplashScreen" />-->
-		<property name="title" value="Aloha fitting" />
-	</bean>
-	<bean id="fitPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.FitPanel"
-		init-method="init" lazy-init="true">
-		<property name="variationParameterPanel" ref="variationParameterPanel" />
-		<property name="fixedParameterPanel" ref="fixedParametersPanel" />
-		<property name="calculatorConfigPanel" ref="calculatorConfigPanel" />
-		<property name="sensityMatrixContributorConfigsPanel" ref="sensityMatrixContributorConfigsPanel" />
-		<property name="calcButtonsPanel" ref="calcButtonsPanel" />
-		<property name="modelOperationPanel" ref="alohaModelOperationPanel" />
-		<property name="fitDataViewerPanel" ref="alohaFitDataViewerPanel" />
-	</bean>
-	<bean id="alohaFitDataViewerPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.FitDataViewerPanel"
-		init-method="init">
-		<property name="dataSetManager" ref="dataSetManager" />
-		<property name="chartFactory" ref="chartFactory" />
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="dataViewsManager" ref="chartRendererPanel" />
-		<property name="iterationChartFactory" ref="iterationChartFactory" />
-	</bean>
-	<bean id="iterationChartFactory"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.IterationChartFactory"
-		init-method="init">
-		<property name="calculator" ref="calculator" />
-		<property name="iterationManager" ref="iterationManager" />
-		<property name="sensitivityMatrixManager" ref="sensityMatrixManager" />
-	</bean>
-
-	<bean id="calcButtonsPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.CalcButtonsPanel"
-		init-method="init">
-		<property name="calcActionHandler" ref="calcActionHandler" />
-	</bean>
-	<bean id="sensityMatrixContributorConfigsPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.SensityMatrixContributorConfigsPanel"
-		init-method="init">
-		<property name="sensityMatrixManagerConfig" ref="sensityMatrixManager" />
-	</bean>
-	<bean id="alohaDataViewerPanel" class="cern.accsoft.steering.aloha.gui.panels.DataViewerPanel"
-		init-method="init">
-	</bean>
-	<bean id="chartRendererPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.AlohaChartRendererPanel"
-		init-method="init">
-		<property name="displaySetManager" ref="displaySetManager" />
-	</bean>
-	<bean id="variationParameterPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.VariedVariationParametersPanel"
-		init-method="init">
-		<property name="variationData" ref="variationData" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
-	<bean id="fixedParametersPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.fit.FixedVariationParametersPanel"
-		init-method="init">
-		<property name="variationData" ref="variationData" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
+    <!-- The managers which keep track of helping-data, machineElements, measurements -->
+    <bean id="helperDataManager" class="cern.accsoft.steering.aloha.app.HelperDataManagerImpl"/>
+    <bean id="machineElementsManager"
+          class="cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerImpl"/>
+    <bean id="measurementManager" class="cern.accsoft.steering.aloha.meas.MeasurementManagerImpl">
+        <property name="modelManager" ref="modelManager"/>
+    </bean>
 
 
-	<bean id="alohaModelOperationPanel" factory-bean="jmadPanelFactory"
-		factory-method="createModelOperationPanel" lazy-init="true">
-		<constructor-arg>
-			<map>
-				<entry key="cern.accsoft.steering.jmad.gui.panels.ModelElementsPanel"
-					value-ref="elementsEditHandler" />
-				<entry key="cern.accsoft.steering.jmad.gui.panels.ModelStrengthsPanel"
-					value-ref="knobsEditHandler" />
-				<entry key="cern.accsoft.steering.jmad.gui.panels.ModelCustomKnobsPanel"
-					value-ref="knobsEditHandler" />
-				<entry key="cern.accsoft.steering.jmad.gui.panels.ModelTwissPanel"
-					value-ref="twissPropertyEditHandler" />
-				<entry
-					key="cern.accsoft.steering.jmad.gui.panels.ModelMisalignmentsPanel"
-					value-ref="misalignmentPropertyEditHandler" />
-			</map>
-		</constructor-arg>
-	</bean>
-	<bean id="alignmentDataPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.AlignmentDataPanel"
-		init-method="init">
-		<property name="workingSet" ref="helperDataManager" />
-	</bean>
+    <!-- the dataSetManager. It provides some DataSets of interest -->
+    <bean id="dataSetManager"
+          class="cern.accsoft.steering.aloha.gui.panels.fit.FitDataSetManager">
+        <property name="calculator" ref="calculator"/>
+        <property name="sensityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="variationData" ref="variationData"/>
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+    </bean>
 
-	<!-- solver-panels -->
-	<bean id="svdSolverConfigPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.solve.SvdSolverConfigPanel"
-		init-method="init">
-		<property name="solverConfig" ref="svdSolver" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
-	<bean id="micadoSolverConfigPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.solve.MicadoSolverConfigPanel"
-		init-method="init">
-		<property name="solverConfig" ref="micadoSolver" />
-	</bean>
+    <!-- the stuff for creating the sensity-matrix and for fitting -->
+    <bean id="svdSolver"
+          class="cern.accsoft.steering.aloha.calc.solve.matrix.svd.SvdSolver"/>
+    <bean id="micadoSolver"
+          class="cern.accsoft.steering.aloha.calc.solve.matrix.micado.MicadoSolver"/>
+    <bean id="solverManager"
+          class="cern.accsoft.steering.aloha.calc.solve.SolverManagerImpl">
+        <property name="solvers">
+            <list>
+                <ref bean="svdSolver"/>
+                <ref bean="micadoSolver"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="calculator" class="cern.accsoft.steering.aloha.calc.CalculatorImpl">
+        <property name="algorithmManager" ref="algorithmManager"/>
+        <property name="solverManager" ref="solverManager"/>
+        <property name="iterationManager" ref="iterationManager"/>
+    </bean>
+    <bean id="algorithmManager"
+          class="cern.accsoft.steering.aloha.calc.algorithm.AlgorithmManagerImpl"/>
+    <bean id="noiseWeighter" class="cern.accsoft.steering.aloha.calc.NoiseWeighterImpl"/>
+    <bean id="sensityMatrixManager"
+          class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl">
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="variationData" ref="variationData"/>
+        <property name="measurementManager" ref="measurementManager"/>
+        <property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager"/>
+    </bean>
+    <bean id="sensityMatrixContributorFactoryManager"
+          class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorFactoryManagerImpl"/>
+    <bean id="iterationManager"
+          class="cern.accsoft.steering.aloha.calc.iteration.IterationManagerImpl">
+        <property name="sensitivityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="variationData" ref="variationData"/>
+    </bean>
 
-	<!-- other panels -->
-	<bean id="measurementsPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.MeasurementsPanel">
-		<property name="measurementManager" ref="measurementManager" />
-		<property name="displaySetManager" ref="displaySetManager" />
-	</bean>
-	<bean id="modelDelegatesPanel"
-		class="cern.accsoft.steering.aloha.gui.panels.ModelDelegatesPanel">
-		<property name="modelDelegateManager" ref="measurementManager" />
-		<property name="modelManager" ref="modelManager" />
-	</bean>
-	<bean id="helperDataPanel" class="cern.accsoft.steering.aloha.gui.panels.HelperDataPanel">
-		<property name="helperDataManager" ref="helperDataManager" />
-		<property name="displaySetManager" ref="displaySetManager" />
-	</bean>
+    <!-- Analyzers -->
+    <!-- <bean id="normalizedResponseAnalyzer" class="cern.accsoft.steering.aloha.analysis.NormalizedResponseAnalyzer"
+        init-method="init"> <property name="workingSet" ref="workingSet" /> <property
+        name="modelDelegate" ref="modelDelegate" /> <property name="machineElementsManager"
+        ref="machineElementsManager" /> <property name="modelOpticsData" ref="modelOpticsData"
+        /> <property name="chartFactory" ref="chartFactory" /> </bean> <bean id="normalizedResponseDiffAnalyzer"
+        class="cern.accsoft.steering.aloha.analysis.NormalizedResponseDiffAnalyzer"
+        init-method="init"> <property name="workingSet" ref="workingSet" /> <property
+        name="machineElementsManager" ref="machineElementsManager" /> <property name="modelOpticsData"
+        ref="modelOpticsData" /> <property name="chartFactory" ref="chartFactory"
+        /> </bean> -->
+    <!-- <bean id="alignmentDataAnalyzer" class="cern.accsoft.steering.aloha.analysis.AlignmentDataAnalyzer"
+        init-method="init"> <property name="chartFactory" ref="chartFactory" /> </bean> -->
 
-	<!-- Apply-panels -->
-	<bean id="calculatorConfigApplyAdapter"
-		class="cern.accsoft.steering.aloha.gui.panels.CalculatorConfigPanel"
-		init-method="init">
-		<property name="noiseWeighterConfig" ref="noiseWeighter" />
-		<property name="sensityMatrixManagerConfig" ref="sensityMatrixManager" />
-		<property name="solverManager" ref="solverManager" />
-		<property name="solverConfigPanelManager" ref="solverConfigPanelManager" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
-	<bean id="solverConfigPanelManager"
-		class="cern.accsoft.steering.aloha.gui.panels.solve.SolverConfigPanelManagerImpl">
-		<property name="solverConfigPanels">
-			<map>
-				<entry key-ref="svdSolver" value-ref="svdSolverConfigPanel" />
-				<entry key-ref="micadoSolver" value-ref="micadoSolverConfigPanel" />
-			</map>
-		</property>
-	</bean>
-	<bean id="calculatorConfigPanel" class="cern.accsoft.steering.aloha.gui.panels.ApplyPanel">
-		<property name="applyPanelContent" ref="calculatorConfigApplyAdapter" />
-	</bean>
+    <bean id="analyzerManager"
+          class="cern.accsoft.steering.aloha.analyzer.AnalyzerManagerImpl"/>
+
+    <!-- Menu and toolbar -->
+    <bean id="menuFactory" class="cern.accsoft.steering.aloha.gui.menus.MenuFactory">
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="menuActionHandler" ref="menuActionHandler"/>
+    </bean>
+    <bean id="menuBar" factory-bean="menuFactory" factory-method="getMenuBar"/>
+    <bean id="toolBar" factory-bean="menuFactory" factory-method="getToolBar"/>
+
+    <!-- ActionHandler -->
+    <bean id="menuActionHandler" class="cern.accsoft.steering.aloha.gui.menus.MenuActionHandler">
+        <property name="mainFrame" ref="alohaMainFrame"/>
+        <property name="workingSet" ref="helperDataManager"/>
+        <property name="modelAdapterManager" ref="modelAdapterManager"/>
+        <property name="measurementManager" ref="measurementManager"/>
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="chartRendererPanel" ref="chartRendererPanel"/>
+        <property name="readerManager" ref="readerManager"/>
+        <property name="displaySetManager" ref="displaySetManager"/>
+        <property name="preferences" ref="alohaPreferences"/>
+        <property name="jMadGui" ref="jmadGui"/>
+        <property name="jMadService" ref="jmadService"/>
+        <lookup-method name="getFitGui" bean="fitGui"/>
+    </bean>
+    <bean id="calcActionHandler" class="cern.accsoft.steering.aloha.gui.menus.CalcActionHandler">
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="calculator" ref="calculator"/>
+        <property name="mainPanel" ref="alohaMainPanel"/>
+    </bean>
+
+    <!-- edit-handlers for the tables -->
+    <bean id="elementsEditHandler" class="cern.accsoft.steering.aloha.gui.edit.VaryElementsEditHandler">
+        <property name="variationData" ref="variationData"/>
+        <property name="modelDelegateManager" ref="measurementManager"/>
+    </bean>
+    <bean id="knobsEditHandler" class="cern.accsoft.steering.aloha.gui.edit.VaryStrengthsEditHandler">
+        <property name="variationData" ref="variationData"/>
+        <property name="modelDelegateManager" ref="measurementManager"/>
+    </bean>
+    <bean id="twissPropertyEditHandler" class="cern.accsoft.steering.aloha.gui.edit.VaryBeanPropertyEditHandler">
+        <property name="variationData" ref="variationData"/>
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="knobType" value="TWISS_INITIAL_CONDITION"/>
+    </bean>
+    <bean id="misalignmentPropertyEditHandler" class="cern.accsoft.steering.aloha.gui.edit.VaryBeanPropertyEditHandler">
+        <property name="variationData" ref="variationData"/>
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="knobType" value="MISALIGNMENT"/>
+    </bean>
+
+    <!-- charts & factory -->
+    <bean id="aloha2DChart" scope="prototype" class="cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart">
+        <property name="markedElementsManager" ref="markedElementsManager"/>
+    </bean>
+    <bean id="chartFactory" class="cern.accsoft.steering.aloha.gui.dv.ChartFactoryImpl">
+        <lookup-method name="createAloha2DChart" bean="aloha2DChart"/>
+    </bean>
+    <!-- panels -->
+    <bean id="fitGui" class="cern.accsoft.steering.util.gui.DefaultAccsoftGui" lazy-init="true" init-method="init">
+        <property name="sizeX" value="1024"/>
+        <property name="sizeY" value="768"/>
+        <property name="mainPanel" ref="fitPanel"/>
+        <property name="mainFrame" value="false"/>
+        <property name="title" value="Aloha fitting"/>
+    </bean>
+    <bean id="fitPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.FitPanel" init-method="init" lazy-init="true">
+        <property name="variationParameterPanel" ref="variationParameterPanel"/>
+        <property name="fixedParameterPanel" ref="fixedParametersPanel"/>
+        <property name="calculatorConfigPanel" ref="calculatorConfigPanel"/>
+        <property name="sensityMatrixContributorConfigsPanel" ref="sensityMatrixContributorConfigsPanel"/>
+        <property name="calcButtonsPanel" ref="calcButtonsPanel"/>
+        <property name="modelOperationPanel" ref="alohaModelOperationPanel"/>
+        <property name="fitDataViewerPanel" ref="alohaFitDataViewerPanel"/>
+    </bean>
+    <bean id="alohaFitDataViewerPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.FitDataViewerPanel"
+          init-method="init">
+        <property name="dataSetManager" ref="dataSetManager"/>
+        <property name="chartFactory" ref="chartFactory"/>
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="dataViewsManager" ref="chartRendererPanel"/>
+        <property name="iterationChartFactory" ref="iterationChartFactory"/>
+    </bean>
+    <bean id="iterationChartFactory" class="cern.accsoft.steering.aloha.gui.panels.fit.IterationChartFactory"
+          init-method="init">
+        <property name="calculator" ref="calculator"/>
+        <property name="iterationManager" ref="iterationManager"/>
+        <property name="sensitivityMatrixManager" ref="sensityMatrixManager"/>
+    </bean>
+
+    <bean id="calcButtonsPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.CalcButtonsPanel"
+          init-method="init">
+        <property name="calcActionHandler" ref="calcActionHandler"/>
+    </bean>
+    <bean id="sensityMatrixContributorConfigsPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.fit.SensityMatrixContributorConfigsPanel"
+          init-method="init">
+        <property name="sensityMatrixManagerConfig" ref="sensityMatrixManager"/>
+    </bean>
+    <bean id="alohaDataViewerPanel" class="cern.accsoft.steering.aloha.gui.panels.DataViewerPanel"
+          init-method="init">
+    </bean>
+    <bean id="chartRendererPanel" class="cern.accsoft.steering.aloha.gui.panels.AlohaChartRendererPanel"
+          init-method="init">
+        <property name="displaySetManager" ref="displaySetManager"/>
+    </bean>
+    <bean id="variationParameterPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.fit.VariedVariationParametersPanel"
+          init-method="init">
+        <property name="variationData" ref="variationData"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
+    <bean id="fixedParametersPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.fit.FixedVariationParametersPanel"
+          init-method="init">
+        <property name="variationData" ref="variationData"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
 
 
-	<!-- Everything related to DisplaySet -->
-	<bean id="displaySetManager"
-		class="cern.accsoft.steering.aloha.gui.display.DisplaySetManagerImpl">
-		<property name="analyzerManager" ref="analyzerManager" />
-	</bean>
+    <bean id="alohaModelOperationPanel" factory-bean="jmadPanelFactory"
+          factory-method="createModelOperationPanel" lazy-init="true">
+        <constructor-arg>
+            <map>
+                <entry key="cern.accsoft.steering.jmad.gui.panels.ModelElementsPanel"
+                       value-ref="elementsEditHandler"/>
+                <entry key="cern.accsoft.steering.jmad.gui.panels.ModelStrengthsPanel"
+                       value-ref="knobsEditHandler"/>
+                <entry key="cern.accsoft.steering.jmad.gui.panels.ModelCustomKnobsPanel"
+                       value-ref="knobsEditHandler"/>
+                <entry key="cern.accsoft.steering.jmad.gui.panels.ModelTwissPanel"
+                       value-ref="twissPropertyEditHandler"/>
+                <entry
+                        key="cern.accsoft.steering.jmad.gui.panels.ModelMisalignmentsPanel"
+                        value-ref="misalignmentPropertyEditHandler"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="alignmentDataPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.AlignmentDataPanel"
+          init-method="init">
+        <property name="workingSet" ref="helperDataManager"/>
+    </bean>
 
-	<!-- the main panel and the main frame -->
+    <!-- solver-panels -->
+    <bean id="svdSolverConfigPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.solve.SvdSolverConfigPanel"
+          init-method="init">
+        <property name="solverConfig" ref="svdSolver"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
+    <bean id="micadoSolverConfigPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.solve.MicadoSolverConfigPanel"
+          init-method="init">
+        <property name="solverConfig" ref="micadoSolver"/>
+    </bean>
+
+    <!-- other panels -->
+    <bean id="measurementsPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.MeasurementsPanel">
+        <property name="measurementManager" ref="measurementManager"/>
+        <property name="displaySetManager" ref="displaySetManager"/>
+    </bean>
+    <bean id="modelDelegatesPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.ModelDelegatesPanel">
+        <property name="modelDelegateManager" ref="measurementManager"/>
+        <property name="modelManager" ref="modelManager"/>
+    </bean>
+    <bean id="helperDataPanel" class="cern.accsoft.steering.aloha.gui.panels.HelperDataPanel">
+        <property name="helperDataManager" ref="helperDataManager"/>
+        <property name="displaySetManager" ref="displaySetManager"/>
+    </bean>
+
+    <!-- Apply-panels -->
+    <bean id="calculatorConfigApplyAdapter"
+          class="cern.accsoft.steering.aloha.gui.panels.CalculatorConfigPanel"
+          init-method="init">
+        <property name="noiseWeighterConfig" ref="noiseWeighter"/>
+        <property name="sensityMatrixManagerConfig" ref="sensityMatrixManager"/>
+        <property name="solverManager" ref="solverManager"/>
+        <property name="solverConfigPanelManager" ref="solverConfigPanelManager"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
+    <bean id="solverConfigPanelManager"
+          class="cern.accsoft.steering.aloha.gui.panels.solve.SolverConfigPanelManagerImpl">
+        <property name="solverConfigPanels">
+            <map>
+                <entry key-ref="svdSolver" value-ref="svdSolverConfigPanel"/>
+                <entry key-ref="micadoSolver" value-ref="micadoSolverConfigPanel"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="calculatorConfigPanel" class="cern.accsoft.steering.aloha.gui.panels.ApplyPanel">
+        <property name="applyPanelContent" ref="calculatorConfigApplyAdapter"/>
+    </bean>
 
 
-	<!-- init method is called later by alohaPanel factory -->
-	<bean id="monitorsPanel" class="cern.accsoft.steering.aloha.gui.panels.MonitorsPanel"
-		scope="prototype" init-method="init">
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
-	<bean id="correctorsPanel" class="cern.accsoft.steering.aloha.gui.panels.CorrectorsPanel"
-		scope="prototype" init-method="init">
-		<property name="machineElementsManager" ref="machineElementsManager" />
-		<property name="preferences" ref="alohaPreferences" />
-	</bean>
+    <!-- Everything related to DisplaySet -->
+    <bean id="displaySetManager"
+          class="cern.accsoft.steering.aloha.gui.display.DisplaySetManagerImpl">
+        <property name="analyzerManager" ref="analyzerManager"/>
+    </bean>
 
-	<bean id="alohaPanelFactory"
-		class="cern.accsoft.steering.aloha.gui.panels.AlohaPanelFactory">
-		<lookup-method name="createMonitorsPanel" bean="monitorsPanel" />
-		<lookup-method name="createCorrectorsPanel" bean="correctorsPanel" />
-	</bean>
-	<bean id="alohaMainPanel" class="cern.accsoft.steering.aloha.gui.panels.MainPanel" init-method="init">
-		<property name="alohaPanelFactory" ref="alohaPanelFactory" />
-		<property name="dataViewerPanel" ref="alohaDataViewerPanel" />
-		<property name="measurementsPanel" ref="measurementsPanel" />
-		<property name="modelDelegatesPanel" ref="modelDelegatesPanel" />
-		<property name="displaySetManager" ref="displaySetManager" />
-		<property name="helperDataPanel" ref="helperDataPanel" />
-	</bean>
-	<bean id="scriptPanel" class="cern.accsoft.steering.util.gui.panels.BeanShellPanel" init-method="init">
-		<property name="contextObjects">
-			<map>
-				<entry key="ws" value-ref="helperDataManager" />
-				<entry key="mm" value-ref="modelManager" />
-			</map>
-		</property>
-	</bean>
-	<bean id="splashScreen" class="cern.accsoft.steering.aloha.gui.manage.SplashFactory"
-		factory-method="getSplashScreen" />
-	<bean id="alohaGui" class="cern.accsoft.steering.aloha.AlohaGui"
-		init-method="init">
-		<property name="title" value="aloha - Another Linear Optics Helper Application" />
-		<property name="sizeX" value="1024" />
-		<property name="sizeY" value="768" />
-		<property name="menuBar" ref="menuBar" />
-		<property name="toolBar" ref="toolBar" />
-		<property name="mainPanel" ref="alohaMainPanel" />
-		<!--<property name="splashScreen" ref="splashScreen" />-->
-		<property name="extraConsoleTabs">
-			<map>
-				<entry key="script" value-ref="scriptPanel" />
-			</map>
-		</property>
-	</bean>
+    <!-- the main panel and the main frame -->
 
-	<bean id="alohaMainFrame" factory-bean="alohaGui" factory-method="getMainFrame" />
-	<!--<bean id="userInteractor" class="cern.accsoft.steering.util.gui.SwingUserInteractor" />-->
 
-	<!-- some more knowledge of specific jmad-models -->
-	<bean id="lhcModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.LhcModelAdapter" />
-	<bean id="tiModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.TiModelAdapter" />
-	<bean id="modelAdapterManager" class="cern.accsoft.steering.aloha.model.adapt.ModelAdapterManagerImpl">
-		<property name="modelAdapters">
-			<list>
-				<ref bean="lhcModelAdapter" />
-				<ref bean="tiModelAdapter" />
-			</list>
-		</property>
-	</bean>
+    <!-- init method is called later by alohaPanel factory -->
+    <bean id="monitorsPanel" class="cern.accsoft.steering.aloha.gui.panels.MonitorsPanel"
+          scope="prototype" init-method="init">
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
+    <bean id="correctorsPanel" class="cern.accsoft.steering.aloha.gui.panels.CorrectorsPanel"
+          scope="prototype" init-method="init">
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+        <property name="preferences" ref="alohaPreferences"/>
+    </bean>
 
-	<!-- the jmad stuff -->
-	<bean id="jmad" class="cern.accsoft.steering.jmad.gui.JMad" factory-method="createStandaloneJMad" />
-	<bean id="jmadGui" factory-bean="jmad" factory-method="getJMadGui" />
-	<bean id="jmadService" factory-bean="jmad" factory-method="getJMadService" />
-	<bean id="jmadPreferences" factory-bean="jmad" factory-method="getJMadPreferences" />
-	<bean id="modelManager" factory-bean="jmad" factory-method="getModelManager" />
-	<bean id="markedElementsManager" factory-bean="jmad" factory-method="getMarkedElementsManager" />
-	<bean id="jmadPanelFactory" factory-bean="jmad" factory-method="getJMadPanelFactory" lazy-init="true" />
-	<!--<bean id="jmadSplashScreen" factory-bean="jmad" factory-method="getJMadGuiSplashScreen" lazy-init="true" />-->
+    <bean id="alohaPanelFactory"
+          class="cern.accsoft.steering.aloha.gui.panels.AlohaPanelFactory">
+        <lookup-method name="createMonitorsPanel" bean="monitorsPanel"/>
+        <lookup-method name="createCorrectorsPanel" bean="correctorsPanel"/>
+    </bean>
+    <bean id="alohaMainPanel" class="cern.accsoft.steering.aloha.gui.panels.MainPanel" init-method="init">
+        <property name="alohaPanelFactory" ref="alohaPanelFactory"/>
+        <property name="dataViewerPanel" ref="alohaDataViewerPanel"/>
+        <property name="measurementsPanel" ref="measurementsPanel"/>
+        <property name="modelDelegatesPanel" ref="modelDelegatesPanel"/>
+        <property name="displaySetManager" ref="displaySetManager"/>
+        <property name="helperDataPanel" ref="helperDataPanel"/>
+    </bean>
+    <bean id="scriptPanel" class="cern.accsoft.steering.util.gui.panels.BeanShellPanel" init-method="init">
+        <property name="contextObjects">
+            <map>
+                <entry key="ws" value-ref="helperDataManager"/>
+                <entry key="mm" value-ref="modelManager"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="splashScreen" class="cern.accsoft.steering.aloha.gui.manage.SplashFactory"
+          factory-method="getSplashScreen"/>
+    <bean id="alohaGui" class="cern.accsoft.steering.aloha.AlohaGui"
+          init-method="init">
+        <property name="title" value="aloha - Another Linear Optics Helper Application"/>
+        <property name="sizeX" value="1024"/>
+        <property name="sizeY" value="768"/>
+        <property name="menuBar" ref="menuBar"/>
+        <property name="toolBar" ref="toolBar"/>
+        <property name="mainPanel" ref="alohaMainPanel"/>
+		<property name="consoleLogLevel" value="INFO" />
+        <!--<property name="splashScreen" ref="splashScreen" />-->
+        <property name="extraConsoleTabs">
+            <map>
+                <entry key="script" value-ref="scriptPanel"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="alohaMainFrame" factory-bean="alohaGui" factory-method="getMainFrame"/>
+
+    <!-- some more knowledge of specific jmad-models -->
+    <bean id="lhcModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.LhcModelAdapter"/>
+    <bean id="tiModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.TiModelAdapter"/>
+    <bean id="modelAdapterManager" class="cern.accsoft.steering.aloha.model.adapt.ModelAdapterManagerImpl">
+        <property name="modelAdapters">
+            <list>
+                <ref bean="lhcModelAdapter"/>
+                <ref bean="tiModelAdapter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- the jmad stuff -->
+    <bean id="jmad" class="cern.accsoft.steering.jmad.gui.JMad" factory-method="createStandaloneJMad"/>
+    <bean id="jmadGui" factory-bean="jmad" factory-method="getJMadGui"/>
+    <bean id="jmadService" factory-bean="jmad" factory-method="getJMadService"/>
+    <bean id="jmadPreferences" factory-bean="jmad" factory-method="getJMadPreferences"/>
+    <bean id="modelManager" factory-bean="jmad" factory-method="getModelManager"/>
+    <bean id="markedElementsManager" factory-bean="jmad" factory-method="getMarkedElementsManager"/>
+    <bean id="jmadPanelFactory" factory-bean="jmad" factory-method="getJMadPanelFactory" lazy-init="true"/>
 
 </beans>

@@ -28,8 +28,7 @@ import java.util.List;
  * @author kfuchsbe
  *
  */
-public class ModelKickResponseDataImpl extends AbstractDynamicData implements
-        ModelKickResponseData {
+public class ModelKickResponseDataImpl extends AbstractDynamicData implements ModelKickResponseData {
     private final static Logger LOGGER = LoggerFactory.getLogger(ModelKickResponseDataImpl.class);
 
     /** The tool, which calculates the response matrix */
@@ -66,13 +65,12 @@ public class ModelKickResponseDataImpl extends AbstractDynamicData implements
         if ((getModelDelegate() == null) || (getResponseMatrixTool() == null)) {
             return null;
         }
-        LOGGER.debug("calculating model response-matrix...");
+        LOGGER.info("calculating model response-matrix...");
 
         getModelDelegate().setSuppressEvents(true);
 
         /* create diagonal-matrix with monitor-gains */
-        List<Double> monitorGains = getMachineElementsManager()
-                .getActiveMonitorGains();
+        List<Double> monitorGains = getMachineElementsManager().getActiveMonitorGains();
         int monitorCount = monitorGains.size();
         Matrix monitorGainsMatrix = new Matrix(monitorCount, monitorCount);
         for (int i = 0; i < monitorCount; i++) {
@@ -80,8 +78,7 @@ public class ModelKickResponseDataImpl extends AbstractDynamicData implements
         }
 
         /* create diagonal-matrix of corrector-gains */
-        List<Double> correctorGains = getMachineElementsManager()
-                .getActiveCorrectorGains();
+        List<Double> correctorGains = getMachineElementsManager().getActiveCorrectorGains();
         int correctorCount = getActiveCorrectors().size();
         Matrix correctorGainsMatrix = new Matrix(correctorCount, correctorCount);
         for (int i = 0; i < correctorCount; i++) {
@@ -94,16 +91,15 @@ public class ModelKickResponseDataImpl extends AbstractDynamicData implements
          * calculate response-matrix from model and apply monitor-gains.
          */
         try {
-            responseMatrix = monitorGainsMatrix.times(
-                    getResponseMatrixTool().calcResponseMatrix(
-                            getModelDelegate().getJMadModel(), request)).times(
-                    correctorGainsMatrix);
+            responseMatrix = monitorGainsMatrix
+                    .times(getResponseMatrixTool().calcResponseMatrix(getModelDelegate().getJMadModel(), request))
+                    .times(correctorGainsMatrix);
         } catch (JMadModelException e) {
             LOGGER.error("Model was unable to calculate the ResponseMatrix.", e);
         }
 
         getModelDelegate().setSuppressEvents(false);
-        LOGGER.debug("... finished.");
+        LOGGER.info("response-matrix calculation finished.");
         return responseMatrix;
     }
 

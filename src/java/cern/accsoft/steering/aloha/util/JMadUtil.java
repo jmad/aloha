@@ -23,7 +23,7 @@ public class JMadUtil {
 	 *            the plane to convert
 	 * @return the model plane
 	 */
-	public final static JMadPlane convertPlane(Plane plane) {
+	public static JMadPlane convertPlane(Plane plane) {
 		return ((plane == Plane.HORIZONTAL) ? JMadPlane.H : JMadPlane.V);
 	}
 

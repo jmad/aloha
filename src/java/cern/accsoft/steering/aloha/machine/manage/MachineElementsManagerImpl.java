@@ -17,8 +17,6 @@ import cern.accsoft.steering.jmad.domain.elem.JMadElementType;
 import cern.accsoft.steering.jmad.domain.elem.MadxElementType;
 import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
 import cern.accsoft.steering.jmad.model.JMadModel;
-import cern.accsoft.steering.jmad.util.ListUtil;
-import cern.accsoft.steering.jmad.util.ListUtil.Mapper;
 import cern.accsoft.steering.util.meas.data.DataValue;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.Status;
@@ -29,7 +27,10 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * the basic implementation of a class, that keeps track of active monitors and correctors.
@@ -73,37 +74,31 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     /**
      * the marker-provider which indicates the border between H and V- plane
      */
-    private MarkerXProvider monitorHVBorderProvider = new MarkerXProvider() {
-        @Override
-        public List<Double> getXPositions(String elementName) {
-            List<Double> xValues = new ArrayList<>();
-            if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
-                int allMonitorsCount = getActiveMonitorsCount();
-                int horMonitorsCount = getActiveMonitorsCount(Plane.HORIZONTAL);
-                if (allMonitorsCount > horMonitorsCount) {
-                    xValues.add(horMonitorsCount - 0.5);
-                }
+    private MarkerXProvider monitorHVBorderProvider = elementName -> {
+        List<Double> xValues = new ArrayList<>();
+        if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
+            int allMonitorsCount = getActiveMonitorsCount();
+            int horMonitorsCount = getActiveMonitorsCount(Plane.HORIZONTAL);
+            if (allMonitorsCount > horMonitorsCount) {
+                xValues.add(horMonitorsCount - 0.5);
             }
-            return xValues;
         }
+        return xValues;
     };
 
     /**
      * the provider which indicates the border between H and V- plane
      */
-    private MarkerXProvider correctorHVBorderProvider = new MarkerXProvider() {
-        @Override
-        public List<Double> getXPositions(String elementName) {
-            List<Double> xValues = new ArrayList<>();
-            if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
-                int allCorrectorsCount = getActiveCorrectorsCount();
-                int horCorrectorsCount = getActiveCorrectorsCount(Plane.HORIZONTAL);
-                if (allCorrectorsCount > horCorrectorsCount) {
-                    xValues.add(horCorrectorsCount - 0.5);
-                }
+    private MarkerXProvider correctorHVBorderProvider = elementName -> {
+        List<Double> xValues = new ArrayList<>();
+        if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
+            int allCorrectorsCount = getActiveCorrectorsCount();
+            int horCorrectorsCount = getActiveCorrectorsCount(Plane.HORIZONTAL);
+            if (allCorrectorsCount > horCorrectorsCount) {
+                xValues.add(horCorrectorsCount - 0.5);
             }
-            return xValues;
         }
+        return xValues;
     };
 
     /**
@@ -163,6 +158,21 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                  */
                 corrector.setStatus(Status.NOT_OK);
                 this.correctors.add(corrector);
+            }
+        }
+
+        /*
+         * add bends to the corrector list
+         */
+        List<Element> modelBends = model.getActiveRange().getElements(JMadElementType.BEND);
+        for (Element modelBend : modelBends) {
+            Plane tiltPlane = getPlaneForBend(modelBend);
+            if (tiltPlane != null) {
+                Corrector corrector = new Corrector(modelBend.getName(), tiltPlane);
+                corrector.setStatus(Status.NOT_OK);
+                this.correctors.add(corrector);
+            } else {
+                LOGGER.warn("Ignoring bend {} for kicks - tilt too far from 0 or pi/2", modelBend.getName());
             }
         }
 
@@ -560,21 +570,11 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     }
 
     private <T extends AbstractMachineElement> List<Double> getGains(List<T> elements) {
-        return ListUtil.map(elements, new Mapper<T, Double>() {
-            @Override
-            public Double map(T element) {
-                return element.getGain();
-            }
-        });
+        return elements.stream().map(AbstractMachineElement::getGain).collect(toList());
     }
 
     private <T extends AbstractMachineElement> List<Double> getGainErrors(List<T> elements) {
-        return ListUtil.map(elements, new Mapper<T, Double>() {
-            @Override
-            public Double map(T element) {
-                return element.getGainError();
-            }
-        });
+        return elements.stream().map(AbstractMachineElement::getGainError).collect(toList());
     }
 
     @Override
@@ -623,15 +623,33 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     /**
      * returns the plane which corresponds to the given madx-type, if it is definite.
-     * 
+     *
      * @param type The madx-element type for which to get the plane
      * @return the plane, or <code>null</code> if the plane is undefined
      */
-    private final static Plane getPlaneFromMadxElementType(MadxElementType type) {
+    private static Plane getPlaneFromMadxElementType(MadxElementType type) {
         if (MadxElementType.HKICKER.equals(type) || MadxElementType.HMONITOR.equals(type)) {
             return Plane.HORIZONTAL;
         } else if (MadxElementType.VKICKER.equals(type) || MadxElementType.VMONITOR.equals(type)) {
             return Plane.VERTICAL;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * returns the plane from a BEND element by evaluating it's TILT, or null if the bend is neither H or V
+     *
+     * @param bend the bend element to get the plane for
+     * @return the plane, or <code>null</code> if the plane is undefined (tilt too far from 0 or pi/2)
+     */
+    private static Plane getPlaneForBend(Element bend) {
+        double tiltTolerance = 1e-5;
+        double tilt = Optional.ofNullable(bend.getAttribute("tilt")).orElse(0.0);
+        if (Math.abs(Math.abs(tilt) - Math.PI/2) < tiltTolerance) {
+            return Plane.VERTICAL;
+        } else if (Math.abs(tilt) < tiltTolerance) {
+            return Plane.HORIZONTAL;
         } else {
             return null;
         }

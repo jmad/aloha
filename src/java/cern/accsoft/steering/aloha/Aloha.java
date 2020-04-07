@@ -10,14 +10,12 @@
 package cern.accsoft.steering.aloha;
 
 import cern.accsoft.gui.beans.spi.SplashScreen;
-import org.apache.log4j.BasicConfigurator;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import cern.accsoft.steering.aloha.app.AlohaCommandLineParser;
 import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.gui.manage.SplashFactory;
 import cern.accsoft.steering.jmad.util.JMadPreferences;
+import org.apache.log4j.BasicConfigurator;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * this is the class which starts the aloha application.
@@ -30,11 +28,12 @@ public class Aloha {
 	private final static String BEAN_NAME_ALOHA_PREFERENCES = "alohaPreferences";
 	private final static String BEAN_NAME_JMAD_PREFERENCES = "jmadPreferences";
 
-	private final ApplicationContext appCtx;
+	private final AnnotationConfigApplicationContext appCtx;
 
 	private Aloha() {
 		appCtx = new AnnotationConfigApplicationContext(AlohaSpringConfiguration.class);
-		appCtx.getBean("fitGui");
+		appCtx.registerShutdownHook();
+		appCtx.getBean("alohaGui");
 	}
 
 	private AlohaGui getGuiBean() {
