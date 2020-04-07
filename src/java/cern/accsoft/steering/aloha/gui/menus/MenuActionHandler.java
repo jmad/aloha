@@ -1,5 +1,6 @@
 package cern.accsoft.steering.aloha.gui.menus;
 
+import cern.accsoft.gui.beans.SwingUtil;
 import cern.accsoft.gui.frame.Task;
 import cern.accsoft.steering.aloha.app.HelperDataManager;
 import cern.accsoft.steering.aloha.app.Preferences;
@@ -25,7 +26,6 @@ import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
 import cern.accsoft.steering.jmad.gui.JMadGui;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.service.JMadService;
-import cern.accsoft.steering.util.gui.DefaultAccsoftGui;
 import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
@@ -96,9 +96,9 @@ public abstract class MenuActionHandler {
     }
 
     public void showFitDialog() {
-        DefaultAccsoftGui fitGui = getFitGui();
+        JFrame fitGui = getFitGui();
         if (fitGui != null) {
-            fitGui.show();
+            SwingUtil.invokeLater(() -> fitGui.setVisible(true));
         }
     }
 
@@ -468,7 +468,7 @@ public abstract class MenuActionHandler {
      * 
      * @return a new GUI-frame which provides the fitting options.
      */
-    public abstract DefaultAccsoftGui getFitGui();
+    public abstract JFrame getFitGui();
 
     public void setModelDelegateManager(ModelDelegateManager modelDelegateManager) {
         this.modelDelegateManager = modelDelegateManager;

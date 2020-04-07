@@ -108,22 +108,7 @@
         <property name="variationData" ref="variationData"/>
     </bean>
 
-    <!-- Analyzers -->
-    <!-- <bean id="normalizedResponseAnalyzer" class="cern.accsoft.steering.aloha.analysis.NormalizedResponseAnalyzer"
-        init-method="init"> <property name="workingSet" ref="workingSet" /> <property
-        name="modelDelegate" ref="modelDelegate" /> <property name="machineElementsManager"
-        ref="machineElementsManager" /> <property name="modelOpticsData" ref="modelOpticsData"
-        /> <property name="chartFactory" ref="chartFactory" /> </bean> <bean id="normalizedResponseDiffAnalyzer"
-        class="cern.accsoft.steering.aloha.analysis.NormalizedResponseDiffAnalyzer"
-        init-method="init"> <property name="workingSet" ref="workingSet" /> <property
-        name="machineElementsManager" ref="machineElementsManager" /> <property name="modelOpticsData"
-        ref="modelOpticsData" /> <property name="chartFactory" ref="chartFactory"
-        /> </bean> -->
-    <!-- <bean id="alignmentDataAnalyzer" class="cern.accsoft.steering.aloha.analysis.AlignmentDataAnalyzer"
-        init-method="init"> <property name="chartFactory" ref="chartFactory" /> </bean> -->
-
-    <bean id="analyzerManager"
-          class="cern.accsoft.steering.aloha.analyzer.AnalyzerManagerImpl"/>
+    <bean id="analyzerManager" class="cern.accsoft.steering.aloha.analyzer.AnalyzerManagerImpl"/>
 
     <!-- Menu and toolbar -->
     <bean id="menuFactory" class="cern.accsoft.steering.aloha.gui.menus.MenuFactory">
@@ -147,7 +132,7 @@
         <property name="preferences" ref="alohaPreferences"/>
         <property name="jMadGui" ref="jmadGui"/>
         <property name="jMadService" ref="jmadService"/>
-        <lookup-method name="getFitGui" bean="fitGui"/>
+        <lookup-method name="getFitGui" bean="fitFrame"/>
     </bean>
     <bean id="calcActionHandler" class="cern.accsoft.steering.aloha.gui.menus.CalcActionHandler">
         <property name="modelDelegateManager" ref="measurementManager"/>
@@ -183,14 +168,7 @@
         <lookup-method name="createAloha2DChart" bean="aloha2DChart"/>
     </bean>
     <!-- panels -->
-    <bean id="fitGui" class="cern.accsoft.steering.util.gui.DefaultAccsoftGui" lazy-init="true" init-method="init">
-        <property name="sizeX" value="1024"/>
-        <property name="sizeY" value="768"/>
-        <property name="mainPanel" ref="fitPanel"/>
-        <property name="mainFrame" value="false"/>
-        <property name="title" value="Aloha fitting"/>
-    </bean>
-    <bean id="fitPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.FitPanel" init-method="init" lazy-init="true">
+    <bean id="fitFrame" class="cern.accsoft.steering.aloha.gui.panels.fit.FitFrame" init-method="init" lazy-init="true">
         <property name="variationParameterPanel" ref="variationParameterPanel"/>
         <property name="fixedParameterPanel" ref="fixedParametersPanel"/>
         <property name="calculatorConfigPanel" ref="calculatorConfigPanel"/>
@@ -368,12 +346,11 @@
     <bean id="alohaGui" class="cern.accsoft.steering.aloha.AlohaGui"
           init-method="init">
         <property name="title" value="aloha - Another Linear Optics Helper Application"/>
-        <property name="sizeX" value="1024"/>
-        <property name="sizeY" value="768"/>
+        <property name="sizeX" value="1200"/>
+        <property name="sizeY" value="1000"/>
         <property name="menuBar" ref="menuBar"/>
         <property name="toolBar" ref="toolBar"/>
         <property name="mainPanel" ref="alohaMainPanel"/>
-		<property name="consoleLogLevel" value="INFO" />
         <!--<property name="splashScreen" ref="splashScreen" />-->
         <property name="extraConsoleTabs">
             <map>
