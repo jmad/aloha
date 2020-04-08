@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.read;
 
+import cern.accsoft.steering.aloha.plugin.api.ReaderProvider;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import cern.accsoft.steering.aloha.plugin.api.ReaderProvider;
 
 /**
  * This is the implementation of the {@link ReaderManager}. For the moment all

@@ -3,12 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.read;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
-
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
@@ -25,6 +19,11 @@ import cern.accsoft.steering.aloha.plugin.multiturn.read.parse.MultiturnParserEx
 import cern.accsoft.steering.aloha.plugin.multiturn.read.parse.MultiturnParserImpl;
 import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
 import cern.accsoft.steering.util.meas.read.ReaderException;
+
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This is the implementation of the reader for multiturn data

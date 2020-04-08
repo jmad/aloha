@@ -3,8 +3,9 @@
  */
 package cern.accsoft.steering.aloha.read;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import cern.accsoft.steering.util.acc.BeamNumber;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This class holds the options which can be given when reading a measurement.

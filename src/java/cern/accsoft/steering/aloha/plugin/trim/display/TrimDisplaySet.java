@@ -1,13 +1,12 @@
 package cern.accsoft.steering.aloha.plugin.trim.display;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-
 import cern.accsoft.steering.aloha.gui.display.DisplaySet;
 import cern.accsoft.steering.aloha.plugin.trim.meas.TrimMeasurement;
 import cern.jdve.viewer.DVView;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrimDisplaySet implements DisplaySet {
 

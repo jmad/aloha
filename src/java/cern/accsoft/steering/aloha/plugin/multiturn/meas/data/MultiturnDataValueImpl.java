@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.meas.data;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cern.accsoft.steering.util.meas.data.AbstractDataValue;
 import cern.accsoft.steering.util.meas.data.Status;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * the implementation of a multiturn data - value

@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.plugin.api;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.read.Reader;
+
+import java.util.List;
 
 /**
  * This interface is intended to be implemented by an {@link AlohaPlugin} if it

@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.meas.data;
 
-import java.util.List;
-
 import cern.accsoft.steering.util.meas.data.Plane;
+
+import java.util.List;
 
 /**
  * The difference data between measurement and model

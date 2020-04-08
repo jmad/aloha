@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.gui.display.DisplaySet;
@@ -19,6 +16,9 @@ import cern.accsoft.steering.aloha.plugin.multiturn.meas.MultiturnMeasurement;
 import cern.accsoft.steering.aloha.plugin.multiturn.read.MultiturnMeasurementReaderImpl;
 import cern.accsoft.steering.aloha.plugin.multiturn.sensity.MultiturnBetaSensityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The plugin for aloha that handles multiturn data

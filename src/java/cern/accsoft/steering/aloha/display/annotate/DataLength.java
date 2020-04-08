@@ -1,10 +1,10 @@
 package cern.accsoft.steering.aloha.display.annotate;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.util.meas.data.Plane;
+
+import java.util.List;
 
 public enum DataLength {
 	ACTIVE_MONITORS {

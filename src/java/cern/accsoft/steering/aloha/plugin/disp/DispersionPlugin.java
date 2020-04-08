@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.disp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.analyzer.Analyzer;
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
@@ -23,6 +20,9 @@ import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurementImpl;
 import cern.accsoft.steering.aloha.plugin.disp.read.yasp.YaspDispersionMeasurementReader;
 import cern.accsoft.steering.aloha.plugin.disp.sensitivity.DispersionSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kfuchsbe

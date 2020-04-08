@@ -3,15 +3,13 @@
  */
 package cern.accsoft.steering.aloha.gui.panels.fit;
 
+import cern.accsoft.steering.aloha.calc.variation.VariationParameter;
+import cern.accsoft.steering.aloha.gui.panels.AbstractVariationParameterPanel;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
-import cern.accsoft.steering.aloha.calc.variation.VariationParameter;
-import cern.accsoft.steering.aloha.gui.panels.AbstractVariationParameterPanel;
 
 /**
  * this is the panel displaying the really varied variation parameters

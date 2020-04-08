@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.traj;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
@@ -21,6 +18,9 @@ import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurement;
 import cern.accsoft.steering.aloha.plugin.traj.read.yasp.YaspTrajectoryMeasurementReader;
 import cern.accsoft.steering.aloha.plugin.traj.sensity.TrajectorySensityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This plugin provides components to analyze trajectory/orbit data from yasp

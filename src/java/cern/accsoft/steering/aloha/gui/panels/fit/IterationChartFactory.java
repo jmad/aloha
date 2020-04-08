@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.gui.panels.fit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.calc.Calculator;
 import cern.accsoft.steering.aloha.calc.CalculatorListener;
 import cern.accsoft.steering.aloha.calc.iteration.IterationData;
@@ -22,6 +19,9 @@ import cern.jdve.data.DefaultDataSet;
 import cern.jdve.data.DefaultDataSource;
 import cern.jdve.viewer.DVView;
 import cern.jdve.viewer.DataView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * provides a helper method to create charts for the iteration values.

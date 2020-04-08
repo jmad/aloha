@@ -1,8 +1,5 @@
 package cern.accsoft.steering.aloha.plugin.kickresp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.analyzer.Analyzer;
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
@@ -23,6 +20,9 @@ import cern.accsoft.steering.aloha.plugin.kickresp.meas.KickResponseMeasurementI
 import cern.accsoft.steering.aloha.plugin.kickresp.read.yasp.YaspKickResponseDataReader;
 import cern.accsoft.steering.aloha.plugin.kickresp.sensitivity.KickResponseSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KickResponsePlugin extends AbstractAlohaPlugin implements
 		SensitivityMatrixContributorFactory, DisplaySetFactory, AnalyzerFactory,

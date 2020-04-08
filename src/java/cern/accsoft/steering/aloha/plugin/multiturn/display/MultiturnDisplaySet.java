@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.display;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.ChartFactoryAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -26,6 +23,9 @@ import cern.accsoft.steering.util.gui.dv.ds.ListDataSet;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.jdve.viewer.DVView;
 import cern.jdve.viewer.DataView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * this is the displayset for a multiturn measurement

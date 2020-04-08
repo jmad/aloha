@@ -3,17 +3,15 @@
  */
 package cern.accsoft.steering.aloha.gui.panels;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-
 import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
 import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.gui.panels.Applyable;
 import cern.accsoft.steering.util.gui.panels.Titleable;
+
+import javax.swing.*;
+import java.awt.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This panel is used to query options from the user which are required when importing data files

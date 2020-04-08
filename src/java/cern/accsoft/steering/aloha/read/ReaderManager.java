@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.read;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.plugin.api.ReaderProvider;
+
+import java.util.List;
 
 /**
  * This is the interface of a class, that keeps track of all available readers.

@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.calc.iteration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.variation.VariationParameter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The implementation of the data holding info about aloha iterations

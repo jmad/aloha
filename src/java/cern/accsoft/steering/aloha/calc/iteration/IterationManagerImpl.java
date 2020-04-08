@@ -3,15 +3,15 @@
  */
 package cern.accsoft.steering.aloha.calc.iteration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
 import cern.accsoft.steering.aloha.calc.variation.VariationData;
 import cern.accsoft.steering.aloha.calc.variation.VariationParameter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * collects all the data for iteration entries

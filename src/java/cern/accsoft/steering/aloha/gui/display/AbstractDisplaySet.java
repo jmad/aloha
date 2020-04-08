@@ -3,13 +3,12 @@
  */
 package cern.accsoft.steering.aloha.gui.display;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-
 import cern.accsoft.steering.aloha.analyzer.Analyzer;
 import cern.jdve.viewer.DVView;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the default implementation of a {@link DisplaySet}

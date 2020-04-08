@@ -3,11 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.traj.meas.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -18,6 +13,11 @@ import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurement;
 import cern.accsoft.steering.jmad.util.MatrixUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author kfuchsbe

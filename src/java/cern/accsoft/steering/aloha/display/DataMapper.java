@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.display;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.data.Data;
+
+import java.util.List;
 
 /**
  * This interface defines mapping of data from displayable data to real

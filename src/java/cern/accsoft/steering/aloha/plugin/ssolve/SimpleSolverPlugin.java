@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.ssolve;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.calc.algorithm.Algorithm;
 import cern.accsoft.steering.aloha.calc.algorithm.SimpleAlgorithm;
@@ -20,6 +17,9 @@ import cern.accsoft.steering.aloha.plugin.ssolve.solve.SimpleSolver;
 import cern.accsoft.steering.aloha.plugin.ssolve.solve.sannealing.SimulatedAnnealingConfigPanel;
 import cern.accsoft.steering.aloha.plugin.ssolve.solve.sannealing.SimulatedAnnealingSolver;
 import cern.accsoft.steering.aloha.plugin.ssolve.solve.sannealing.SimulatedAnnealingSolverConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A plugin which provides additional solvers and an additional calculator

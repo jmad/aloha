@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.model.adapt.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
 import cern.accsoft.steering.jmad.model.JMadModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The specific datas for transfer line models

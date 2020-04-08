@@ -1,10 +1,10 @@
 package cern.accsoft.steering.aloha.plugin.traj.meas.data;
 
-import java.util.List;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.meas.data.DynamicData;
 import cern.accsoft.steering.util.meas.data.Plane;
+
+import java.util.List;
 
 public interface CombinedTrajectoryData extends DynamicData {
 

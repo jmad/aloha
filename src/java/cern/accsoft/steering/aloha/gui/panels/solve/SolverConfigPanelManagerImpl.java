@@ -3,13 +3,13 @@
  */
 package cern.accsoft.steering.aloha.gui.panels.solve;
 
+import cern.accsoft.steering.aloha.calc.solve.Solver;
+import cern.accsoft.steering.aloha.plugin.api.SolverConfigPanelFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cern.accsoft.steering.aloha.calc.solve.Solver;
-import cern.accsoft.steering.aloha.plugin.api.SolverConfigPanelFactory;
 
 /**
  * This class keeps track of config-panels for solvers.

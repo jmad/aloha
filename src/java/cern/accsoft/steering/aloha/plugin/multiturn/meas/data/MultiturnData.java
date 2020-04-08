@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.meas.data;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.data.DynamicData;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
+
+import java.util.List;
 
 /**
  * The data of a multiturn measurement

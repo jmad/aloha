@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.conf;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * represents a set of active monitors. This class is intended to be serialized to xml.

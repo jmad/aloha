@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.model.adapt;
 
+import cern.accsoft.steering.jmad.model.JMadModel;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import cern.accsoft.steering.jmad.model.JMadModel;
 
 /**
  * This is the implementation of a class which provides model adapters for

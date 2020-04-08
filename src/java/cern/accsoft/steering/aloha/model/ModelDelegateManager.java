@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.model;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.MeasurementManager.ModelDelegateInstance;
+
+import java.util.List;
 
 /**
  * the interface of a class, that keeps track of all currently available model-delegates.

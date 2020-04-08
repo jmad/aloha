@@ -3,11 +3,11 @@
  */
 package cern.accsoft.steering.aloha.analyzer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.plugin.api.AnalyzerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the implementation of the {@link AnalyzerManager}

@@ -3,16 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.display;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.MeasurementManagerAware;
 import cern.accsoft.steering.aloha.meas.BuiltinMeasurementType;
@@ -23,6 +13,12 @@ import cern.accsoft.steering.aloha.meas.ModelAwareMeasurement;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.KickResponseMeasurement;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurement;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurementImpl;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * a panel with several options for the kick-response measurement

@@ -3,14 +3,14 @@
  */
 package cern.accsoft.steering.aloha.plugin.xxx;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactory;
 import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurement;
 import cern.accsoft.steering.aloha.plugin.xxx.sensitivity.Ti8CollimatorConstraintsContributor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * XXX THIS IS VERY UGLY AND TEMPORARY:

@@ -3,12 +3,12 @@
  */
 package cern.accsoft.steering.aloha.plugin.api;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.analyzer.Analyzer;
 import cern.accsoft.steering.aloha.gui.display.DisplaySet;
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.jdve.viewer.DVView;
+
+import java.util.List;
 
 /**
  * This is the interface for a class, that can create Analyzers. An Analyzer is

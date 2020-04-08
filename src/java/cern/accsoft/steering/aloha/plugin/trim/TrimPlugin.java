@@ -3,9 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.trim;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.gui.display.DisplaySet;
 import cern.accsoft.steering.aloha.meas.Measurement;
@@ -16,6 +13,9 @@ import cern.accsoft.steering.aloha.plugin.trim.display.TrimDisplaySet;
 import cern.accsoft.steering.aloha.plugin.trim.meas.TrimMeasurement;
 import cern.accsoft.steering.aloha.read.Reader;
 import cern.accsoft.steering.aloha.read.yasp.YaspTrimDataReader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kfuchsbe

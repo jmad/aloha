@@ -3,12 +3,12 @@
  */
 package cern.accsoft.steering.aloha.bean.annotate;
 
+import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 
 /**
  * it this annotation is added to a method of a class that is instantiated by

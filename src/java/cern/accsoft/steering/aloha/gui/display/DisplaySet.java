@@ -3,11 +3,10 @@
  */
 package cern.accsoft.steering.aloha.gui.display;
 
-import java.util.List;
-
-import javax.swing.JPanel;
-
 import cern.jdve.viewer.DVView;
+
+import javax.swing.*;
+import java.util.List;
 
 /**
  * A {@link DisplaySet} defines swing components to show in the aloha swing gui

@@ -3,16 +3,16 @@
  */
 package cern.accsoft.steering.aloha.meas;
 
+import cern.accsoft.steering.aloha.model.ModelDelegate;
+import cern.accsoft.steering.aloha.model.ModelDelegateManager;
+import cern.accsoft.steering.aloha.model.ModelDelegateManagerListener;
+import cern.accsoft.steering.jmad.model.manage.JMadModelManager;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cern.accsoft.steering.aloha.model.ModelDelegate;
-import cern.accsoft.steering.aloha.model.ModelDelegateManager;
-import cern.accsoft.steering.aloha.model.ModelDelegateManagerListener;
-import cern.accsoft.steering.jmad.model.manage.JMadModelManager;
 
 /**
  * This is the implementation of a class, which keeps track of all loaded measurements in aloha.

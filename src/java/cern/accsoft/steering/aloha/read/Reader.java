@@ -1,9 +1,8 @@
 package cern.accsoft.steering.aloha.read;
 
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
 
 public interface Reader {
 

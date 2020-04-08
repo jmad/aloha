@@ -3,9 +3,9 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.read.parse;
 
-import java.io.File;
-
 import cern.accsoft.steering.aloha.plugin.multiturn.meas.data.MultiturnData;
+
+import java.io.File;
 
 /**
  * this is the interface for a parser for Multiturn data. Since the data is

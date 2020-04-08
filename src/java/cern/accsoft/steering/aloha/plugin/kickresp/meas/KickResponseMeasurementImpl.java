@@ -3,8 +3,6 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas;
 
-import java.lang.ref.WeakReference;
-
 import cern.accsoft.steering.aloha.meas.BuiltinMeasurementType;
 import cern.accsoft.steering.aloha.meas.GenericMeasurementImpl;
 import cern.accsoft.steering.aloha.meas.MeasurementType;
@@ -13,6 +11,8 @@ import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CombinedKickRespons
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.KickResponseData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.ModelKickResponseData;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurementImpl;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author kfuchsbe

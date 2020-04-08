@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.calc.sensitivity;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactory;
+
+import java.util.List;
 
 /**
  * A class which knows about all available SensityMatrixContributorFactories

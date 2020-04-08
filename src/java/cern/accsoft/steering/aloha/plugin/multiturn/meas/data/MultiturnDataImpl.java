@@ -3,19 +3,19 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.meas.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.meas.data.AbstractDynamicData;
 import cern.accsoft.steering.aloha.meas.data.InconsistentDataException;
 import cern.accsoft.steering.jmad.util.ListUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.Status;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author kfuchsbe

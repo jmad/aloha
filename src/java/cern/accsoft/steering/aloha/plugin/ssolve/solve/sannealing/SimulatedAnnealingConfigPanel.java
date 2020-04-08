@@ -1,10 +1,10 @@
 package cern.accsoft.steering.aloha.plugin.ssolve.solve.sannealing;
 
-import javax.swing.JLabel;
-
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.gui.panels.solve.GenericSolverConfigPanel;
+
+import javax.swing.*;
 
 /**
  * This is the config-panel for the simulated-annealing solver
