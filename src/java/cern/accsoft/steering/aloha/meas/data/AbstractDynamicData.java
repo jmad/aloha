@@ -114,21 +114,9 @@ public abstract class AbstractDynamicData implements DynamicData,
         this.machineElementsManager = machineElementsManager;
         this.machineElementsManager
                 .addListener(new MachineElementsManagerListener() {
-
                     @Override
                     public void changedActiveElements() {
                         setDirty(true);
-                    }
-
-                    @Override
-                    public void changedActiveCorrector(int number,
-                                                       Corrector corrector) {
-                        /* do nothing */
-                    }
-
-                    @Override
-                    public void changedActiveMonitor(int number, Monitor monitor) {
-                        /* do nothing */
                     }
 
                     @Override

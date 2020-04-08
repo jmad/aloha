@@ -4,7 +4,6 @@ import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.gui.components.DoubleTableCellRenderer;
 import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
 import cern.accsoft.steering.aloha.machine.Corrector;
-import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener;
 import cern.accsoft.steering.util.gui.menu.Checkable;
@@ -57,40 +56,14 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
 
     public void init() {
         getMachineElementsManager().addListener(new MachineElementsManagerListener() {
-
-            @Override
-            public void changedActiveCorrector(int number, Corrector corrector) {
-                /*
-                 * TODO maybe set correct selection in table!?
-                 */
-            }
-
             @Override
             public void changedActiveElements() {
                 refresh();
             }
 
             @Override
-            public void changedActiveMonitor(int number, Monitor monitor) {
-                /*
-                 * TODO maybe set correct selection in table!?
-                 */
-            }
-
-            @Override
             public void changedElements() {
                 fill();
-            }
-
-            @Override
-            public void changedCorrectorGains() {
-                /* do nothing */
-
-            }
-
-            @Override
-            public void changedMonitorGains() {
-                /* do nothing */
             }
         });
 

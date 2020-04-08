@@ -546,20 +546,12 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
             case ABSOLUTE_DIFFERENCE_MATRIX:
                 adapter = new SingleDsAdapter<MatrixDataSet>(new MatrixDataSet("Difference measurement - model", new Matrix(
                         1, 1))) {
-
                     @Override
                     public void refresh() {
                         dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
                         dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
                         dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
                     }
-
-                    @Override
-                    public void changedElements() {
-                        // TODO Auto-generated method stub
-
-                    }
-
                 };
                 break;
 
@@ -582,7 +574,6 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     private interface DsAdapter extends MachineElementsManagerListener {
         DataSource dataSource();
-
         void refresh();
     }
 
@@ -604,35 +595,14 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         }
 
         @Override
-        public void changedElements() {
+        public final void changedElements() {
             refresh();
-        }
-
-        @Override
-        public void changedActiveMonitor(int number, Monitor monitor) {
-            /* override if needed */
-        }
-
-        @Override
-        public void changedActiveCorrector(int number, Corrector corrector) {
-            /* override if needed */
         }
 
         @Override
         public void refresh() {
             /* override if needed */
         }
-
-        @Override
-        public void changedCorrectorGains() {
-            /* override if needed */
-        }
-
-        @Override
-        public void changedMonitorGains() {
-            /* override if needed */
-        }
-
     }
 
     private abstract static class SingleDsAdapter<T extends DataSet> extends DsAdapterImpl<DefaultDataSource> {

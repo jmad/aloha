@@ -13,7 +13,6 @@ import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
 import cern.accsoft.steering.aloha.calc.CalculatorException;
 import cern.accsoft.steering.aloha.calc.NoiseWeighter;
 import cern.accsoft.steering.aloha.machine.Corrector;
-import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener;
 import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
@@ -257,35 +256,14 @@ public class CombinedKickResponseDataImpl implements CombinedKickResponseData, M
     public void setMachineElementsManager(MachineElementsManager machineElementsManager) {
         this.machineElementsManager = machineElementsManager;
         this.machineElementsManager.addListener(new MachineElementsManagerListener() {
-
             @Override
             public void changedActiveElements() {
                 setDirty(true);
             }
 
             @Override
-            public void changedActiveCorrector(int number, Corrector corrector) {
-                /* do nothing */
-            }
-
-            @Override
-            public void changedActiveMonitor(int number, Monitor monitor) {
-                /* do nothing */
-            }
-
-            @Override
             public void changedElements() {
                 setDirty(true);
-            }
-
-            @Override
-            public void changedCorrectorGains() {
-                /* do nothing */
-            }
-
-            @Override
-            public void changedMonitorGains() {
-                /* do nothing */
             }
         });
     }

@@ -9,13 +9,10 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.analyzer;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.analyzer.AbstractAnalyzer;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.machine.Corrector;
-import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener;
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
@@ -29,6 +26,8 @@ import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.accsoft.steering.util.gui.dv.ds.MatrixColumnDataSet;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.jdve.viewer.DVView;
+
+import java.util.List;
 
 /**
  * This analyzer displays the measured trajectories which were used to calc the
@@ -172,7 +171,6 @@ public class ResponseTrajAnalyzer extends
 		this.machineElementsManager = machineElementsManager;
 		this.machineElementsManager
 				.addListener(new MachineElementsManagerListener() {
-
 					@Override
 					public void changedActiveCorrector(int number,
 							Corrector corrector) {
@@ -181,32 +179,6 @@ public class ResponseTrajAnalyzer extends
 						dataVUp.setColumn(number);
 						dataVDown.setColumn(number);
 					}
-
-					@Override
-					public void changedActiveElements() {
-						/* nothing to do */
-					}
-
-					@Override
-					public void changedActiveMonitor(int number, Monitor monitor) {
-						/* nothing to do */
-					}
-
-					@Override
-					public void changedElements() {
-						/* nothing to do */
-					}
-
-					@Override
-					public void changedCorrectorGains() {
-						/* nothing to do */
-					}
-
-					@Override
-					public void changedMonitorGains() {
-						/* nothing to do */
-					}
-
 				});
 	}
 

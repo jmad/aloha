@@ -4,8 +4,6 @@ import cern.accsoft.steering.aloha.calc.Calculator;
 import cern.accsoft.steering.aloha.calc.CalculatorListener;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
 import cern.accsoft.steering.aloha.calc.variation.VariationData;
-import cern.accsoft.steering.aloha.machine.Corrector;
-import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
@@ -256,50 +254,14 @@ public class FitDataSetManager {
             return dataSet;
         }
 
-        /* override if wanted */
-        @Override
-        public void changedActiveCorrector(int number, Corrector corrector) {
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedActiveMonitor(int number, Monitor monitor) {
-        }
-
         /*
          * following methods are not foreseen to be overridden.
          */
-
         @Override
         public void changedActiveElements() {
             if (dataSet instanceof AbstractJmadDataSet) {
                 ((AbstractJmadDataSet) dataSet).refresh();
             }
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedElements() {
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedCalculatedValues(Calculator calculator) {
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedVariationParameters(Calculator calculator) {
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedCorrectorGains() {
-        }
-
-        /* override if wanted */
-        @Override
-        public void changedMonitorGains() {
         }
 
     }
