@@ -22,18 +22,18 @@ public interface SensitivityMatrixContributor {
     /**
      * @return the measurement to which this contributor is related to.
      */
-    public Measurement getMeasurement();
+    Measurement getMeasurement();
 
     /**
      * this method is called by the {@link SensitivityMatrixManagerImpl}, to make it possible for the contributors to
      * store their unperturbed values, in order to be able to correctly calculate the perturbed values later on.
      */
-    public void initUnperturbed();
+    void initUnperturbed();
 
     /**
      * @return a name for the contributor, which can be displayed
      */
-    public String getName();
+    String getName();
 
     /**
      * this method can be called to determine the designated number of rows of the matrices that will be produced by
@@ -41,17 +41,17 @@ public interface SensitivityMatrixContributor {
      * 
      * @return the number of rows of the matrices.
      */
-    public int getMatrixRowCount();
+    int getMatrixRowCount();
 
     /**
      * @return the part of the sensity-matrix corresponding to the monitor-gains.
      */
-    public Matrix calcMonitorSensityMatrix();
+    Matrix calcMonitorSensityMatrix();
 
     /**
      * @return the part of the sensity-matrix corresponding to the corrector-gains.
      */
-    public Matrix calcCorrectorSensityMatrix();
+    Matrix calcCorrectorSensityMatrix();
 
     /**
      * @param delta the variation that was used to trim the parameter. This is needed by the method to calc the gradient
@@ -60,12 +60,12 @@ public interface SensitivityMatrixContributor {
      *            own normalization-factor must be calculated by the method.
      * @return a column, which represents the perturbation of the actual values in comparison to the default one.
      */
-    public PerturbedColumn calcPerturbedColumn(double delta, Double normalizationFactor);
+    PerturbedColumn calcPerturbedColumn(double delta, Double normalizationFactor);
 
     /**
      * @return the difference-vector between measurement-model, corresponding to the rows in the other matrices
      */
-    public Matrix getDifferenceVector();
+    Matrix getDifferenceVector();
 
     /**
      * This method must return a vector which has the same dimensions as the difference-vector as returned by
@@ -74,6 +74,6 @@ public interface SensitivityMatrixContributor {
      * 
      * @return a vector representing the errors on the difference vector.
      */
-    public Matrix getDifferenceVectorErrors();
+    Matrix getDifferenceVectorErrors();
 
 }

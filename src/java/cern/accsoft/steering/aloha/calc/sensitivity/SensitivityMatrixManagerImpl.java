@@ -140,6 +140,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
     @Override
     public Matrix createSensitivityMatrix() throws CalculatorException {
+        LOGGER.info("Calculating Sensitivity Matrix ...");
         this.perturbedColumnFactors.clear();
 
         List<SensitivityMatrixContributor> activeContributors = getActiveContributors();
@@ -163,6 +164,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
          * add the columns for the monitor-gains
          */
         if (isVaryMonitorGains()) {
+            LOGGER.info("Calculating sensitivity to monitor gains ...");
             row = 0;
             int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
             for (SensitivityMatrixContributor contributor : activeContributors) {
@@ -180,6 +182,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
          * columns for the corrector-gains
          */
         if (isVaryCorrectorGains()) {
+            LOGGER.info("Calculating sensitivity to corrector gains ...");
             row = 0;
             int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
             for (SensitivityMatrixContributor contributor : activeContributors) {
@@ -198,6 +201,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
          */
         for (VariationParameter parameter : getVariationData().getVariationParameters()) {
             row = 0;
+            LOGGER.info("Calculating sensitivity to parameter '{}'", parameter.getName());
             parameter.addDelta();
             int contribNumber = 0;
             for (SensitivityMatrixContributor contributor : activeContributors) {
@@ -252,6 +256,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             matrix.setMatrix(baseRow, baseRow + nRows - 1, 0, matrix.getColumnDimension() - 1, subMatrix);
             baseRow += nRows;
         }
+        LOGGER.info("{}x{} Sensitivity Matrix established.", matrix.getRowDimension(), matrix.getColumnDimension());
         return matrix;
     }
 

@@ -18,31 +18,31 @@ public interface Calculator {
 	 * @param listener
 	 *            the listener to add
 	 */
-	public abstract void addListener(CalculatorListener listener);
+	void addListener(CalculatorListener listener);
 
 	/**
 	 * @param listener
 	 *            the listener to remove
 	 */
-	public abstract void removeListener(CalculatorListener listener);
+	void removeListener(CalculatorListener listener);
 
 	/**
 	 * reset the calculation
 	 * 
 	 * @throws CalculatorException
 	 */
-	public abstract void reset() throws CalculatorException;
+	void reset() throws CalculatorException;
 
 	/**
 	 * performs one step of calculation
 	 * 
 	 * @throws CalculatorException
 	 */
-	public abstract void calc() throws CalculatorException;
+	void calc() throws CalculatorException;
 
 	/**
 	 * @return the change of the parameters during the last calculation
 	 */
-	public Matrix getDeltaParameterValues();
+	Matrix getDeltaParameterValues();
 
 }

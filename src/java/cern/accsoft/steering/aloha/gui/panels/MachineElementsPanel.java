@@ -24,6 +24,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cern.accsoft.gui.frame.util.CompletableFutureTasks.backgroundTask;
+
 public abstract class MachineElementsPanel extends JPanel implements Applyable, TableModelListener {
     private final static Logger LOGGER = LoggerFactory.getLogger(MachineElementsPanel.class);
 
@@ -50,7 +52,7 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
      * 
      * @author kfuchsbe
      */
-    public static enum Type {
+    public enum Type {
         CORRECTORS, MONITORS;
     }
 
@@ -98,25 +100,22 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
             this.tableModel.fireTableDataChanged();
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                validate();
-            }
-        });
+        SwingUtilities.invokeLater(this::validate);
     }
 
     @Override
     public boolean apply() {
         if (dataChanged) {
-            getMachineElementsManager().setSuppressActiveElementsChangedEvent(true);
-            for (int i = 0; i < elements.length; i++) {
-                AbstractMachineElement element = elements[i];
-                element.setActive(activeBuffer.get(i));
-                element.setInitialGain(gainBuffer.get(i));
-            }
-            getMachineElementsManager().setSuppressActiveElementsChangedEvent(false);
-            dataChanged = false;
+            backgroundTask("setting active elements", () -> {
+                getMachineElementsManager().setSuppressActiveElementsChangedEvent(true);
+                for (int i = 0; i < elements.length; i++) {
+                    AbstractMachineElement element = elements[i];
+                    element.setActive(activeBuffer.get(i));
+                    element.setInitialGain(gainBuffer.get(i));
+                }
+                getMachineElementsManager().setSuppressActiveElementsChangedEvent(false);
+                dataChanged = false;
+            });
         }
         return true;
     }

@@ -7,12 +7,12 @@
  */
 package cern.accsoft.steering.aloha.calc.sensitivity;
 
-import java.util.List;
-
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.calc.CalculatorException;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResult;
 import cern.accsoft.steering.aloha.meas.Measurement;
+
+import java.util.List;
 
 /**
  * this interface defines the methods of a class, that provides a sensity matrix for a fit. It also provides a method to
@@ -26,17 +26,17 @@ public interface SensitivityMatrixManager {
     /**
      * @return the difference vector, corresponding to the rows of the sensity matrix
      */
-    public Matrix getActiveDifferenceVector();
+    Matrix getActiveDifferenceVector();
 
     /**
      * @return the difference vector including all contributors
      */
-    public Matrix getAllDifferenceVector();
+    Matrix getAllDifferenceVector();
 
     /**
      * @return the errors on the difference vector, corresponding to the rows of the sensity matrix
      */
-    public Matrix getActiveDifferenceVectorErrors();
+    Matrix getActiveDifferenceVectorErrors();
 
     /**
      * creates the sensity matrix
@@ -44,38 +44,38 @@ public interface SensitivityMatrixManager {
      * @return the sensity matrix.
      * @throws CalculatorException
      */
-    public Matrix createSensitivityMatrix() throws CalculatorException;
+    Matrix createSensitivityMatrix() throws CalculatorException;
 
     /**
      * applies the given changes in the parameter values to the correct values of the model.
      * 
      * @param solverResult the result as calculated from the matrix solver
      */
-    public void apply(MatrixSolverResult solverResult);
+    void apply(MatrixSolverResult solverResult);
 
     /**
      * adds a contributor to the manager
      * 
      * @param contributor
      */
-    public void addContributor(SensitivityMatrixContributor contributor);
+    void addContributor(SensitivityMatrixContributor contributor);
 
     /**
      * removes the contributor for the given measurement.
      * 
      * @param measurement
      */
-    public void removeContributors(Measurement measurement);
+    void removeContributors(Measurement measurement);
 
     /**
      * @param listener the listener to add
      */
-    public void addListener(SensitivityMatrixManagerListener listener);
+    void addListener(SensitivityMatrixManagerListener listener);
 
     /**
      * @param listener the listener to remove
      */
-    public void removeListener(SensitivityMatrixManagerListener listener);
+    void removeListener(SensitivityMatrixManagerListener listener);
 
     List<SensitivityMatrixContributor> getActiveContributors();
 
