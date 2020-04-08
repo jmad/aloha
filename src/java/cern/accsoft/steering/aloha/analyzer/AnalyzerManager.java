@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.analyzer;
 
-import java.util.List;
-
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.plugin.api.AnalyzerFactory;
+
+import java.util.List;
 
 /**
  * The interface of a class, that keeps track of all {@link AnalyzerFactory}s
