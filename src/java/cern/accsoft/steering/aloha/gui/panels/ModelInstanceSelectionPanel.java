@@ -41,7 +41,7 @@ public class ModelInstanceSelectionPanel extends JPanel implements Titleable, Ap
      * the combobox, which allows to select the model-instance, if the same as
      * in another measurement shall be used.
      */
-    private JComboBox cboModelDelegateInstances;
+    private JComboBox<ModelDelegateInstance> cboModelDelegateInstances;
 
     /**
      * this button is true, if an old instance shall be reused.
@@ -103,7 +103,7 @@ public class ModelInstanceSelectionPanel extends JPanel implements Titleable, Ap
         add(btnSameInstance, constraints);
 
         constraints.gridy++;
-        cboModelDelegateInstances = new JComboBox();
+        cboModelDelegateInstances = new JComboBox<>();
         add(cboModelDelegateInstances, constraints);
 
         constraints.gridy++;
