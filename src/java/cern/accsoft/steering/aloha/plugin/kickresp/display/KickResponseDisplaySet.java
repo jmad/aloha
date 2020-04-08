@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.display;
 
@@ -46,10 +46,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Arrays.asList;
 
 /**
  * this is a special implementation of a DisplaySet for a kick-response measurement
- * 
+ *
  * @author kfuchsbe
  */
 public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaBeanFactoryAware {
@@ -76,10 +79,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
     /** here we keep all the DsAdapters */
     private HashMap<DS, DsAdapter> dsAdapters = new HashMap<>();
 
-    /** a hasmap for the datasources */
-    private HashMap<DSRC, DataSource> dataSources = new HashMap<>();
-
-    private static enum DS {
+    private enum DS {
         MEASURED_CORRECTOR_RESPONSE, MODEL_CORRECTOR_RESPONSE, //
         MEASURED_CORRECTOR_RESPONSE_H, MODEL_CORRECTOR_RESPONSE_H, //
         MEASURED_CORRECTOR_RESPONSE_V, MODEL_CORRECTOR_RESPONSE_V, //
@@ -89,10 +89,10 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         CORRECTOR_DIFFERENCE_RMS, RELATIVE_MONITOR_DIFFERENCE, //
         RELATIVE_MONITOR_DIFFERENCE_RMS, RELATIVE_CORRECTOR_DIFFERENCE, //
         RELATIVE_CORRECTOR_DIFFERENCE_RMS, //
-        MEASURED_CORRECTOR_RESPONSE_LO, MEASURED_CORRECTOR_RESPONSE_HI, //
-        MEASURED_MONITOR_RESPONSE_LO, MEASURED_MONITOR_RESPONSE_HI, //
-        MEASURED_CORRECTOR_RESPONSE_H_LO, MEASURED_CORRECTOR_RESPONSE_H_HI, //
-        MEASURED_CORRECTOR_RESPONSE_V_LO, MEASURED_CORRECTOR_RESPONSE_V_HI, //
+        MEASURED_CORRECTOR_RESPONSE_HILO, //
+        MEASURED_MONITOR_RESPONSE_HILO, //
+        MEASURED_CORRECTOR_RESPONSE_H_HILO, //
+        MEASURED_CORRECTOR_RESPONSE_V_HILO, //
         /* the matrix */
         MEASURED_RESPONSE_MATRIX(DsType.DS3D), MODEL_RESPONSE_MATRIX(DsType.DS3D), // 
         ABSOLUTE_DIFFERENCE_MATRIX(DsType.DS3D), RELATIVE_DIFFERENCE_MATRIX(DsType.DS3D);
@@ -126,18 +126,10 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         }
     }
 
-    private static enum DsType {
+    private enum DsType {
         DS2D, DS3D;
     }
 
-    /**
-     * the enum for all available dataSources
-     * 
-     * @author kfuchsbe
-     */
-    public enum DSRC {
-        MEASURED_CORRECTOR_RESPONSE_HILO, MEASURED_MONITOR_RESPONSE_HILO, MEASURED_CORRECTOR_RESPONSE_H_HILO, MEASURED_CORRECTOR_RESPONSE_V_HILO, ;
-    }
 
     public KickResponseDisplaySet(KickResponseMeasurementImpl measurement, ChartFactory chartFactory) {
         this.measurement = measurement;
@@ -172,7 +164,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
          * The chart for comparison of responses
          */
         chart = createBarChart(DS.MEASURED_CORRECTOR_RESPONSE, DS.MODEL_CORRECTOR_RESPONSE,
-                DSRC.MEASURED_CORRECTOR_RESPONSE_HILO, TITLE_MONITOR, TITLE_RESPONSE);
+                DS.MEASURED_CORRECTOR_RESPONSE_HILO, TITLE_MONITOR, TITLE_RESPONSE);
         chart.setMarkerXProvider(measurement.getMachineElementsManager().getMonitorHVBorderProvider());
         viewCompare.addDataView(new DataView(chart));
 
@@ -180,7 +172,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
          * The chart for comparison of Monitor - responses
          */
         chart = createBarChart(DS.MEASURED_MONITOR_RESPONSE, DS.MODEL_MONITOR_RESPONSE,
-                DSRC.MEASURED_MONITOR_RESPONSE_HILO, TITLE_CORRECTOR, TITLE_RESPONSE);
+                DS.MEASURED_MONITOR_RESPONSE_HILO, TITLE_CORRECTOR, TITLE_RESPONSE);
         chart.setMarkerXProvider(measurement.getMachineElementsManager().getCorrectorHVBorderProvider());
         viewCompare.addDataView(new DataView(chart));
 
@@ -192,11 +184,11 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         dvViews.add(viewCompareHV);
 
         chart = createBarChart(DS.MEASURED_CORRECTOR_RESPONSE_H, DS.MODEL_CORRECTOR_RESPONSE_H,
-                DSRC.MEASURED_CORRECTOR_RESPONSE_H_HILO, TITLE_MONITOR, TITLE_RESPONSE);
+                DS.MEASURED_CORRECTOR_RESPONSE_H_HILO, TITLE_MONITOR, TITLE_RESPONSE);
         viewCompareHV.addDataView(new DataView(chart));
 
         chart = createBarChart(DS.MEASURED_CORRECTOR_RESPONSE_V, DS.MODEL_CORRECTOR_RESPONSE_V,
-                DSRC.MEASURED_CORRECTOR_RESPONSE_V_HILO, TITLE_MONITOR, TITLE_RESPONSE);
+                DS.MEASURED_CORRECTOR_RESPONSE_V_HILO, TITLE_MONITOR, TITLE_RESPONSE);
         viewCompareHV.addDataView(new DataView(chart));
 
         /*
@@ -254,7 +246,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     /**
      * creates the default BarChart
-     * 
+     *
      * @param measurementDsType the dataset-type for the measurement
      * @param modelDsType the dataset-type for the model
      * @param measurementDsrcTypeError the datasource containing the measurement errors
@@ -262,8 +254,8 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
      * @param ytitle the title of the y-axis.
      * @return
      */
-    private Aloha2DChart createBarChart(DS measurementDsType, DS modelDsType, DSRC measurementDsrcTypeError,
-            String xtitle, String ytitle) {
+    private Aloha2DChart createBarChart(DS measurementDsType, DS modelDsType, DS measurementDsrcTypeError,
+                                        String xtitle, String ytitle) {
         if (getChartFactory() == null) {
             return null;
         }
@@ -277,53 +269,11 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     /**
      * getter method for dataSources
-     * 
-     * @param dsrc the type of the dataSource to get
+     *
+     * @param ds the type of the dataSource to get
      * @return the dataSource
      */
-    public DataSource getDataSource(DSRC dsrc) {
-        if (dsrc == null) {
-            return null;
-        }
-
-        if (dataSources.get(dsrc) == null) {
-            dataSources.put(dsrc, createDataSource(dsrc));
-        }
-        return dataSources.get(dsrc);
-    }
-
-    /**
-     * create the dataSource of the given type
-     * 
-     * @param dsrc the type of the dataSource to create
-     * @return the dataSource
-     */
-    private DataSource createDataSource(DSRC dsrc) {
-        switch (dsrc) {
-        case MEASURED_CORRECTOR_RESPONSE_HILO:
-            return new DefaultDataSource(new DataSet[] { getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_LO),
-                    getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_HI) });
-        case MEASURED_CORRECTOR_RESPONSE_H_HILO:
-            return new DefaultDataSource(new DataSet[] { getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_H_LO),
-                    getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_H_HI) });
-        case MEASURED_CORRECTOR_RESPONSE_V_HILO:
-            return new DefaultDataSource(new DataSet[] { getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_V_LO),
-                    getDataSet(DS.MEASURED_CORRECTOR_RESPONSE_V_HI) });
-        case MEASURED_MONITOR_RESPONSE_HILO:
-            return new DefaultDataSource(new DataSet[] { getDataSet(DS.MEASURED_MONITOR_RESPONSE_LO),
-                    getDataSet(DS.MEASURED_MONITOR_RESPONSE_HI) });
-        default:
-            return null;
-        }
-    }
-
-    /**
-     * getter method for 2D - DataSets. Lazy loading.
-     * 
-     * @param ds the type of the 2D - DataSet
-     * @return the DataSet.
-     */
-    private DataSet getDataSet(DS ds) {
+    private DataSource getDataSource(DS ds) {
         if (ds == null) {
             return null;
         }
@@ -335,319 +285,317 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
             dsAdapters.put(ds, adapter);
         }
         if (adapter != null) {
-            return adapter.getDataSet();
+            return adapter.dataSource();
         } else {
             return null;
         }
     }
 
+    /**
+     * getter method for 2D - DataSets. Lazy loading.
+     *
+     * @param ds the type of the 2D - DataSet
+     * @return the DataSet.
+     */
+    private DataSet getDataSet(DS ds) {
+        return Optional.ofNullable(getDataSource(ds))
+                .map(DataSource::getDataSets)
+                .map(dataSets -> dataSets[0])
+                .orElse(null);
+    }
+
     private DsAdapter createDsAdapter(DS ds) {
         DsAdapter adapter = null;
         switch (ds) {
-        case MEASURED_CORRECTOR_RESPONSE:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response for one Corrector."),
-                    MeasModelType.MEASUREMENT);
-            break;
-        case MODEL_CORRECTOR_RESPONSE:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response for one Corrector."),
-                    MeasModelType.MODEL);
-            break;
-        case MEASURED_CORRECTOR_RESPONSE_H:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response (H) for one Corrector."),
-                    MeasModelType.MEASUREMENT, Plane.HORIZONTAL);
-            break;
-        case MODEL_CORRECTOR_RESPONSE_H:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response (H) for one Corrector."),
-                    MeasModelType.MODEL, Plane.HORIZONTAL);
-            break;
-        case MEASURED_CORRECTOR_RESPONSE_V:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response (V) for one Corrector."),
-                    MeasModelType.MEASUREMENT, Plane.VERTICAL);
-            break;
-        case MODEL_CORRECTOR_RESPONSE_V:
-            adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response (V) for one Corrector."),
-                    MeasModelType.MODEL, Plane.VERTICAL);
-            break;
-        case MEASURED_MONITOR_RESPONSE:
-            adapter = new DsAdapterImpl<MatrixRowDataSet>(new MatrixRowDataSet("Measured responses of one Monitor")) {
-                @Override
-                public void changedActiveMonitor(int number, Monitor monitor) {
-                    dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.getName() + " (measured)");
-                }
+            case MEASURED_CORRECTOR_RESPONSE:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response for one Corrector."),
+                        MeasModelType.MEASUREMENT);
+                break;
+            case MODEL_CORRECTOR_RESPONSE:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response for one Corrector."),
+                        MeasModelType.MODEL);
+                break;
+            case MEASURED_CORRECTOR_RESPONSE_H:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response (H) for one Corrector."),
+                        MeasModelType.MEASUREMENT, Plane.HORIZONTAL);
+                break;
+            case MODEL_CORRECTOR_RESPONSE_H:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response (H) for one Corrector."),
+                        MeasModelType.MODEL, Plane.HORIZONTAL);
+                break;
+            case MEASURED_CORRECTOR_RESPONSE_V:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Measured Response (V) for one Corrector."),
+                        MeasModelType.MEASUREMENT, Plane.VERTICAL);
+                break;
+            case MODEL_CORRECTOR_RESPONSE_V:
+                adapter = new CorrectorResponseAdapter(new MatrixColumnDataSet("Model Response (V) for one Corrector."),
+                        MeasModelType.MODEL, Plane.VERTICAL);
+                break;
+            case MEASURED_MONITOR_RESPONSE:
+                adapter = new SingleDsAdapter<MatrixRowDataSet>(new MatrixRowDataSet("Measured responses of one Monitor")) {
+                    @Override
+                    public void changedActiveMonitor(int number, Monitor monitor) {
+                        dataSet.setRow(number);
+                        dataSet.setName("Monitor: " + monitor.getName() + " (measured)");
+                    }
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setMatrix(measurement.getData().getResponseMatrix());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                }
-            };
-            break;
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setMatrix(measurement.getData().getResponseMatrix());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                    }
+                };
+                break;
 
-        case MEASURED_CORRECTOR_RESPONSE_LO:
-            MatrixColumnDataSet loCorrDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
-            loCorrDs.setOffsetSubtract(true);
-            adapter = new HiLowMatrixDsAdapter(loCorrDs);
-            break;
+            case MEASURED_CORRECTOR_RESPONSE_HILO:
+                MatrixColumnDataSet loCorrDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
+                loCorrDs.setOffsetSubtract(true);
+                MatrixColumnDataSet hiCorrDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
+                hiCorrDs.setOffsetSubtract(false);
+                adapter = new HiLowMatrixDsAdapter(loCorrDs, hiCorrDs);
+                break;
 
-        case MEASURED_CORRECTOR_RESPONSE_HI:
-            MatrixColumnDataSet hiCorrDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
-            hiCorrDs.setOffsetSubtract(false);
-            adapter = new HiLowMatrixDsAdapter(hiCorrDs);
-            break;
+            case MEASURED_MONITOR_RESPONSE_HILO:
+                MatrixRowDataSet loMonDs = new MatrixRowDataSet("measured response for one monitor, lower limit");
+                loMonDs.setOffsetSubtract(true);
+                MatrixRowDataSet hiMonDs = new MatrixRowDataSet("measured response for one monitor, higher limit");
+                hiMonDs.setOffsetSubtract(false);
+                adapter = new HiLowMatrixDsAdapter(loMonDs, hiMonDs);
+                break;
+            case MEASURED_CORRECTOR_RESPONSE_H_HILO:
+                MatrixColumnDataSet loCorrHDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
+                loCorrHDs.setOffsetSubtract(true);
+                MatrixColumnDataSet hiCorrHDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
+                hiCorrHDs.setOffsetSubtract(false);
+                adapter = new HiLowMatrixDsAdapter(loCorrHDs, hiCorrHDs, Plane.HORIZONTAL);
+                break;
 
-        case MEASURED_MONITOR_RESPONSE_LO:
-            MatrixRowDataSet loMonDs = new MatrixRowDataSet("measured response for one monitor, lower limit");
-            loMonDs.setOffsetSubtract(true);
-            adapter = new HiLowMatrixDsAdapter(loMonDs);
-            break;
+            case MEASURED_CORRECTOR_RESPONSE_V_HILO:
+                MatrixColumnDataSet loCorrVDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
+                loCorrVDs.setOffsetSubtract(true);
+                MatrixColumnDataSet hiCorrVDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
+                hiCorrVDs.setOffsetSubtract(false);
+                adapter = new HiLowMatrixDsAdapter(loCorrVDs, hiCorrVDs, Plane.VERTICAL);
+                break;
 
-        case MEASURED_MONITOR_RESPONSE_HI:
-            MatrixRowDataSet hiMonDs = new MatrixRowDataSet("measured response for one monitor, higher limit");
-            hiMonDs.setOffsetSubtract(false);
-            adapter = new HiLowMatrixDsAdapter(hiMonDs);
-            break;
 
-        case MEASURED_CORRECTOR_RESPONSE_H_LO:
-            MatrixColumnDataSet loCorrHDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
-            loCorrHDs.setOffsetSubtract(true);
-            adapter = new HiLowMatrixDsAdapter(loCorrHDs, Plane.HORIZONTAL);
-            break;
+            case MODEL_MONITOR_RESPONSE:
+                adapter = new SingleDsAdapter<MatrixRowDataSet>(new MatrixRowDataSet("Model responses of one Monitor")) {
 
-        case MEASURED_CORRECTOR_RESPONSE_H_HI:
-            MatrixColumnDataSet hiCorrHDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
-            hiCorrHDs.setOffsetSubtract(false);
-            adapter = new HiLowMatrixDsAdapter(hiCorrHDs, Plane.HORIZONTAL);
-            break;
+                    @Override
+                    public void changedActiveMonitor(int number, Monitor monitor) {
+                        dataSet.setRow(number);
+                        dataSet.setName("Monitor: " + monitor.getName() + " (model)");
+                    }
 
-        case MEASURED_CORRECTOR_RESPONSE_V_LO:
-            MatrixColumnDataSet loCorrVDs = new MatrixColumnDataSet("measured response for one corrector, lower limit");
-            loCorrVDs.setOffsetSubtract(true);
-            adapter = new HiLowMatrixDsAdapter(loCorrVDs, Plane.VERTICAL);
-            break;
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                        dataSet.setMatrix(measurement.getModelData().getResponseMatrix());
+                    }
+                };
+                break;
 
-        case MEASURED_CORRECTOR_RESPONSE_V_HI:
-            MatrixColumnDataSet hiCorrVDs = new MatrixColumnDataSet("measured response for one corrector, higher limit");
-            hiCorrVDs.setOffsetSubtract(false);
-            adapter = new HiLowMatrixDsAdapter(hiCorrVDs, Plane.VERTICAL);
-            break;
+            case MONITOR_DIFFERENCE:
+                adapter = new SingleDsAdapter<MatrixRowDataSet>(new MatrixRowDataSet(
+                        "Difference measurement - model for one Monitor")) {
 
-        case MODEL_MONITOR_RESPONSE:
-            adapter = new DsAdapterImpl<MatrixRowDataSet>(new MatrixRowDataSet("Model responses of one Monitor")) {
+                    @Override
+                    public void changedActiveMonitor(int number, Monitor monitor) {
+                        dataSet.setRow(number);
+                        dataSet.setName("Monitor: " + monitor.getName());
+                    }
 
-                @Override
-                public void changedActiveMonitor(int number, Monitor monitor) {
-                    dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.getName() + " (model)");
-                }
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                        dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
+                    }
+                };
+                break;
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                    dataSet.setMatrix(measurement.getModelData().getResponseMatrix());
-                }
-            };
-            break;
-        case MONITOR_DIFFERENCE:
-            adapter = new DsAdapterImpl<MatrixRowDataSet>(new MatrixRowDataSet(
-                    "Difference measurement - model for one Monitor")) {
+            case MONITOR_DIFFERENCE_RMS:
+                adapter = new SingleDsAdapter<ListDataSet>(new ListDataSet("Monitor Error rms")) {
 
-                @Override
-                public void changedActiveMonitor(int number, Monitor monitor) {
-                    dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.getName());
-                }
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setYValues(measurement.getCombinedData().getMonitorDifferenceRms());
+                    }
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                    dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
-                }
-            };
-            break;
+                };
+                break;
 
-        case MONITOR_DIFFERENCE_RMS:
-            adapter = new DsAdapterImpl<ListDataSet>(new ListDataSet("Monitor Error rms")) {
+            case CORRECTOR_DIFFERENCE:
+                adapter = new SingleDsAdapter<MatrixColumnDataSet>(new MatrixColumnDataSet(
+                        "Difference measurement -model for one Corrector")) {
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setYValues(measurement.getCombinedData().getMonitorDifferenceRms());
-                }
+                    @Override
+                    public void changedActiveCorrector(int number, Corrector corrector) {
+                        dataSet.setColumn(number);
+                        dataSet.setName("Corrector: " + corrector.getName());
+                    }
 
-            };
-            break;
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                        dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
+                    }
+                };
+                break;
 
-        case CORRECTOR_DIFFERENCE:
-            adapter = new DsAdapterImpl<MatrixColumnDataSet>(new MatrixColumnDataSet(
-                    "Difference measurement -model for one Corrector")) {
+            case CORRECTOR_DIFFERENCE_RMS:
+                adapter = new SingleDsAdapter<ListDataSet>(new ListDataSet("Corrector Error rms")) {
 
-                @Override
-                public void changedActiveCorrector(int number, Corrector corrector) {
-                    dataSet.setColumn(number);
-                    dataSet.setName("Corrector: " + corrector.getName());
-                }
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setYValues(measurement.getCombinedData().getCorrectorDifferenceRms());
+                    }
+                };
+                break;
+            case RELATIVE_MONITOR_DIFFERENCE:
+                adapter = new SingleDsAdapter<MatrixRowDataSet>(new MatrixRowDataSet(
+                        "Difference measurement - model for one Monitor")) {
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                    dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
-                }
-            };
-            break;
+                    @Override
+                    public void changedActiveMonitor(int number, Monitor monitor) {
+                        dataSet.setRow(number);
+                        dataSet.setName("Monitor: " + monitor.getName());
+                    }
 
-        case CORRECTOR_DIFFERENCE_RMS:
-            adapter = new DsAdapterImpl<ListDataSet>(new ListDataSet("Corrector Error rms")) {
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                        dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
+                    }
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setYValues(measurement.getCombinedData().getCorrectorDifferenceRms());
-                }
-            };
-            break;
-        case RELATIVE_MONITOR_DIFFERENCE:
-            adapter = new DsAdapterImpl<MatrixRowDataSet>(new MatrixRowDataSet(
-                    "Difference measurement - model for one Monitor")) {
+                };
+                break;
 
-                @Override
-                public void changedActiveMonitor(int number, Monitor monitor) {
-                    dataSet.setRow(number);
-                    dataSet.setName("Monitor: " + monitor.getName());
-                }
+            case RELATIVE_MONITOR_DIFFERENCE_RMS:
+                adapter = new SingleDsAdapter<ListDataSet>(new ListDataSet("Monitor Error rms")) {
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                    dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
-                }
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setYValues(measurement.getCombinedData().getMonitorRelativeDiffRms());
+                    }
 
-            };
-            break;
+                };
+                break;
 
-        case RELATIVE_MONITOR_DIFFERENCE_RMS:
-            adapter = new DsAdapterImpl<ListDataSet>(new ListDataSet("Monitor Error rms")) {
+            case RELATIVE_CORRECTOR_DIFFERENCE:
+                adapter = new SingleDsAdapter<MatrixColumnDataSet>(new MatrixColumnDataSet(
+                        "Difference measurement - model for one Corrector")) {
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setYValues(measurement.getCombinedData().getMonitorRelativeDiffRms());
-                }
+                    @Override
+                    public void changedActiveCorrector(int number, Corrector corrector) {
+                        dataSet.setColumn(number);
+                        dataSet.setName("Corrector: " + corrector.getName());
+                    }
 
-            };
-            break;
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+                        dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
+                    }
+                };
+                break;
 
-        case RELATIVE_CORRECTOR_DIFFERENCE:
-            adapter = new DsAdapterImpl<MatrixColumnDataSet>(new MatrixColumnDataSet(
-                    "Difference measurement - model for one Corrector")) {
+            case RELATIVE_CORRECTOR_DIFFERENCE_RMS:
+                adapter = new SingleDsAdapter<ListDataSet>(new ListDataSet("Corrector Error rms")) {
+                    @Override
+                    public void refresh() {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setYValues(measurement.getCombinedData().getCorrectorRelativeDiffRms());
+                    }
+                };
+                break;
+            case MEASURED_RESPONSE_MATRIX:
+                adapter = new SingleDsAdapter<MatrixDataSet>(
+                        new MatrixDataSet("Measured Response - Matrix", new Matrix(1, 1))) {
 
-                @Override
-                public void changedActiveCorrector(int number, Corrector corrector) {
-                    dataSet.setColumn(number);
-                    dataSet.setName("Corrector: " + corrector.getName());
-                }
+                    @Override
+                    public void refresh() {
+                        dataSet.setMatrix(measurement.getData().getResponseMatrix());
+                        dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                    }
+                };
+                break;
 
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
-                    dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
-                }
-            };
-            break;
+            case MODEL_RESPONSE_MATRIX:
+                adapter = new SingleDsAdapter<MatrixDataSet>(new MatrixDataSet("Model Response - Matrix", new Matrix(1, 1))) {
 
-        case RELATIVE_CORRECTOR_DIFFERENCE_RMS:
-            adapter = new DsAdapterImpl<ListDataSet>(new ListDataSet("Corrector Error rms")) {
-                @Override
-                public void refresh() {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setYValues(measurement.getCombinedData().getCorrectorRelativeDiffRms());
-                }
-            };
-            break;
-        case MEASURED_RESPONSE_MATRIX:
-            adapter = new DsAdapterImpl<MatrixDataSet>(
-                    new MatrixDataSet("Measured Response - Matrix", new Matrix(1, 1))) {
+                    @Override
+                    public void refresh() {
+                        dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setMatrix(measurement.getModelData().getResponseMatrix());
+                    }
+                };
+                break;
 
-                @Override
-                public void refresh() {
-                    dataSet.setMatrix(measurement.getData().getResponseMatrix());
-                    dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                }
-            };
-            break;
+            case ABSOLUTE_DIFFERENCE_MATRIX:
+                adapter = new SingleDsAdapter<MatrixDataSet>(new MatrixDataSet("Difference measurement - model", new Matrix(
+                        1, 1))) {
 
-        case MODEL_RESPONSE_MATRIX:
-            adapter = new DsAdapterImpl<MatrixDataSet>(new MatrixDataSet("Model Response - Matrix", new Matrix(1, 1))) {
+                    @Override
+                    public void refresh() {
+                        dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
+                    }
 
-                @Override
-                public void refresh() {
-                    dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setMatrix(measurement.getModelData().getResponseMatrix());
-                }
-            };
-            break;
+                    @Override
+                    public void changedElements() {
+                        // TODO Auto-generated method stub
 
-        case ABSOLUTE_DIFFERENCE_MATRIX:
-            adapter = new DsAdapterImpl<MatrixDataSet>(new MatrixDataSet("Difference measurement - model", new Matrix(
-                    1, 1))) {
+                    }
 
-                @Override
-                public void refresh() {
-                    dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setMatrix(measurement.getCombinedData().getDifferenceMatrix());
-                }
+                };
+                break;
 
-                @Override
-                public void changedElements() {
-                    // TODO Auto-generated method stub
+            case RELATIVE_DIFFERENCE_MATRIX:
+                adapter = new SingleDsAdapter<MatrixDataSet>(new MatrixDataSet("Relative difference measurement - model",
+                        new Matrix(1, 1))) {
 
-                }
-
-            };
-            break;
-
-        case RELATIVE_DIFFERENCE_MATRIX:
-            adapter = new DsAdapterImpl<MatrixDataSet>(new MatrixDataSet("Relative difference measurement - model",
-                    new Matrix(1, 1))) {
-
-                @Override
-                public void refresh() {
-                    dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                    dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                    dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
-                }
-            };
-            break;
+                    @Override
+                    public void refresh() {
+                        dataSet.setRowLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                        dataSet.setColumnLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                        dataSet.setMatrix(measurement.getCombinedData().getRelativeDiffMatrix());
+                    }
+                };
+                break;
 
         }
         return adapter;
     }
 
     private interface DsAdapter extends MachineElementsManagerListener {
-        public DataSet getDataSet();
+        DataSource dataSource();
 
-        public void refresh();
+        void refresh();
     }
 
-    private abstract class DsAdapterImpl<T extends DataSet> implements DsAdapter, MachineElementsManagerListener {
-        protected T dataSet;
+    private abstract static class DsAdapterImpl<T extends DataSource> implements DsAdapter, MachineElementsManagerListener {
+        protected final T dataSource;
 
-        private DsAdapterImpl(T dataSet) {
-            this.dataSet = dataSet;
+        private DsAdapterImpl(T dataSource) {
+            this.dataSource = dataSource;
         }
 
         @Override
-        public DataSet getDataSet() {
-            return this.dataSet;
+        public T dataSource() {
+            return this.dataSource;
         }
 
         @Override
@@ -687,6 +635,15 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     }
 
+    private abstract static class SingleDsAdapter<T extends DataSet> extends DsAdapterImpl<DefaultDataSource> {
+        protected final T dataSet;
+
+        private SingleDsAdapter(T dataSet) {
+            super(new DefaultDataSource(dataSet));
+            this.dataSet = dataSet;
+        }
+    }
+
     private JPanel createDetailPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
 
@@ -712,75 +669,87 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     /**
      * special ds-adapter for HiLow - datasets
-     * 
+     *
      * @author kfuchsbe
      */
-    private class HiLowMatrixDsAdapter extends DsAdapterImpl<MatrixRowColDataSet> {
+    private class HiLowMatrixDsAdapter extends DsAdapterImpl<DefaultDataSource> {
 
-        private Plane plane;
+        private final Plane plane;
+        private final MatrixRowColDataSet hiDataSet;
+        private final MatrixRowColDataSet loDataSet;
 
-        private HiLowMatrixDsAdapter(MatrixRowColDataSet dataSet) {
-            super(dataSet);
+        private HiLowMatrixDsAdapter(MatrixRowColDataSet loDataSet, MatrixRowColDataSet hiDataSet) {
+            this(loDataSet, hiDataSet, null);
         }
 
-        private HiLowMatrixDsAdapter(MatrixRowColDataSet dataSet, Plane plane) {
-            super(dataSet);
+        private HiLowMatrixDsAdapter(MatrixRowColDataSet loDataSet, MatrixRowColDataSet hiDataSet, Plane plane) {
+            super(new DefaultDataSource(new DataSet[]{loDataSet, hiDataSet}));
             this.plane = plane;
+            this.hiDataSet = hiDataSet;
+            this.loDataSet = loDataSet;
         }
 
         @Override
         public void refresh() {
-            dataSet.setMatrix(measurement.getData().getResponseMatrix());
-            dataSet.setOffsetMatrix(measurement.getData().getRelativeRmsValues());
-            if (MatrixDsType.ROW.equals(dataSet.getType())) {
-                if (this.plane == null) {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
-                } else {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames(plane));
-                }
+            dataSource.setAdjusting(true);
+            for (MatrixRowColDataSet dataSet : asList(hiDataSet, loDataSet)) {
+                dataSet.setMatrix(measurement.getData().getResponseMatrix());
+                dataSet.setOffsetMatrix(measurement.getData().getRelativeRmsValues());
+                if (MatrixDsType.ROW.equals(dataSet.getType())) {
+                    if (this.plane == null) {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames());
+                    } else {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveCorrectorNames(plane));
+                    }
 
-                if (this.plane != null) {
-                    int hCorrectorsCount = measurement.getMachineElementsManager().getActiveCorrectorsCount(
-                            Plane.HORIZONTAL);
-                    if (Plane.HORIZONTAL == plane) {
-                        dataSet.setLastIndex(hCorrectorsCount);
-                    } else if (Plane.VERTICAL == plane) {
-                        dataSet.setFirstIndex(hCorrectorsCount);
+                    if (this.plane != null) {
+                        int hCorrectorsCount = measurement.getMachineElementsManager().getActiveCorrectorsCount(
+                                Plane.HORIZONTAL);
+                        if (Plane.HORIZONTAL == plane) {
+                            dataSet.setLastIndex(hCorrectorsCount);
+                        } else if (Plane.VERTICAL == plane) {
+                            dataSet.setFirstIndex(hCorrectorsCount);
+                        }
+                    }
+                } else if (MatrixDsType.COLUMN.equals(dataSet.getType())) {
+                    if (this.plane == null) {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
+                    } else {
+                        dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames(plane));
+                    }
+
+                    if (this.plane != null) {
+                        int hMonitorsCount = measurement.getMachineElementsManager().getActiveMonitorsCount(
+                                Plane.HORIZONTAL);
+                        if (Plane.HORIZONTAL == plane) {
+                            dataSet.setLastIndex(hMonitorsCount);
+                        } else if (Plane.VERTICAL == plane) {
+                            dataSet.setFirstIndex(hMonitorsCount);
+                        }
                     }
                 }
-            } else if (MatrixDsType.COLUMN.equals(dataSet.getType())) {
-                if (this.plane == null) {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames());
-                } else {
-                    dataSet.setLabels(measurement.getMachineElementsManager().getActiveMonitorNames(plane));
-                }
-
-                if (this.plane != null) {
-                    int hMonitorsCount = measurement.getMachineElementsManager().getActiveMonitorsCount(
-                            Plane.HORIZONTAL);
-                    if (Plane.HORIZONTAL == plane) {
-                        dataSet.setLastIndex(hMonitorsCount);
-                    } else if (Plane.VERTICAL == plane) {
-                        dataSet.setFirstIndex(hMonitorsCount);
-                    }
-                }
+                dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
             }
-            dataSet.setValidityMatrix(measurement.getData().getValidityMatrix());
+            dataSource.setAdjusting(false);
         }
 
         @Override
         public void changedActiveCorrector(int number, Corrector corrector) {
-            if (MatrixDsType.COLUMN.equals(dataSet.getType())) {
-                dataSet.setFixedIndex(number);
-                dataSet.setName("corrector: " + corrector.getName());
+            if (MatrixDsType.COLUMN.equals(hiDataSet.getType())) {
+                hiDataSet.setFixedIndex(number);
+                hiDataSet.setName("corrector: " + corrector.getName());
+                loDataSet.setFixedIndex(number);
+                loDataSet.setName("corrector: " + corrector.getName());
             }
         }
 
         @Override
         public void changedActiveMonitor(int number, Monitor monitor) {
-            if (MatrixDsType.ROW.equals(dataSet.getType())) {
-                dataSet.setFixedIndex(number);
-                dataSet.setName("monitor: " + monitor.getName());
+            if (MatrixDsType.ROW.equals(hiDataSet.getType())) {
+                hiDataSet.setFixedIndex(number);
+                hiDataSet.setName("monitor: " + monitor.getName());
+                loDataSet.setFixedIndex(number);
+                loDataSet.setName("monitor: " + monitor.getName());
             }
         }
 
@@ -795,7 +764,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
     /**
      * This class is the panel, which displays the matrices in dataViewer - charts
-     * 
+     *
      * @author kfuchsbe
      */
     private class MatrixPanel extends JPanel {
@@ -853,7 +822,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
         /**
          * creates a matrix-chart
-         * 
+         *
          * @param dstype
          * @return
          */
@@ -864,7 +833,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
                 ContourChartRenderer renderer = new ContourChartRenderer();
                 renderer.setDataSet(dataSet);
-                renderer.setStyles(new Style[] { new Style(Color.blue), new Style(Color.magenta) });
+                renderer.setStyles(new Style[]{new Style(Color.blue), new Style(Color.magenta)});
                 chart.addRenderer(renderer);
 
                 DataPickerInteractor dataPicker = new DataPickerInteractor();
@@ -888,7 +857,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
         /**
          * this class listens to the transpose-checkbox
-         * 
+         *
          * @author kfuchsbe
          */
         private class TransposeCheckboxAdapter implements ActionListener {
@@ -899,12 +868,14 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
                     if (dsAdapter == null) {
                         continue;
                     }
-                    DataSet ds = dsAdapter.getDataSet();
+                    DataSource ds = dsAdapter.dataSource();
                     if (ds == null) {
                         continue;
                     }
-                    if (ds instanceof MatrixDataSet) {
-                        ((MatrixDataSet) ds).setTransposed(chkTranspose.isSelected());
+                    for (DataSet dataSet : ds.getDataSets()) {
+                        if (dataSet instanceof MatrixDataSet) {
+                            ((MatrixDataSet) dataSet).setTransposed(chkTranspose.isSelected());
+                        }
                     }
                 }
             }
@@ -912,7 +883,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
 
         /**
          * this class listens to clicks in the matrix-display and sets the actual corrector- and monitor index.
-         * 
+         *
          * @author kfuchsbe
          */
         private class MatrixClickListener implements ChartInteractionListener {
@@ -952,7 +923,7 @@ public class KickResponseDisplaySet extends AbstractDisplaySet implements AlohaB
         return this.alohaBeanFactory;
     }
 
-    private class CorrectorResponseAdapter extends DsAdapterImpl<MatrixColumnDataSet> {
+    private class CorrectorResponseAdapter extends SingleDsAdapter<MatrixColumnDataSet> {
 
         private Plane plane = null;
         private MeasModelType measModelType = null;
