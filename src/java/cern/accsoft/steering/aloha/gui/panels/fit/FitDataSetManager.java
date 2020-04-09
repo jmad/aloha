@@ -23,7 +23,7 @@ public class FitDataSetManager {
 
     private MachineElementsManager machineElementsManager;
 
-    private HashMap<DS, DataSet> dataSets = new HashMap<DS, DataSet>();
+    private HashMap<DS, DataSet> dataSets = new HashMap<>();
 
     //
     // the sources for all the data (to be injected)

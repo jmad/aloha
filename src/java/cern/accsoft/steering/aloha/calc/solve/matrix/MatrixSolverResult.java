@@ -20,19 +20,19 @@ public interface MatrixSolverResult {
 	 * 
 	 * @return the resulting vector
 	 */
-	public Matrix getResultVector();
+	Matrix getResultVector();
 
 	/**
 	 * @return the sensitivity-value for each parameter (column-vector)
 	 */
-	public Matrix getParameterSensitivities();
+	Matrix getParameterSensitivities();
 
 	/**
 	 * calculates error estimates from the errors of the input parameters. 
 	 * 
 	 * @return a column vector with the errors for the parameters.
 	 */
-	public Matrix getParameterErrorEstimates();
+	Matrix getParameterErrorEstimates();
 
 	
 

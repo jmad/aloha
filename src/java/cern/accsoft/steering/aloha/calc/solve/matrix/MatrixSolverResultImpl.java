@@ -15,10 +15,10 @@ import Jama.Matrix;
 public class MatrixSolverResultImpl implements MatrixSolverResult {
 
 	/** the sensity values for the parameters */
-	private Matrix parameterSensitivities = new Matrix(0, 0);
+	private Matrix parameterSensitivities;
 
 	/** The result of the solve operation */
-	private Matrix resultVector = new Matrix(0, 0);
+	private Matrix resultVector;
 
 	/** The error estimates for the results */
 	private Matrix parameterErrorEstimates = new Matrix(0, 0);

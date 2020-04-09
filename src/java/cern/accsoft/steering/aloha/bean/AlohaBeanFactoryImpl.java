@@ -11,7 +11,7 @@ import cern.accsoft.steering.aloha.bean.aware.HelperDataManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.MeasurementManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
-import cern.accsoft.steering.aloha.bean.aware.SensityMatrixManagerAware;
+import cern.accsoft.steering.aloha.bean.aware.SensitivityMatrixManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.VariationDataAware;
 import cern.accsoft.steering.aloha.calc.NoiseWeighter;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
@@ -96,9 +96,9 @@ public class AlohaBeanFactoryImpl implements AlohaBeanFactory {
             ((VariationDataAware) instance)
                     .setVariationData(getVariationData());
         }
-        if (instance instanceof SensityMatrixManagerAware) {
-            ((SensityMatrixManagerAware) instance)
-                    .setSensityMatrixManager(getSensityMatrixManager());
+        if (instance instanceof SensitivityMatrixManagerAware) {
+            ((SensitivityMatrixManagerAware) instance)
+                    .setSensitivityMatrixManager(getSensityMatrixManager());
         }
         /*
          * after all the beans are injected we try to call the init method, if

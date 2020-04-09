@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cern.accsoft.steering.aloha.calc;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 /**
  * The implementation of a class that keeps track of all available Calculators.
- * 
+ *
  * @author tbaer
  */
 public class CalculatorImpl implements Calculator {
@@ -78,7 +78,7 @@ public class CalculatorImpl implements Calculator {
         /*
          * here we start the calculation and increase the iteration number
          */
-        LOGGER.info("starting fit - iteration number " + (iteration + 1) + ".");
+        LOGGER.info("Starting fit - iteration number {}.", (iteration + 1));
         this.deltaParameterValues = activeAlgorithm.calc();
 
         /*
@@ -91,6 +91,8 @@ public class CalculatorImpl implements Calculator {
          * garbage collection !
          */
         System.gc();
+
+        LOGGER.info("Fitting iteration number {} finished.", (iteration + 1));
 
         /*
          * here we can notify the listeners, since there is new Data to be fetched
@@ -117,7 +119,7 @@ public class CalculatorImpl implements Calculator {
 
     /**
      * the init method used by spring to inject the {@link AlgorithmManager}
-     * 
+     *
      * @param algorithmManager
      */
     public void setAlgorithmManager(AlgorithmManager algorithmManager) {

@@ -57,14 +57,14 @@ public class SvdSolver extends AbstractMatrixSolver implements MatrixSolver, Svd
             vector.setMatrix(0, inVector.getRowDimension() - 1, 0, inVector.getColumnDimension() - 1, inVector);
         }
 
-        LOGGER.debug("starting singular value decomposition ...");
+        LOGGER.info("starting singular value decomposition ...");
         SingularValueDecomposition svd = matrix.svd();
-        LOGGER.debug("   ... finished.");
+        LOGGER.info("   ... finished.");
 
         /* try to get rid of old stuff. */
         System.gc();
 
-        LOGGER.debug("multiplying matrices ...");
+        LOGGER.info("multiplying matrices ...");
         Matrix transformMatrix = svd.getV().times(calcInvertDiagonal(svd.getSingularValues())).times(
                 svd.getU().transpose());
         Matrix outVector = transformMatrix.times(vector);

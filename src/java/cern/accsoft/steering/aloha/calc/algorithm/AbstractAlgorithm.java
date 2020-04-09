@@ -1,7 +1,7 @@
 package cern.accsoft.steering.aloha.calc.algorithm;
 
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
-import cern.accsoft.steering.aloha.bean.aware.SensityMatrixManagerAware;
+import cern.accsoft.steering.aloha.bean.aware.SensitivityMatrixManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.VariationDataAware;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManager;
 import cern.accsoft.steering.aloha.calc.solve.Solver;
@@ -10,7 +10,7 @@ import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 
 public abstract class AbstractAlgorithm<T extends Solver> implements Algorithm,
 		VariationDataAware, MachineElementsManagerAware,
-		SensityMatrixManagerAware {
+		SensitivityMatrixManagerAware {
 
 	/** The data containing all the variation parameters */
 	private VariationData variationData;
@@ -25,7 +25,7 @@ public abstract class AbstractAlgorithm<T extends Solver> implements Algorithm,
 	 * the class which takes care of creating the sensity-matrix and applying
 	 * the calculated values,
 	 */
-	private SensitivityMatrixManager sensityMatrixManager;
+	private SensitivityMatrixManager sensitivityMatrixManager;
 
 	@Override
 	public final void reset() {
@@ -77,20 +77,20 @@ public abstract class AbstractAlgorithm<T extends Solver> implements Algorithm,
 	}
 
 	/**
-	 * @param sensityMatrixManager
-	 *            the sensityMatrixManager to set
+	 * @param sensitivityMatrixManager
+	 *            the sensitivityMatrixManager to set
 	 */
 	@Override
-	public void setSensityMatrixManager(
-			SensitivityMatrixManager sensityMatrixManager) {
-		this.sensityMatrixManager = sensityMatrixManager;
+	public void setSensitivityMatrixManager(
+			SensitivityMatrixManager sensitivityMatrixManager) {
+		this.sensitivityMatrixManager = sensitivityMatrixManager;
 	}
 
 	/**
-	 * @return the sensityMatrixManager
+	 * @return the sensitivityMatrixManager
 	 */
-	protected SensitivityMatrixManager getSensityMatrixManager() {
-		return sensityMatrixManager;
+	protected SensitivityMatrixManager getSensitivityMatrixManager() {
+		return sensitivityMatrixManager;
 	}
 
 }

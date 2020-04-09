@@ -14,14 +14,18 @@ public interface MeasurementManagerListener {
 	/**
 	 * fired, when a measurement was added.
 	 */
-	public void addedMeasurement(Measurement newMeasurement);
+	default void addedMeasurement(Measurement newMeasurement) {
+
+	}
 
 	/**
 	 * fired, when a measurement was removed.
 	 * 
 	 * @param removedMeasurement
 	 */
-	public void removedMeasurement(Measurement removedMeasurement);
+	default void removedMeasurement(Measurement removedMeasurement) {
+
+	}
 
 	/**
 	 * fired, when the active measurement changed.
@@ -30,6 +34,8 @@ public interface MeasurementManagerListener {
 	 *            the newly active measurement (can be null, if the last one is
 	 *            removed!)
 	 */
-	public void changedActiveMeasurement(Measurement activeMeasurement);
+	default void changedActiveMeasurement(Measurement activeMeasurement) {
+
+	}
 
 }

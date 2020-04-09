@@ -1,8 +1,8 @@
 /*
  * $Id: SensityMatrixManagerImpl.java,v 1.4 2009-03-16 16:38:11 kfuchsbe Exp $
- * 
+ *
  * $Date: 2009-03-16 16:38:11 $ $Revision: 1.4 $ $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.calc.sensitivity;
@@ -30,7 +30,7 @@ import java.util.List;
  * This class implements the methods for creating sensity-matrices and applying the fitted values. It uses several
  * contributors, from which it composes the total sensity-matrix. This for example may be sensity-matrizes from
  * response-matrizes or dispersion-responses ... etc.
- * 
+ *
  * @author kfuchsbe
  */
 public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, SensitivityMatrixManagerConfig {
@@ -40,10 +40,14 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
     // fields used for configuration
     //
 
-    /** if set, monitor gains are used as fit-parameter */
+    /**
+     * if set, monitor gains are used as fit-parameter
+     */
     private boolean varyMonitorGains = true;
 
-    /** if set, corrector gains are used as fit-parameter */
+    /**
+     * if set, corrector gains are used as fit-parameter
+     */
     private boolean varyCorrectorGains = true;
 
     /**
@@ -72,29 +76,36 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
      */
     private SensitivityMatrixContributorFactoryManager sensityMatrixContributorFactoryManager;
 
-    /** the configs for the contributors */
-    private List<SensitivityMatrixContributorState> contributorStates = new ArrayList<SensitivityMatrixContributorState>();
+    /**
+     * the configs for the contributors
+     */
+    private List<SensitivityMatrixContributorState> contributorStates = new ArrayList<>();
 
-    /** the normalization-factors for the perturbed columns */
-    private List<Double> perturbedColumnFactors = new ArrayList<Double>();
+    /**
+     * the normalization-factors for the perturbed columns
+     */
+    private List<Double> perturbedColumnFactors = new ArrayList<>();
 
-    /** the listeners to this class */
-    private List<SensitivityMatrixManagerListener> listeners = new ArrayList<SensitivityMatrixManagerListener>();
+    /**
+     * the listeners to this class
+     */
+    private List<SensitivityMatrixManagerListener> listeners = new ArrayList<>();
 
     @Override
     public void apply(MatrixSolverResult solverResult) {
-
+        LOGGER.info("Applying results to models ...");
         Matrix deltaParameterValues = solverResult.getResultVector();
         Matrix parameterSensitivities = solverResult.getParameterSensitivities();
         Matrix parameterErrors = solverResult.getParameterErrorEstimates();
 
         /*
          * the factors are contained in the rows of the deltaParameterValues.
-         * 
+         *
          * the corrector and monitor-gains are read and set from/to the model:
          */
         int baseRow = 0;
         if (isVaryMonitorGains()) {
+            LOGGER.info("Applying monitor gains ...");
             List<Monitor> monitors = getMachineElementsManager().getActiveMonitors();
             getMachineElementsManager().setSuppressChangedMonitorGainsEvent(true);
             for (int i = 0; i < monitors.size(); i++) {
@@ -111,6 +122,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
         }
 
         if (isVaryCorrectorGains()) {
+            LOGGER.info("Applying corrector gains ...");
             List<Corrector> correctors = getMachineElementsManager().getActiveCorrectors();
             getMachineElementsManager().setSuppressChangedCorrectorGainsEvent(true);
             for (int i = 0; i < correctors.size(); i++) {
@@ -129,6 +141,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
         int i = 0;
         for (VariationParameter param : getVariationData().getVariationParameters()) {
+            LOGGER.info("Applying parameter variations ...");
             double valueChange = (deltaParameterValues.get(i + baseRow, 0) / this.perturbedColumnFactors.get(i));
             double error = parameterErrors.get(i + baseRow, 0) / this.perturbedColumnFactors.get(i);
             param.addValueScaled(valueChange);
@@ -136,6 +149,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             param.setSensity(parameterSensitivities.get(i, 0));
             i++;
         }
+        LOGGER.info("Results applied.");
     }
 
     @Override
@@ -280,7 +294,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
     /**
      * combines the vectors of the given type from the different contributors taking into account the correct factors.
-     * 
+     *
      * @param type the type of the vector
      * @return the combined vector
      */
@@ -296,8 +310,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
         Matrix vector = new Matrix(rows, 1);
         int baseRow = 0;
         for (SensitivityMatrixContributorState config : contributorStates) {
-            SensitivityMatrixContributor contributor = ((SensitivityMatrixContributorStateImpl) config)
-                    .getContributor();
+            SensitivityMatrixContributor contributor = ((SensitivityMatrixContributorStateImpl) config).getContributor();
             int rowDiff = contributor.getMatrixRowCount();
             if (rowDiff > 0) {
                 vector.setMatrix(baseRow, baseRow + rowDiff - 1, 0, 0, type.getVector(contributor).times(
@@ -329,7 +342,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
     /**
      * creates an empty matrix, according to our needs. The size depends on if we are varying corrector-gains or
      * monitor-gains or both and if we are using additional variation-parameters.
-     * 
+     *
      * @return a new matrix of correct size.
      */
     private Matrix createEmptySensityMatrix() {
@@ -382,12 +395,6 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
     public void setMeasurementManager(MeasurementManager measurementManager) {
         measurementManager.addListener(new MeasurementManagerListener() {
-
-            @Override
-            public void changedActiveMeasurement(Measurement activeMeasurement) {
-                /* nothing to do */
-            }
-
             @Override
             public void addedMeasurement(Measurement newMeasurement) {
                 createContributors(newMeasurement);
@@ -397,7 +404,6 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             public void removedMeasurement(Measurement removedMeasurement) {
                 removeContributors(removedMeasurement);
             }
-
         });
     }
 
@@ -418,7 +424,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
      * @return the active contributor-configs
      */
     private List<SensitivityMatrixContributorState> getActiveContributorConfigs() {
-        List<SensitivityMatrixContributorState> activeContributorConfigs = new ArrayList<SensitivityMatrixContributorState>();
+        List<SensitivityMatrixContributorState> activeContributorConfigs = new ArrayList<>();
         for (SensitivityMatrixContributorState config : this.contributorStates) {
             if (config.isActive()) {
                 activeContributorConfigs.add(config);
@@ -429,7 +435,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
     private static List<SensitivityMatrixContributor> getContributors(
             List<SensitivityMatrixContributorState> contributorStates) {
-        List<SensitivityMatrixContributor> contributors = new ArrayList<SensitivityMatrixContributor>();
+        List<SensitivityMatrixContributor> contributors = new ArrayList<>();
         for (SensitivityMatrixContributorState config : contributorStates) {
             contributors.add(((SensitivityMatrixContributorStateImpl) config).getContributor());
         }
@@ -494,7 +500,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
 
     /**
      * adds the contributor without firing any event
-     * 
+     *
      * @param contributor
      */
     private void putContributor(SensitivityMatrixContributor contributor) {
