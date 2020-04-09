@@ -1,9 +1,5 @@
 package cern.accsoft.steering.aloha.gui.panels.fit;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-
 import cern.accsoft.steering.aloha.gui.dv.ChartFactory;
 import cern.accsoft.steering.aloha.gui.panels.DataViewsManager;
 import cern.accsoft.steering.aloha.gui.panels.fit.FitDataSetManager.DS;
@@ -17,9 +13,10 @@ import cern.jdve.viewer.DVView;
 import cern.jdve.viewer.DataView;
 import cern.jdve.viewer.DataViewer;
 
-public class FitDataViewerPanel extends JPanel {
-    private static final long serialVersionUID = -5359391586208558362L;
+import javax.swing.*;
+import java.awt.*;
 
+public class FitDataViewerPanel extends JPanel {
     private DataViewer dataViewer = new DataViewer();
 
     private ChartFactory chartFactory;

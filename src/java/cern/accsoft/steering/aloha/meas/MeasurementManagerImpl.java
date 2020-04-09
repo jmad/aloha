@@ -22,16 +22,16 @@ import java.util.Map;
 public class MeasurementManagerImpl implements MeasurementManager, ModelDelegateManager {
 
     /** this list contains all available measurements */
-    private List<ModelAwareMeasurement> measurements = new ArrayList<ModelAwareMeasurement>();
+    private final List<ModelAwareMeasurement> measurements = new ArrayList<>();
 
     /** the hashmap to look up the indizes */
-    private Map<ModelAwareMeasurement, Integer> indizes = new HashMap<ModelAwareMeasurement, Integer>();
+    private final Map<ModelAwareMeasurement, Integer> indizes = new HashMap<>();
 
     /** the listeners to this class */
-    private List<MeasurementManagerListener> listeners = new ArrayList<MeasurementManagerListener>();
+    private final List<MeasurementManagerListener> listeners = new ArrayList<>();
 
     /** the listeners to the {@link ModelDelegateManager} */
-    private List<ModelDelegateManagerListener> mdmListeners = new ArrayList<ModelDelegateManagerListener>();
+    private final List<ModelDelegateManagerListener> mdmListeners = new ArrayList<>();
 
     /** the model manager, to which we set the actual model of the measurement */
     private JMadModelManager modelManager = null;
@@ -127,27 +127,24 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
      * notifies the listeners, that a measurement was added.
      */
     private void fireAddedMeasurement(Measurement newMeasurement) {
-        for (MeasurementManagerListener listener : listeners) {
-            listener.addedMeasurement(newMeasurement);
-        }
+        listeners.forEach(l -> l.addedMeasurement(newMeasurement));
     }
 
     /**
      * notifies the listeners, that a measurement was removed.
      */
     private void fireRemovedMeasurement(Measurement removedMeasurement) {
-        for (MeasurementManagerListener listener : listeners) {
-            listener.removedMeasurement(removedMeasurement);
-        }
+        listeners.forEach(l -> l.removedMeasurement(removedMeasurement));
     }
 
     /**
      * notifies all listeners, that the active measurement has changed.
      */
     private void fireChangedActiveMeasurement() {
-        for (MeasurementManagerListener listener : listeners) {
-            listener.changedActiveMeasurement(getActiveMeasurement());
-        }
+        ModelAwareMeasurement activeMeasurement = getActiveMeasurement();
+        ModelDelegate activeModelDelegate = getActiveModelDelegate();
+        listeners.forEach(l -> l.changedActiveMeasurement(activeMeasurement));
+        mdmListeners.forEach(l -> l.activeModelDelegateChanged(activeModelDelegate));
     }
 
     /**
@@ -156,9 +153,7 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
      * @param modelDelegate the new {@link ModelDelegate}
      */
     private void fireAddedModelDelegate(ModelDelegate modelDelegate) {
-        for (ModelDelegateManagerListener listener : mdmListeners) {
-            listener.addedModelDelegate(modelDelegate);
-        }
+        mdmListeners.forEach(l -> l.addedModelDelegate(modelDelegate));
     }
 
     /**
@@ -167,9 +162,7 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
      * @param removedModelDelegate
      */
     private void fireRemovedModelDelegate(ModelDelegate removedModelDelegate) {
-        for (ModelDelegateManagerListener listener : mdmListeners) {
-            listener.removedModelDelegate(removedModelDelegate);
-        }
+        mdmListeners.forEach(l -> l.removedModelDelegate(removedModelDelegate));
     }
 
     @Override
@@ -182,7 +175,7 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
 
     @Override
     public List<ModelDelegateInstance> getModelDelegateInstances() {
-        Map<ModelDelegate, ModelDelegateInstance> modelDelegateInstances = new HashMap<ModelDelegate, ModelDelegateInstance>();
+        Map<ModelDelegate, ModelDelegateInstance> modelDelegateInstances = new HashMap<>();
         for (ModelAwareMeasurement measurement : this.measurements) {
             ModelDelegate modelDelegate = measurement.getModelDelegate();
             ModelDelegateInstance instance = modelDelegateInstances.get(modelDelegate);
@@ -192,13 +185,13 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
             }
             instance.addMeasurementName(measurement);
         }
-        return new ArrayList<ModelDelegateInstance>(modelDelegateInstances.values());
+        return new ArrayList<>(modelDelegateInstances.values());
     }
 
     @Override
     public List<ModelDelegate> getModelDelegates() {
         Collection<ModelDelegateInstance> instances = getModelDelegateInstances();
-        List<ModelDelegate> delegates = new ArrayList<ModelDelegate>();
+        List<ModelDelegate> delegates = new ArrayList<>();
         for (ModelDelegateInstance instance : instances) {
             delegates.add(instance.getModelDelegate());
         }
@@ -225,7 +218,7 @@ public class MeasurementManagerImpl implements MeasurementManager, ModelDelegate
 
     @Override
     public List<ModelAwareMeasurement> getMeasurements(MeasurementType type) {
-        List<ModelAwareMeasurement> measurements = new ArrayList<ModelAwareMeasurement>();
+        List<ModelAwareMeasurement> measurements = new ArrayList<>();
         for (ModelAwareMeasurement measurement : getMeasurements()) {
             if (type.equals(measurement.getType())) {
                 measurements.add(measurement);

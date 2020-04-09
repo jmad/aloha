@@ -351,7 +351,7 @@
         <property name="menuBar" ref="menuBar"/>
         <property name="toolBar" ref="toolBar"/>
         <property name="mainPanel" ref="alohaMainPanel"/>
-        <!--<property name="splashScreen" ref="splashScreen" />-->
+        <property name="splashScreen" ref="splashScreen" />
         <property name="extraConsoleTabs">
             <map>
                 <entry key="script" value-ref="scriptPanel"/>

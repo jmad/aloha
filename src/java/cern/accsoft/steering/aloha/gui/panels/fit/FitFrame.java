@@ -47,6 +47,7 @@ public class FitFrame extends JFrame {
     private void initComponents() {
         setLayout(new BorderLayout());
         setSize(1024, 768);
+        setTitle("Aloha Fitting");
 
         /*
          * The multisplit layout and the multisplit-pane, which contains all
@@ -88,9 +89,6 @@ public class FitFrame extends JFrame {
                     new BevelBorder(BevelBorder.LOWERED));
             multiSplitPane.add(getFitDataViewerPanel(), "bottom");
         }
-
-        multiSplitPane.validate();
-        validate();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 

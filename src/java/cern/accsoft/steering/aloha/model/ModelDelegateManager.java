@@ -17,30 +17,30 @@ public interface ModelDelegateManager {
     /**
      * @return all model-instances in a list
      */
-    public List<ModelDelegateInstance> getModelDelegateInstances();
+    List<ModelDelegateInstance> getModelDelegateInstances();
 
     /**
      * @return all the model delegates.
      */
-    public List<ModelDelegate> getModelDelegates();
+    List<ModelDelegate> getModelDelegates();
 
     /**
      * add a listener to the {@link ModelDelegateManager}
      * 
      * @param listener
      */
-    public void addListener(ModelDelegateManagerListener listener);
+    void addListener(ModelDelegateManagerListener listener);
 
     /**
      * remove a listener
      * 
      * @param listener the listener to remove
      */
-    public void removeListener(ModelDelegateManagerListener listener);
+    void removeListener(ModelDelegateManagerListener listener);
 
     /**
      * @return The model - delegate of the active measurement (if any)
      */
-    public ModelDelegate getActiveModelDelegate();
+    ModelDelegate getActiveModelDelegate();
 
 }

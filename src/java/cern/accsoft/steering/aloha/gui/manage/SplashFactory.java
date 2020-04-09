@@ -11,6 +11,7 @@ package cern.accsoft.steering.aloha.gui.manage;
 
 import cern.accsoft.gui.beans.spi.SplashScreen;
 import cern.accsoft.steering.aloha.gui.icons.Icon;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
 /**
  * This class manages the Splash-screen.
@@ -23,9 +24,6 @@ public class SplashFactory {
 	private final static SplashScreen splashScreen = new SplashScreen(null,
 			Icon.SPLASH.getImageIcon().getImage());
 
-	/**
-	 * static block to initialize the splashScreen.
-	 */
 	static {
 		splashScreen.setText("Aloha");
 		splashScreen.setMessage("don't hesitate to dance while waiting!");
@@ -34,7 +32,8 @@ public class SplashFactory {
 	/**
 	 * @return the {@link SplashScreen}
 	 */
-	public final static SplashScreen getSplashScreen() {
+	@CanIgnoreReturnValue
+	public static SplashScreen getSplashScreen() {
 		return splashScreen;
 	}
 }

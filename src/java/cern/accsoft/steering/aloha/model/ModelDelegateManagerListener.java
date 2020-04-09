@@ -10,9 +10,13 @@ package cern.accsoft.steering.aloha.model;
  * 
  */
 public interface ModelDelegateManagerListener {
+	default void activeModelDelegateChanged(ModelDelegate modelDelegate) {
 
-	public void addedModelDelegate(ModelDelegate newModelDelegate);
+	}
+	default void addedModelDelegate(ModelDelegate newModelDelegate) {
 
-	public void removedModelDelegate(ModelDelegate removedModelDelegate);
+	}
+	default void removedModelDelegate(ModelDelegate removedModelDelegate) {
 
+	}
 }
