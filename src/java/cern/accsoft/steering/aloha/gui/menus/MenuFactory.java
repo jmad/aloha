@@ -32,7 +32,7 @@ public class MenuFactory {
     /**
      * the action to display an open-file dialog
      */
-    private Action openFileAction = new AbstractAction("Open", Icon.FILE_OPEN.getImageIcon()) {
+    private final Action openFileAction = new AbstractAction("Open", Icon.FILE_OPEN.getImageIcon()) {
         {
             putValue(AbstractAction.SHORT_DESCRIPTION, "Open a file");
         }
@@ -46,7 +46,7 @@ public class MenuFactory {
     /**
      * the action to display the chart renderer options
      */
-    private Action showChartRendererOptionsAction = new AbstractAction("DV") {
+    private final Action showChartRendererOptionsAction = new AbstractAction("DV") {
         {
             putValue(AbstractAction.SHORT_DESCRIPTION, "Show dialog for Dataviewer options.");
         }
@@ -60,7 +60,7 @@ public class MenuFactory {
     /**
      * the action to display a dialog with the fit options
      */
-    private Action showFitDialogAction = new AbstractAction("fit") {
+    private final Action showFitDialogAction = new AbstractAction("fit") {
         {
             putValue(AbstractAction.SHORT_DESCRIPTION, "Show dialog for fit options.");
         }
