@@ -104,6 +104,18 @@ public class MenuFactory {
         return jmadActiveModelLabel;
     }
 
+    private void registerListenerForActiveJmadModelLabel() {
+        modelDelegateManager.addListener(new ModelDelegateManagerListener() {
+            @Override
+            public void activeModelDelegateChanged(ModelDelegate modelDelegate) {
+                SwingUtil.invokeLater(() -> jmadActiveModelLabel.setText(
+                        "JMad: " + Optional.ofNullable(modelDelegate)
+                                .map(m -> m.getJMadModel().getDescription())
+                                .orElse("<no model>")));
+            }
+        });
+    }
+
     /**
      * Factory - method for MenuBar
      *
@@ -201,14 +213,6 @@ public class MenuFactory {
 
     public void setModelDelegateManager(ModelDelegateManager modelDelegateManager) {
         this.modelDelegateManager = modelDelegateManager;
-        modelDelegateManager.addListener(new ModelDelegateManagerListener() {
-            @Override
-            public void activeModelDelegateChanged(ModelDelegate modelDelegate) {
-                SwingUtil.invokeLater(() -> jmadActiveModelLabel.setText(
-                        "JMad: " + Optional.ofNullable(modelDelegate)
-                                .map(m -> m.getJMadModel().getDescription())
-                                .orElse("<no model>")));
-            }
-        });
+        registerListenerForActiveJmadModelLabel();
     }
 }
