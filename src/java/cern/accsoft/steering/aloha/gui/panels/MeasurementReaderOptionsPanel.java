@@ -34,13 +34,13 @@ public class MeasurementReaderOptionsPanel extends JPanel implements Titleable, 
      */
     public MeasurementReaderOptionsPanel(MeasurementReaderOptions options) {
         this.measurementReaderOptions = checkNotNull(options, "options must not be null");
-        initComponenets();
+        initComponents();
     }
 
     /**
      * create all the gui components
      */
-    private void initComponenets() {
+    private void initComponents() {
         setLayout(new BorderLayout());
 
         cboBeamNumbers = new JComboBox<>(BeamNumber.values());

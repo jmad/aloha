@@ -1,10 +1,10 @@
 /*
  * $Id: CorrectorKickDataImpl.java,v 1.1 2008-12-02 20:57:43 kfuchsbe Exp $
- * 
- * $Date: 2008-12-02 20:57:43 $ 
- * $Revision: 1.1 $ 
+ *
+ * $Date: 2008-12-02 20:57:43 $
+ * $Revision: 1.1 $
  * $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
@@ -17,81 +17,83 @@ import cern.accsoft.steering.util.meas.data.yasp.ReadingDataImpl;
 
 /**
  * @author kfuchsbe
- * 
  */
-public class CorrectorKickDataImpl extends ReadingDataImpl implements
-		CorrectorKickData {
+public class CorrectorKickDataImpl extends ReadingDataImpl implements CorrectorKickData {
 
-	/** the plane of the kicked corrector */
-	private String planeToken = null;
+    /**
+     * the plane of the kicked corrector
+     */
+    private String planeToken = null;
 
-	/** the sign of the kicked corrector */
-	private String signToken = null;
+    /**
+     * the sign of the kicked corrector
+     */
+    private String signToken = null;
 
-	/** the name of the kicked corrector */
-	private String correctorName = null;
-	
-	/** the beam to which this element belongs to */
-	private BeamNumber beamNumber = null;
+    /**
+     * the name of the kicked corrector
+     */
+    private String correctorName = null;
 
-	/**
-	 * @param planeToken the planeToken to set
-	 */
-	public final void setPlaneToken(String planeToken) {
-		this.planeToken = planeToken;
-	}
+    /**
+     * the beam to which this element belongs to
+     */
+    private BeamNumber beamNumber = null;
 
-	/**
-	 * @param signToken the signToken to set
-	 */
-	public final void setSignToken(String signToken) {
-		this.signToken = signToken;
-	}
+    /**
+     * @param planeToken the planeToken to set
+     */
+    public final void setPlaneToken(String planeToken) {
+        this.planeToken = planeToken;
+    }
 
-	/**
-	 * @param correctorName the correctorName to set
-	 */
-	public final void setCorrectorName(String correctorName) {
-		this.correctorName = correctorName;
-	}
-	
-	//
-	// methods of interface CorrectorKickData
-	//
+    /**
+     * @param signToken the signToken to set
+     */
+    public final void setSignToken(String signToken) {
+        this.signToken = signToken;
+    }
 
-	@Override
-	public String getCorrectorKey() {
-	    return ElementKeyUtil.composeKey(this.correctorName, Plane.fromTag(this.planeToken), this.beamNumber);
-	}
+    /**
+     * @param correctorName the correctorName to set
+     */
+    public final void setCorrectorName(String correctorName) {
+        this.correctorName = correctorName;
+    }
 
-	@Override
-	public String getCorrectorName() {
-		return this.correctorName;
-	}
+    //
+    // methods of interface CorrectorKickData
+    //
 
-	@Override
-	public boolean isVertical() {
-		return (planeToken != null && planeToken
-				.equals(Plane.VERTICAL.getTag()));
-	}
+    @Override
+    public String getCorrectorKey() {
+        return ElementKeyUtil.composeKey(this.correctorName, Plane.fromTag(this.planeToken), this.beamNumber);
+    }
 
-	@Override
-	public boolean isHorizontal() {
-		return (planeToken != null && planeToken.equals(Plane.HORIZONTAL
-				.getTag()));
-	}
+    @Override
+    public String getCorrectorName() {
+        return this.correctorName;
+    }
 
-	@Override
-	public boolean isPlus() {
-		return (signToken != null && signToken.equals(DeflectionSign.PLUS
-				.getTag()));
-	}
+    @Override
+    public boolean isVertical() {
+        return (planeToken != null && planeToken.equals(Plane.VERTICAL.getTag()));
+    }
 
-	@Override
-	public boolean isMinus() {
-		return (signToken != null && signToken.equals(DeflectionSign.MINUS
-				.getTag()));
-	}
+    @Override
+    public boolean isHorizontal() {
+        return (planeToken != null && planeToken.equals(Plane.HORIZONTAL.getTag()));
+    }
+
+    @Override
+    public boolean isPlus() {
+        return (signToken != null && signToken.equals(DeflectionSign.PLUS.getTag()));
+    }
+
+    @Override
+    public boolean isMinus() {
+        return (signToken != null && signToken.equals(DeflectionSign.MINUS.getTag()));
+    }
 
     @Override
     public BeamNumber getBeamNumber() {

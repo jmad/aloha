@@ -16,6 +16,8 @@ import cern.jdve.viewer.DataViewer;
 import javax.swing.*;
 import java.awt.*;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 public class FitDataViewerPanel extends JPanel {
     private DataViewer dataViewer = new DataViewer();
 
@@ -33,7 +35,7 @@ public class FitDataViewerPanel extends JPanel {
      * init method used by spring
      */
     public void init() {
-        initComponents();
+        invokeLater(this::initComponents);
     }
 
     /**

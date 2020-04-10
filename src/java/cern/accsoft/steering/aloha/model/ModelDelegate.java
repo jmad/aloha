@@ -28,64 +28,64 @@ public interface ModelDelegate {
     /**
      * resets the model
      */
-    public void reset();
+    void reset();
 
     /**
      * clean up the model
      */
-    public void cleanup();
+    void cleanup();
 
     /**
      * @param listener the listener to add
      */
-    public void addListener(ModelDelegateListener listener);
+    void addListener(ModelDelegateListener listener);
 
     /**
      * @param listener the listener to remove
      */
-    public void removeListener(ModelDelegateListener listener);
+    void removeListener(ModelDelegateListener listener);
 
     /**
      * creates a selection filter for reading yasp-files
      * 
      * @return the selection filter
      */
-    public NameListReadSelectionFilter createReadSelectionFilter(BeamNumber beamNumber);
+    NameListReadSelectionFilter createReadSelectionFilter(BeamNumber beamNumber);
 
     /**
      * @return true, if the model is initialized
      */
-    public boolean isInitialized();
+    boolean isInitialized();
 
     /**
      * sets the Correctors of the model to the values given in {@link TrimData}
      * 
      * @param trimData the trim-data to apply to the model
      */
-    public void applyTrim(TrimData trimData);
+    void applyTrim(TrimData trimData);
 
     /**
      * sets the misalignments to the elements, as they are given in the alignmentData
      * 
      * @param alignmentData
      */
-    public void applyAlignment(AlignmentData alignmentData);
+    void applyAlignment(AlignmentData alignmentData);
 
     /**
      * @return the jmad-model instance used by this delegate
      */
-    public JMadModel getJMadModel();
+    JMadModel getJMadModel();
 
     /**
      * @return an object containing all kind of information of the current model-optic.
      */
-    public ModelOpticsData getModelOpticsData();
+    ModelOpticsData getModelOpticsData();
 
     /**
      * @return a list of regexpressions representing the monitors, or an empty list. This can be used e.g. for
      *         calculating the response matrix.
      */
-    public List<String> getMonitorRegexps();
+    List<String> getMonitorRegexps();
 
     /**
      * if this is set to true, then the listener event (becameDirty) are not fired. This is useful if on is modifying
@@ -97,6 +97,6 @@ public interface ModelDelegate {
      * 
      * @param suppressEvents true to suppress the event, false for nominal behaviour.
      */
-    public void setSuppressEvents(boolean suppressEvents);
+    void setSuppressEvents(boolean suppressEvents);
 
 }

@@ -142,7 +142,7 @@ public class JMadModelDelegate implements ModelDelegate {
                 getJMadModel().cleanup();
             }
         } catch (JMadModelException e) {
-            LOGGER.error("Error while claening up the model", e);
+            LOGGER.error("Error while cleaning up the model", e);
         }
     }
 
@@ -150,10 +150,9 @@ public class JMadModelDelegate implements ModelDelegate {
     public NameListReadSelectionFilter createReadSelectionFilter(BeamNumber beamNumber) {
         Range activeRange = getJMadModel().getActiveRange();
 
-        NameListReadSelectionFilter selection = new NameListReadSelectionFilter(
+        return new NameListReadSelectionFilter(
                 activeRange.getElementNames(JMadElementType.CORRECTOR),
                 activeRange.getElementNames(JMadElementType.MONITOR), beamNumber);
-        return selection;
     }
 
     @Override
