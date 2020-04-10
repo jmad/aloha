@@ -42,7 +42,7 @@ public class AlohaBeanFactoryImpl implements AlohaBeanFactory {
     private ChartFactory chartFactory;
     private MeasurementManager measurementManager;
     private VariationData variationData;
-    private SensitivityMatrixManager sensityMatrixManager;
+    private SensitivityMatrixManager sensitivityMatrixManager;
 
     @Override
     public <T> T create(Class<? extends T> clazz) {
@@ -98,7 +98,7 @@ public class AlohaBeanFactoryImpl implements AlohaBeanFactory {
         }
         if (instance instanceof SensitivityMatrixManagerAware) {
             ((SensitivityMatrixManagerAware) instance)
-                    .setSensitivityMatrixManager(getSensityMatrixManager());
+                    .setSensitivityMatrixManager(getSensitivityMatrixManager());
         }
         /*
          * after all the beans are injected we try to call the init method, if
@@ -183,13 +183,13 @@ public class AlohaBeanFactoryImpl implements AlohaBeanFactory {
         return variationData;
     }
 
-    public void setSensityMatrixManager(
-            SensitivityMatrixManager sensityMatrixManager) {
-        this.sensityMatrixManager = sensityMatrixManager;
+    public void setSensitivityMatrixManager(
+            SensitivityMatrixManager sensitivityMatrixManager) {
+        this.sensitivityMatrixManager = sensitivityMatrixManager;
     }
 
-    private SensitivityMatrixManager getSensityMatrixManager() {
-        return sensityMatrixManager;
+    private SensitivityMatrixManager getSensitivityMatrixManager() {
+        return sensitivityMatrixManager;
     }
 
 }

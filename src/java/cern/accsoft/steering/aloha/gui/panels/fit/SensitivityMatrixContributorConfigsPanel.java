@@ -24,13 +24,13 @@ import java.util.List;
 /**
  * @author kfuchsbe
  */
-public class SensityMatrixContributorConfigsPanel extends JPanel {
-    private final static Logger LOGGER = LoggerFactory.getLogger(SensityMatrixContributorConfigsPanel.class);
+public class SensitivityMatrixContributorConfigsPanel extends JPanel {
+    private final static Logger LOGGER = LoggerFactory.getLogger(SensitivityMatrixContributorConfigsPanel.class);
 
     /**
      * the config which we use to get the contributors
      */
-    private SensitivityMatrixManagerConfig sensityMatrixManagerConfig;
+    private SensitivityMatrixManagerConfig sensitivityMatrixManagerConfig;
 
     /**
      * the table model
@@ -60,12 +60,12 @@ public class SensityMatrixContributorConfigsPanel extends JPanel {
     /**
      * this property sets the configs, which we will display.
      *
-     * @param sensityMatrixManagerConfig
+     * @param sensitivityMatrixManagerConfig
      */
-    public void setSensityMatrixManagerConfig(
-            SensitivityMatrixManagerConfig sensityMatrixManagerConfig) {
-        this.sensityMatrixManagerConfig = sensityMatrixManagerConfig;
-        this.sensityMatrixManagerConfig
+    public void setSensitivityMatrixManagerConfig(
+            SensitivityMatrixManagerConfig sensitivityMatrixManagerConfig) {
+        this.sensitivityMatrixManagerConfig = sensitivityMatrixManagerConfig;
+        this.sensitivityMatrixManagerConfig
                 .addListener(new SensitivityMatrixManagerListener() {
                     @Override
                     public void changedContributors() {
@@ -78,8 +78,8 @@ public class SensityMatrixContributorConfigsPanel extends JPanel {
      * @return the actual contributors
      */
     private List<SensitivityMatrixContributorState> getConfigs() {
-        if (this.sensityMatrixManagerConfig != null) {
-            return this.sensityMatrixManagerConfig.getContributorConfigs();
+        if (this.sensitivityMatrixManagerConfig != null) {
+            return this.sensitivityMatrixManagerConfig.getContributorConfigs();
         } else {
             return new ArrayList<>();
         }

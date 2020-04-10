@@ -74,22 +74,22 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
      * the manager which knows all the {@link SensitivityMatrixContributorFactory}s and therefore can create
      * {@link SensitivityMatrixContributor}s
      */
-    private SensitivityMatrixContributorFactoryManager sensityMatrixContributorFactoryManager;
+    private SensitivityMatrixContributorFactoryManager sensitivityMatrixContributorFactoryManager;
 
     /**
      * the configs for the contributors
      */
-    private List<SensitivityMatrixContributorState> contributorStates = new ArrayList<>();
+    private final List<SensitivityMatrixContributorState> contributorStates = new ArrayList<>();
 
     /**
      * the normalization-factors for the perturbed columns
      */
-    private List<Double> perturbedColumnFactors = new ArrayList<>();
+    private final List<Double> perturbedColumnFactors = new ArrayList<>();
 
     /**
      * the listeners to this class
      */
-    private List<SensitivityMatrixManagerListener> listeners = new ArrayList<>();
+    private final List<SensitivityMatrixManagerListener> listeners = new ArrayList<>();
 
     @Override
     public void apply(MatrixSolverResult solverResult) {
@@ -183,7 +183,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
             for (SensitivityMatrixContributor contributor : activeContributors) {
                 int rows = contributor.getMatrixRowCount();
-                Matrix subMatrix = contributor.calcMonitorSensityMatrix();
+                Matrix subMatrix = contributor.calcMonitorSensitivityMatrix();
                 if (subMatrix != null) {
                     matrix.setMatrix(row, row + rows - 1, col, col + monitorCount - 1, subMatrix);
                 }
@@ -201,7 +201,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
             for (SensitivityMatrixContributor contributor : activeContributors) {
                 int rows = contributor.getMatrixRowCount();
-                Matrix subMatrix = contributor.calcCorrectorSensityMatrix();
+                Matrix subMatrix = contributor.calcCorrectorSensitivityMatrix();
                 if (subMatrix != null) {
                     matrix.setMatrix(row, row + rows - 1, col, col + correctorCount - 1, subMatrix);
                 }
@@ -509,7 +509,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
     }
 
     private void createContributors(Measurement measurement) {
-        List<SensitivityMatrixContributor> contributors = getSensityMatrixContributorFactoryManager()
+        List<SensitivityMatrixContributor> contributors = getSensitivityMatrixContributorFactoryManager()
                 .createContributors(measurement);
         for (SensitivityMatrixContributor contributor : contributors) {
             putContributor(contributor);
@@ -535,13 +535,13 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
         this.listeners.remove(listener);
     }
 
-    public void setSensityMatrixContributorFactoryManager(
-            SensitivityMatrixContributorFactoryManager sensityMatrixContributorFactoryManager) {
-        this.sensityMatrixContributorFactoryManager = sensityMatrixContributorFactoryManager;
+    public void setSensitivityMatrixContributorFactoryManager(
+            SensitivityMatrixContributorFactoryManager sensitivityMatrixContributorFactoryManager) {
+        this.sensitivityMatrixContributorFactoryManager = sensitivityMatrixContributorFactoryManager;
     }
 
-    private SensitivityMatrixContributorFactoryManager getSensityMatrixContributorFactoryManager() {
-        return sensityMatrixContributorFactoryManager;
+    private SensitivityMatrixContributorFactoryManager getSensitivityMatrixContributorFactoryManager() {
+        return sensitivityMatrixContributorFactoryManager;
     }
 
 }

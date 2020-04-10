@@ -11,14 +11,14 @@
         <property name="chartFactory" ref="chartFactory"/>
         <property name="measurementManager" ref="measurementManager"/>
         <property name="variationData" ref="variationData"/>
-        <property name="sensityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManager" ref="sensitivityMatrixManager"/>
     </bean>
 
     <!-- this bean searches for all the plugins and installs them -->
     <bean id="pluginManager" class="cern.accsoft.steering.aloha.plugin.PluginManagerImpl"
           init-method="init">
         <property name="alohaBeanFactory" ref="alohaBeanFactory"/>
-        <property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager"/>
+        <property name="sensitivityMatrixContributorFactoryManager" ref="sensitivityMatrixContributorFactoryManager"/>
         <property name="displaySetManager" ref="displaySetManager"/>
         <property name="readerManager" ref="readerManager"/>
         <property name="analyzerManager" ref="analyzerManager"/>
@@ -66,12 +66,12 @@
     <bean id="dataSetManager"
           class="cern.accsoft.steering.aloha.gui.panels.fit.FitDataSetManager">
         <property name="calculator" ref="calculator"/>
-        <property name="sensityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManager" ref="sensitivityMatrixManager"/>
         <property name="variationData" ref="variationData"/>
         <property name="machineElementsManager" ref="machineElementsManager"/>
     </bean>
 
-    <!-- the stuff for creating the sensity-matrix and for fitting -->
+    <!-- the stuff for creating the sensitivity-matrix and for fitting -->
     <bean id="svdSolver"
           class="cern.accsoft.steering.aloha.calc.solve.matrix.svd.SvdSolver"/>
     <bean id="micadoSolver"
@@ -93,18 +93,18 @@
     <bean id="algorithmManager"
           class="cern.accsoft.steering.aloha.calc.algorithm.AlgorithmManagerImpl"/>
     <bean id="noiseWeighter" class="cern.accsoft.steering.aloha.calc.NoiseWeighterImpl"/>
-    <bean id="sensityMatrixManager"
+    <bean id="sensitivityMatrixManager"
           class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixManagerImpl">
         <property name="machineElementsManager" ref="machineElementsManager"/>
         <property name="variationData" ref="variationData"/>
         <property name="measurementManager" ref="measurementManager"/>
-        <property name="sensityMatrixContributorFactoryManager" ref="sensityMatrixContributorFactoryManager"/>
+        <property name="sensitivityMatrixContributorFactoryManager" ref="sensitivityMatrixContributorFactoryManager"/>
     </bean>
-    <bean id="sensityMatrixContributorFactoryManager"
+    <bean id="sensitivityMatrixContributorFactoryManager"
           class="cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributorFactoryManagerImpl"/>
     <bean id="iterationManager"
           class="cern.accsoft.steering.aloha.calc.iteration.IterationManagerImpl">
-        <property name="sensitivityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManager" ref="sensitivityMatrixManager"/>
         <property name="variationData" ref="variationData"/>
     </bean>
 
@@ -172,7 +172,7 @@
         <property name="variationParameterPanel" ref="variationParameterPanel"/>
         <property name="fixedParameterPanel" ref="fixedParametersPanel"/>
         <property name="calculatorConfigPanel" ref="calculatorConfigPanel"/>
-        <property name="sensityMatrixContributorConfigsPanel" ref="sensityMatrixContributorConfigsPanel"/>
+        <property name="sensitivityMatrixContributorConfigsPanel" ref="sensitivityMatrixContributorConfigsPanel"/>
         <property name="calcButtonsPanel" ref="calcButtonsPanel"/>
         <property name="modelOperationPanel" ref="alohaModelOperationPanel"/>
         <property name="fitDataViewerPanel" ref="alohaFitDataViewerPanel"/>
@@ -189,17 +189,17 @@
           init-method="init">
         <property name="calculator" ref="calculator"/>
         <property name="iterationManager" ref="iterationManager"/>
-        <property name="sensitivityMatrixManager" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManager" ref="sensitivityMatrixManager"/>
     </bean>
 
     <bean id="calcButtonsPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.CalcButtonsPanel"
           init-method="init">
         <property name="calcActionHandler" ref="calcActionHandler"/>
     </bean>
-    <bean id="sensityMatrixContributorConfigsPanel"
-          class="cern.accsoft.steering.aloha.gui.panels.fit.SensityMatrixContributorConfigsPanel"
+    <bean id="sensitivityMatrixContributorConfigsPanel"
+          class="cern.accsoft.steering.aloha.gui.panels.fit.SensitivityMatrixContributorConfigsPanel"
           init-method="init">
-        <property name="sensityMatrixManagerConfig" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManagerConfig" ref="sensitivityMatrixManager"/>
     </bean>
     <bean id="alohaDataViewerPanel" class="cern.accsoft.steering.aloha.gui.panels.DataViewerPanel"
           init-method="init">
@@ -280,7 +280,7 @@
           class="cern.accsoft.steering.aloha.gui.panels.CalculatorConfigPanel"
           init-method="init">
         <property name="noiseWeighterConfig" ref="noiseWeighter"/>
-        <property name="sensityMatrixManagerConfig" ref="sensityMatrixManager"/>
+        <property name="sensitivityMatrixManagerConfig" ref="sensitivityMatrixManager"/>
         <property name="solverManager" ref="solverManager"/>
         <property name="solverConfigPanelManager" ref="solverConfigPanelManager"/>
         <property name="preferences" ref="alohaPreferences"/>

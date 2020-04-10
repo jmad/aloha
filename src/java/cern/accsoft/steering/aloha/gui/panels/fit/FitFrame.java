@@ -30,7 +30,7 @@ public class FitFrame extends JFrame {
     private JPanel calculatorInfoPanel;
 
     /** the panel to configure the contributors to the sensity matrix */
-    private JPanel sensityMatrixContributorConfigsPanel;
+    private JPanel sensitivityMatrixContributorConfigsPanel;
 
     /** the panel which contains the buttons to start the fits */
     private JPanel calcButtonsPanel;
@@ -74,7 +74,7 @@ public class FitFrame extends JFrame {
 
         tabbedPaneCalculator.addTab("Configure", getCalculatorConfigPanel());
         tabbedPaneCalculator.addTab("Contributors",
-                getSensityMatrixContributorConfigsPanel());
+                getSensitivityMatrixContributorConfigsPanel());
         tabbedPaneCalculator.addTab("varied parameters",
                 getVariationParameterPanel());
         tabbedPaneCalculator.addTab("fixed parameters",
@@ -116,13 +116,13 @@ public class FitFrame extends JFrame {
         this.calculatorInfoPanel = calculatorInfoPanel;
     }
 
-    public JPanel getSensityMatrixContributorConfigsPanel() {
-        return sensityMatrixContributorConfigsPanel;
+    public JPanel getSensitivityMatrixContributorConfigsPanel() {
+        return sensitivityMatrixContributorConfigsPanel;
     }
 
-    public void setSensityMatrixContributorConfigsPanel(
-            JPanel sensityMatrixContributorConfigsPanel) {
-        this.sensityMatrixContributorConfigsPanel = sensityMatrixContributorConfigsPanel;
+    public void setSensitivityMatrixContributorConfigsPanel(
+            JPanel sensitivityMatrixContributorConfigsPanel) {
+        this.sensitivityMatrixContributorConfigsPanel = sensitivityMatrixContributorConfigsPanel;
     }
 
     public void setCalcButtonsPanel(JPanel calcButtonsPanel) {

@@ -25,9 +25,9 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
     private Preferences preferences;
 
     /**
-     * the configuration interface for the sensity-matrix manager
+     * the configuration interface for the sensitivity-matrix manager
      */
-    private SensitivityMatrixManagerConfig sensityMatrixManagerConfig;
+    private SensitivityMatrixManagerConfig sensitivityMatrixManagerConfig;
 
     /**
      * the config interface for the noise-weighter
@@ -64,11 +64,11 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
                 (Double) txtNoiseLimit.getValue());
         getNoiseWeighterConfig().setActiveNoise(chkActiveNoise.isSelected());
 
-        getSensityMatrixManagerConfig().setMinNorm(
+        getSensitivityMatrixManagerConfig().setMinNorm(
                 (Double) txtMinNorm.getValue());
-        getSensityMatrixManagerConfig().setVaryMonitorGains(
+        getSensitivityMatrixManagerConfig().setVaryMonitorGains(
                 chkVaryMonitorGains.isSelected());
-        getSensityMatrixManagerConfig().setVaryCorrectorGains(
+        getSensitivityMatrixManagerConfig().setVaryCorrectorGains(
                 chkVaryCorrectorGains.isSelected());
 
         solverManager.setActiveSolver((Solver) cboSolvers.getSelectedItem());
@@ -110,7 +110,7 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
         constraints.gridx += 1;
         txtMinNorm = new JFormattedTextField(getPreferences().getNumberFormat());
         txtMinNorm.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-        txtMinNorm.setValue(getSensityMatrixManagerConfig().getMinNorm());
+        txtMinNorm.setValue(getSensitivityMatrixManagerConfig().getMinNorm());
         txtMinNorm
                 .setToolTipText("If a norm for perturbed response-matrix below this level is calculated, "
                         + "then a warning is logged and the perturbed matrix is not normalized.");
@@ -135,7 +135,7 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
         chkVaryMonitorGains.setText("Vary Monitor gains");
         chkVaryMonitorGains
                 .setToolTipText("When checked, the monitor gains are varied by the calculator, otherwise not. (default=true)");
-        chkVaryMonitorGains.setSelected(getSensityMatrixManagerConfig()
+        chkVaryMonitorGains.setSelected(getSensitivityMatrixManagerConfig()
                 .isVaryMonitorGains());
         add(chkVaryMonitorGains, constraints);
 
@@ -145,7 +145,7 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
         chkVaryCorrectorGains.setText("Vary Corrector gains");
         chkVaryCorrectorGains
                 .setToolTipText("When checked, the corrector gains are varied by the calculator, else not. (default=true)");
-        chkVaryCorrectorGains.setSelected(getSensityMatrixManagerConfig()
+        chkVaryCorrectorGains.setSelected(getSensitivityMatrixManagerConfig()
                 .isVaryCorrectorGains());
         add(chkVaryCorrectorGains, constraints);
 
@@ -192,18 +192,18 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
     }
 
     /**
-     * @param sensityMatrixManagerConfig the sensityMatrixManagerConfig to set
+     * @param sensitivityMatrixManagerConfig the sensityMatrixManagerConfig to set
      */
-    public void setSensityMatrixManagerConfig(
-            SensitivityMatrixManagerConfig sensityMatrixManagerConfig) {
-        this.sensityMatrixManagerConfig = sensityMatrixManagerConfig;
+    public void setSensitivityMatrixManagerConfig(
+            SensitivityMatrixManagerConfig sensitivityMatrixManagerConfig) {
+        this.sensitivityMatrixManagerConfig = sensitivityMatrixManagerConfig;
     }
 
     /**
      * @return the sensityMatrixManagerConfig
      */
-    private SensitivityMatrixManagerConfig getSensityMatrixManagerConfig() {
-        return sensityMatrixManagerConfig;
+    private SensitivityMatrixManagerConfig getSensitivityMatrixManagerConfig() {
+        return sensitivityMatrixManagerConfig;
     }
 
     /**

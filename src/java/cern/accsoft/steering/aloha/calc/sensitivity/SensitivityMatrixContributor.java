@@ -44,14 +44,14 @@ public interface SensitivityMatrixContributor {
     int getMatrixRowCount();
 
     /**
-     * @return the part of the sensity-matrix corresponding to the monitor-gains.
+     * @return the part of the sensitivity-matrix corresponding to the monitor-gains.
      */
-    Matrix calcMonitorSensityMatrix();
+    Matrix calcMonitorSensitivityMatrix();
 
     /**
-     * @return the part of the sensity-matrix corresponding to the corrector-gains.
+     * @return the part of the sensitivity-matrix corresponding to the corrector-gains.
      */
-    Matrix calcCorrectorSensityMatrix();
+    Matrix calcCorrectorSensitivityMatrix();
 
     /**
      * @param delta the variation that was used to trim the parameter. This is needed by the method to calc the gradient

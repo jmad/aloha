@@ -48,13 +48,13 @@ public class PluginManagerImpl implements PluginManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(PluginManagerImpl.class);
 
     /** all the plugins that where find. */
-    private List<AlohaPlugin> plugins = new ArrayList<>();
+    private final List<AlohaPlugin> plugins = new ArrayList<>();
 
     /** the manager for all the readers */
     private ReaderManager readerManager;
 
     /** the manager for all {@link SensitivityMatrixContributorFactory}s */
-    private SensitivityMatrixContributorFactoryManager sensityMatrixContributorFactoryManager;
+    private SensitivityMatrixContributorFactoryManager sensitivityMatrixContributorFactoryManager;
 
     /** the manager, which keeps track of the displaysets */
     private DisplaySetManager displaySetManager;
@@ -110,7 +110,7 @@ public class PluginManagerImpl implements PluginManager {
             getReaderManager().addReaders((ReaderProvider) plugin);
         }
         if (plugin instanceof SensitivityMatrixContributorFactory) {
-            getSensityMatrixContributorFactoryManager().addFactory(
+            getSensitivityMatrixContributorFactoryManager().addFactory(
                     (SensitivityMatrixContributorFactory) plugin);
         }
         if (plugin instanceof DisplaySetFactory) {
@@ -169,13 +169,13 @@ public class PluginManagerImpl implements PluginManager {
         return readerManager;
     }
 
-    public void setSensityMatrixContributorFactoryManager(
-            SensitivityMatrixContributorFactoryManager sensityMatrixContributorFactoryManager) {
-        this.sensityMatrixContributorFactoryManager = sensityMatrixContributorFactoryManager;
+    public void setSensitivityMatrixContributorFactoryManager(
+            SensitivityMatrixContributorFactoryManager sensitivityMatrixContributorFactoryManager) {
+        this.sensitivityMatrixContributorFactoryManager = sensitivityMatrixContributorFactoryManager;
     }
 
-    private SensitivityMatrixContributorFactoryManager getSensityMatrixContributorFactoryManager() {
-        return sensityMatrixContributorFactoryManager;
+    private SensitivityMatrixContributorFactoryManager getSensitivityMatrixContributorFactoryManager() {
+        return sensitivityMatrixContributorFactoryManager;
     }
 
     public void setDisplaySetManager(DisplaySetManager displaySetManager) {

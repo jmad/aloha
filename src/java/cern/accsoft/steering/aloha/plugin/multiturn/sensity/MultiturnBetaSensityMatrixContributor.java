@@ -49,7 +49,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
     }
 
     @Override
-    public Matrix calcCorrectorSensityMatrix() {
+    public Matrix calcCorrectorSensitivityMatrix() {
         /*
          * For the moment we do not take into account the change in beta depending on corrector gains.
          * 
@@ -59,7 +59,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
     }
 
     @Override
-    public Matrix calcMonitorSensityMatrix() {
+    public Matrix calcMonitorSensitivityMatrix() {
         /*
          * For the moment we do not take into account the change in beta depending on monitor gains.
          * 

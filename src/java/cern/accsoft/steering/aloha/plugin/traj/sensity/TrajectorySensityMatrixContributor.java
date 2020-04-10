@@ -57,7 +57,7 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
     private double unperturbedNorm = 1;
 
     @Override
-    public Matrix calcCorrectorSensityMatrix() {
+    public Matrix calcCorrectorSensitivityMatrix() {
         /*
          * we do not take into account dispersion-change depending on corrector gains
          */
@@ -65,7 +65,7 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
     }
 
     @Override
-    public Matrix calcMonitorSensityMatrix() {
+    public Matrix calcMonitorSensitivityMatrix() {
         if (getTrajectoryData() == null) {
             return null;
         }

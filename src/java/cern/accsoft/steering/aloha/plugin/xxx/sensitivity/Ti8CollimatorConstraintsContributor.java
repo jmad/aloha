@@ -1,8 +1,8 @@
 package cern.accsoft.steering.aloha.plugin.xxx.sensitivity;
 
 import Jama.Matrix;
-import cern.accsoft.steering.aloha.calc.sensitivity.AbstractSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.sensitivity.PerturbedColumn;
+import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurement;
 import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
@@ -15,21 +15,21 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.List;
 
-public class Ti8CollimatorConstraintsContributor extends AbstractSensitivityMatrixContributor {
+public class Ti8CollimatorConstraintsContributor implements SensitivityMatrixContributor {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Ti8CollimatorConstraintsContributor.class);
 
 	/** the minimal norm */
 	private final static double MIN_NORM = 0.0000001;
 
 	/** All the constraints */
-	private List<OpticsConstraint> opticsConstraints = Arrays.asList(new OpticsConstraint[] {
+	private final List<OpticsConstraint> opticsConstraints = Arrays.asList(new OpticsConstraint[] {
 			new ElementsOpticsDiffConstraint("TCDIH.87441", "TCDIH.87904", MadxTwissVariable.MUX, 4.0 / 6.0),
 			new ElementsOpticsDiffConstraint("TCDIH.87441", "TCDIH.88121", MadxTwissVariable.MUX, 5.0 / 6.0),
 			new ElementsOpticsDiffConstraint("TCDIV.87645", "TCDIV.87804", MadxTwissVariable.MUY, 1.0 / 6.0),
 			new ElementsOpticsDiffConstraint("TCDIV.87645", "TCDIV.88123", MadxTwissVariable.MUY, 2.0 / 6.0) });
 
 	/** the measurement, whose model we would like to constrain */
-	private DispersionMeasurement measurement;
+	private final DispersionMeasurement measurement;
 
 	/** Here we store the unperturbed values for each constraint */
 	private Matrix unperturbedValues = new Matrix(1, 1);
@@ -40,12 +40,12 @@ public class Ti8CollimatorConstraintsContributor extends AbstractSensitivityMatr
 	}
 
 	@Override
-	public Matrix calcCorrectorSensityMatrix() {
+	public Matrix calcCorrectorSensitivityMatrix() {
 		return null;
 	}
 
 	@Override
-	public Matrix calcMonitorSensityMatrix() {
+	public Matrix calcMonitorSensitivityMatrix() {
 		return null;
 	}
 

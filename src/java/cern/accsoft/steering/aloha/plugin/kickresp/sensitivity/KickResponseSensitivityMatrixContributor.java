@@ -1,5 +1,5 @@
 /*
- * $Id: KickResponseSensityMatrixContributor.java,v 1.6 2009-03-16 16:38:11 kfuchsbe Exp $
+ * $Id: KickResponseSensitivityMatrixContributor.java,v 1.6 2009-03-16 16:38:11 kfuchsbe Exp $
  * 
  * $Date: 2009-03-16 16:38:11 $ $Revision: 1.6 $ $Author: kfuchsbe $
  * 
@@ -11,7 +11,6 @@ import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
 import cern.accsoft.steering.aloha.calc.NoiseWeighter;
-import cern.accsoft.steering.aloha.calc.sensitivity.AbstractSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.calc.sensitivity.PerturbedColumn;
 import cern.accsoft.steering.aloha.calc.sensitivity.SensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
@@ -27,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author kfuchsbe
  */
-public class KickResponseSensitivityMatrixContributor extends AbstractSensitivityMatrixContributor implements
+public class KickResponseSensitivityMatrixContributor implements
         SensitivityMatrixContributor, NoiseWeighterAware, MachineElementsManagerAware {
     private final static Logger LOGGER = LoggerFactory.getLogger(KickResponseSensitivityMatrixContributor.class);
 
@@ -58,22 +57,22 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
 
     @Override
     public int getMatrixRowCount() {
-        int monitorCount = getMachinElementsManager().getActiveMonitorsCount();
-        int correctorCount = getMachinElementsManager().getActiveCorrectorsCount();
+        int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
+        int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
         return monitorCount * correctorCount;
     }
 
     @Override
-    public Matrix calcMonitorSensityMatrix() {
-        int monitorCount = getMachinElementsManager().getActiveMonitorsCount();
-        int correctorCount = getMachinElementsManager().getActiveCorrectorsCount();
+    public Matrix calcMonitorSensitivityMatrix() {
+        int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
+        int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
         TMatrix<Boolean> validityMatrix = getValidityMatrix();
         Matrix noises = getNoises();
         Matrix responseMatrixModel = getModelKickResponseData().getResponseMatrix();
 
-        int sensityRowCount = monitorCount * correctorCount;
-        LOGGER.debug("creating " + sensityRowCount + "x" + monitorCount + " monitor-sensity-matrix...");
-        Matrix sensityMatrix = new Matrix(sensityRowCount, monitorCount);
+        int sensitivityRowCount = monitorCount * correctorCount;
+        LOGGER.debug("creating " + sensitivityRowCount + "x" + monitorCount + " monitor-sensitivity-matrix...");
+        Matrix sensitivityMatrix = new Matrix(sensitivityRowCount, monitorCount);
 
         for (int i = 0; i < monitorCount; i++) {
             for (int j = 0; j < correctorCount; j++) {
@@ -85,24 +84,24 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
                 int row = (i * correctorCount) + j;
                 /* columns correspond to the monitor number */
                 int col = i;
-                sensityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(responseMatrixModel.get(i, j),
+                sensitivityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(responseMatrixModel.get(i, j),
                         noises.get(i, j)));
             }
         }
-        return sensityMatrix;
+        return sensitivityMatrix;
     }
 
     @Override
-    public Matrix calcCorrectorSensityMatrix() {
-        int monitorCount = getMachinElementsManager().getActiveMonitorsCount();
-        int correctorCount = getMachinElementsManager().getActiveCorrectorsCount();
+    public Matrix calcCorrectorSensitivityMatrix() {
+        int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
+        int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
         TMatrix<Boolean> validityMatrix = getValidityMatrix();
         Matrix noises = getNoises();
         Matrix responseMatrixModel = getModelKickResponseData().getResponseMatrix();
 
-        int sensityRowCount = monitorCount * correctorCount;
-        LOGGER.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
-        Matrix sensityMatrix = new Matrix(sensityRowCount, correctorCount);
+        int sensitivityRowCount = monitorCount * correctorCount;
+        LOGGER.debug("creating " + sensitivityRowCount + "x" + correctorCount + " corrector-sensitivity-matrix...");
+        Matrix sensitivityMatrix = new Matrix(sensitivityRowCount, correctorCount);
 
         for (int i = 0; i < monitorCount; i++) {
             for (int j = 0; j < correctorCount; j++) {
@@ -115,12 +114,12 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
                 int row = (i * correctorCount) + j;
                 /* column corresponds to corrector-number */
                 int col = j;
-                sensityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(responseMatrixModel.get(i, j),
+                sensitivityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(responseMatrixModel.get(i, j),
                         noises.get(i, j)));
 
             }
         }
-        return sensityMatrix;
+        return sensitivityMatrix;
     }
 
     @Override
@@ -130,14 +129,14 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
 
     @Override
     public PerturbedColumn calcPerturbedColumn(double delta, Double normalizationFactor) {
-        int monitorCount = getMachinElementsManager().getActiveMonitorsCount();
-        int correctorCount = getMachinElementsManager().getActiveCorrectorsCount();
+        int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
+        int correctorCount = getMachineElementsManager().getActiveCorrectorsCount();
         TMatrix<Boolean> validityMatrix = getValidityMatrix();
         Matrix noises = getNoises();
 
-        int sensityRowCount = monitorCount * correctorCount;
-        LOGGER.debug("creating " + sensityRowCount + "x" + correctorCount + " corrector-sensity-matrix...");
-        Matrix sensityMatrix = new Matrix(sensityRowCount, 1);
+        int sensitivityRowCount = monitorCount * correctorCount;
+        LOGGER.debug("creating " + sensitivityRowCount + "x" + correctorCount + " corrector-sensitivity-matrix...");
+        Matrix sensitivityMatrix = new Matrix(sensitivityRowCount, 1);
 
         Matrix deltaMatrix = calcDeltaResponseMatrix(delta);
 
@@ -169,11 +168,11 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
                 }
 
                 int row = (i * correctorCount) + j;
-                sensityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(
+                sensitivityMatrix.set(row, col, getNoiseWeighter().calcNoisyValue(
                         deltaMatrix.get(i, j) / normalizationFactor, noises.get(i, j)));
             }
         }
-        return new PerturbedColumn(sensityMatrix, normalizationFactor);
+        return new PerturbedColumn(sensitivityMatrix, normalizationFactor);
     }
 
     @Override
@@ -236,7 +235,7 @@ public class KickResponseSensitivityMatrixContributor extends AbstractSensitivit
     /**
      * @return the machinElementsManager
      */
-    public MachineElementsManager getMachinElementsManager() {
+    public MachineElementsManager getMachineElementsManager() {
         return machineElementsManager;
     }
 

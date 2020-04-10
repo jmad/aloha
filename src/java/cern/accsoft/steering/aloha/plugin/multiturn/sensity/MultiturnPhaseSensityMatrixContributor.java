@@ -90,7 +90,7 @@ public class MultiturnPhaseSensityMatrixContributor implements
 	 * calcCorrectorSensityMatrix()
 	 */
 	@Override
-	public Matrix calcCorrectorSensityMatrix() {
+	public Matrix calcCorrectorSensitivityMatrix() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -102,7 +102,7 @@ public class MultiturnPhaseSensityMatrixContributor implements
 	 * calcMonitorSensityMatrix()
 	 */
 	@Override
-	public Matrix calcMonitorSensityMatrix() {
+	public Matrix calcMonitorSensitivityMatrix() {
 		// TODO Auto-generated method stub
 		return null;
 	}

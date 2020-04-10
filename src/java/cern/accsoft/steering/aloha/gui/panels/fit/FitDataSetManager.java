@@ -23,7 +23,7 @@ public class FitDataSetManager {
 
     private MachineElementsManager machineElementsManager;
 
-    private HashMap<DS, DataSet> dataSets = new HashMap<>();
+    private final HashMap<DS, DataSet> dataSets = new HashMap<>();
 
     //
     // the sources for all the data (to be injected)
@@ -31,7 +31,7 @@ public class FitDataSetManager {
 
     private Calculator calculator;
     private ModelDelegate modelDelegate;
-    private SensitivityMatrixManager sensityMatrixManager;
+    private SensitivityMatrixManager sensitivityMatrixManager;
     private VariationData variationData;
 
     /**
@@ -73,7 +73,7 @@ public class FitDataSetManager {
             adapter = new DsAdapter<MatrixColumnDataSet>(new MatrixColumnDataSet("Difference - Vector")) {
                 @Override
                 public void changedCalculatedValues(Calculator calculator) {
-                    dataSet.setMatrix(getSensityMatrixManager().getActiveDifferenceVector());
+                    dataSet.setMatrix(getSensitivityMatrixManager().getActiveDifferenceVector());
                 }
 
             };
@@ -178,17 +178,17 @@ public class FitDataSetManager {
     }
 
     /**
-     * @param sensityMatrixManager the sensityMatrixManager to set
+     * @param sensitivityMatrixManager the sensityMatrixManager to set
      */
-    public void setSensityMatrixManager(SensitivityMatrixManager sensityMatrixManager) {
-        this.sensityMatrixManager = sensityMatrixManager;
+    public void setSensitivityMatrixManager(SensitivityMatrixManager sensitivityMatrixManager) {
+        this.sensitivityMatrixManager = sensitivityMatrixManager;
     }
 
     /**
      * @return the sensityMatrixManager
      */
-    public SensitivityMatrixManager getSensityMatrixManager() {
-        return sensityMatrixManager;
+    public SensitivityMatrixManager getSensitivityMatrixManager() {
+        return sensitivityMatrixManager;
     }
 
     /**
