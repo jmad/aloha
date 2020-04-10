@@ -14,7 +14,7 @@ import Jama.Matrix;
  */
 public class MatrixSolverResultImpl implements MatrixSolverResult {
 
-	/** the sensity values for the parameters */
+	/** the sensitivity values for the parameters */
 	private Matrix parameterSensitivities;
 
 	/** The result of the solve operation */

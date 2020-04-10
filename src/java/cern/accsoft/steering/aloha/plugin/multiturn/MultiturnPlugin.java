@@ -14,7 +14,7 @@ import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactor
 import cern.accsoft.steering.aloha.plugin.multiturn.display.MultiturnDisplaySet;
 import cern.accsoft.steering.aloha.plugin.multiturn.meas.MultiturnMeasurement;
 import cern.accsoft.steering.aloha.plugin.multiturn.read.MultiturnMeasurementReaderImpl;
-import cern.accsoft.steering.aloha.plugin.multiturn.sensity.MultiturnBetaSensityMatrixContributor;
+import cern.accsoft.steering.aloha.plugin.multiturn.sensitivity.MultiturnBetaSensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class MultiturnPlugin extends AbstractAlohaPlugin implements
 			Measurement measurement) {
 		List<SensitivityMatrixContributor> contributors = new ArrayList<SensitivityMatrixContributor>();
 		if (measurement instanceof MultiturnMeasurement) {
-			SensitivityMatrixContributor contributor = new MultiturnBetaSensityMatrixContributor(
+			SensitivityMatrixContributor contributor = new MultiturnBetaSensitivityMatrixContributor(
 					(MultiturnMeasurement) measurement);
 			getAlohaBeanFactory().configure(contributor);
 			contributors.add(contributor);

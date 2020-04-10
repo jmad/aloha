@@ -192,7 +192,7 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
     }
 
     /**
-     * @param sensitivityMatrixManagerConfig the sensityMatrixManagerConfig to set
+     * @param sensitivityMatrixManagerConfig the sensitivityMatrixManagerConfig to set
      */
     public void setSensitivityMatrixManagerConfig(
             SensitivityMatrixManagerConfig sensitivityMatrixManagerConfig) {
@@ -200,7 +200,7 @@ public class CalculatorConfigPanel extends JPanel implements Applyable {
     }
 
     /**
-     * @return the sensityMatrixManagerConfig
+     * @return the sensitivityMatrixManagerConfig
      */
     private SensitivityMatrixManagerConfig getSensitivityMatrixManagerConfig() {
         return sensitivityMatrixManagerConfig;

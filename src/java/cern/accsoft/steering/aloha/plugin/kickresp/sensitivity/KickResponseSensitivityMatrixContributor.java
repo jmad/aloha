@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * this class creates the parts of the sensity-matrix which correspond to kick-response measurements
+ * this class creates the parts of the sensitivity-matrix which correspond to kick-response measurements
  * 
  * @author kfuchsbe
  */

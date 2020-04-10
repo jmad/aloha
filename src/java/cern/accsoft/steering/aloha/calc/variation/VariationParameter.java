@@ -109,19 +109,19 @@ public interface VariationParameter {
     public abstract double getUpdateFactor();
 
     /**
-     * The sensity of the parameter during the last fit-iteration.
+     * The sensitivity of the parameter during the last fit-iteration.
      * 
-     * @param sensity the sensity to set
+     * @param sensitivity the sensitivity to set
      */
-    public abstract void setSensity(double sensity);
+    public abstract void setSensitivity(double sensitivity);
 
     /**
-     * @return the sensity of the parameter
+     * @return the sensitivity of the parameter
      */
-    public abstract double getSensity();
+    public abstract double getSensitivity();
 
     /**
-     * set the error for the parameter from the last calculatione
+     * set the error for the parameter from the last calculation
      * 
      * @param error the error from the last calculation
      */

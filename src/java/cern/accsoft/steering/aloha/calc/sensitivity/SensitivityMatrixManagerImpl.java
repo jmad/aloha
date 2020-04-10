@@ -1,5 +1,5 @@
 /*
- * $Id: SensityMatrixManagerImpl.java,v 1.4 2009-03-16 16:38:11 kfuchsbe Exp $
+ * $Id: SensitivityMatrixManagerImpl.java,v 1.4 2009-03-16 16:38:11 kfuchsbe Exp $
  *
  * $Date: 2009-03-16 16:38:11 $ $Revision: 1.4 $ $Author: kfuchsbe $
  *
@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class implements the methods for creating sensity-matrices and applying the fitted values. It uses several
- * contributors, from which it composes the total sensity-matrix. This for example may be sensity-matrizes from
+ * This class implements the methods for creating sensitivity-matrices and applying the fitted values. It uses several
+ * contributors, from which it composes the total sensitivity-matrix. This for example may be sensitivity-matrizes from
  * response-matrizes or dispersion-responses ... etc.
  *
  * @author kfuchsbe
@@ -146,7 +146,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             double error = parameterErrors.get(i + baseRow, 0) / this.perturbedColumnFactors.get(i);
             param.addValueScaled(valueChange);
             param.setError(error);
-            param.setSensity(parameterSensitivities.get(i, 0));
+            param.setSensitivity(parameterSensitivities.get(i, 0));
             i++;
         }
         LOGGER.info("Results applied.");
@@ -170,7 +170,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
             contributor.initUnperturbed();
         }
 
-        Matrix matrix = createEmptySensityMatrix();
+        Matrix matrix = createEmptySensitivityMatrix();
 
         int row;
         int col = 0;
@@ -345,7 +345,7 @@ public class SensitivityMatrixManagerImpl implements SensitivityMatrixManager, S
      *
      * @return a new matrix of correct size.
      */
-    private Matrix createEmptySensityMatrix() {
+    private Matrix createEmptySensitivityMatrix() {
         List<SensitivityMatrixContributor> activeContributors = getActiveContributors();
 
         int rows = 0;

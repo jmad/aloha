@@ -16,7 +16,7 @@ import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactor
 import cern.accsoft.steering.aloha.plugin.traj.display.TrajectoryDisplaySet;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurement;
 import cern.accsoft.steering.aloha.plugin.traj.read.yasp.YaspTrajectoryMeasurementReader;
-import cern.accsoft.steering.aloha.plugin.traj.sensity.TrajectorySensityMatrixContributor;
+import cern.accsoft.steering.aloha.plugin.traj.sensitivity.TrajectorySensitivityMatrixContributor;
 import cern.accsoft.steering.aloha.read.Reader;
 
 import java.util.ArrayList;
@@ -72,8 +72,8 @@ public class TrajectoryPlugin extends AbstractAlohaPlugin implements
 		List<SensitivityMatrixContributor> contributors = new ArrayList<SensitivityMatrixContributor>();
 
 		if (measurement instanceof TrajectoryMeasurement) {
-			TrajectorySensityMatrixContributor contributor = getAlohaBeanFactory()
-					.create(TrajectorySensityMatrixContributor.class);
+			TrajectorySensitivityMatrixContributor contributor = getAlohaBeanFactory()
+					.create(TrajectorySensitivityMatrixContributor.class);
 			contributor
 					.setTrajectoryMeasurement((TrajectoryMeasurement) measurement);
 			contributors.add(contributor);

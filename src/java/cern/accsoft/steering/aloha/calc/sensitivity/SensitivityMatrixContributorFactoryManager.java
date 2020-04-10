@@ -9,7 +9,7 @@ import cern.accsoft.steering.aloha.plugin.api.SensitivityMatrixContributorFactor
 import java.util.List;
 
 /**
- * A class which knows about all available SensityMatrixContributorFactories
+ * A class which knows about all available SensitivityMatrixContributorFactories
  * 
  * @author kfuchsbe
  */

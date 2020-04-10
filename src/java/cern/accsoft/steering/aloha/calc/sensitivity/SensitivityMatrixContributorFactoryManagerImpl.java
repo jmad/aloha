@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * the implementation of the sensityMatrixContributorFactory
+ * the implementation of the sensitivityMatrixContributorFactory
  *
  * @author kfuchsbe
  *

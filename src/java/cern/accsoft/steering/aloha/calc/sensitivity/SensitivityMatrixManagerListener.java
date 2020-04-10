@@ -4,7 +4,7 @@
 package cern.accsoft.steering.aloha.calc.sensitivity;
 
 /**
- * The interface of a listener to a sensityMatrixManager
+ * The interface of a listener to a sensitivityMatrixManager
  * 
  * @author kfuchsbe
  * 

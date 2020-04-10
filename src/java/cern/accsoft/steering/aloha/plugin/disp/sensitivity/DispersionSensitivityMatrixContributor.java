@@ -1,5 +1,5 @@
 /*
- * $Id: DispersionSensityMatrixContributor.java,v 1.2 2009-01-15 11:46:24 kfuchsbe Exp $
+ * $Id: DispersionSensitivityMatrixContributor.java,v 1.2 2009-01-15 11:46:24 kfuchsbe Exp $
  * 
  * $Date: 2009-01-15 11:46:24 $ $Revision: 1.2 $ $Author: kfuchsbe $
  * 
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * This class is responsible for creating correct parts of the sensity-matrix, corresponding to the dispersion-data
+ * This class is responsible for creating correct parts of the sensitivity-matrix, corresponding to the dispersion-data
  * 
  * @author kfuchsbe
  */
@@ -75,8 +75,8 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
         List<Double> modelDispersionValues = getModelOpticsData().getMonitorDispersions();
         int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
 
-        LOGGER.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensity-matrix...");
-        Matrix sensityMatrix = new Matrix(monitorCount, monitorCount);
+        LOGGER.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensitivity-matrix...");
+        Matrix sensitivityMatrix = new Matrix(monitorCount, monitorCount);
 
         for (int i = 0; i < monitorCount; i++) {
             /* just leave the values for defect monitors at zero. */
@@ -87,9 +87,9 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
             /*
              * rows and columns correspond to the monitor number (matrix is diagonal)
              */
-            sensityMatrix.set(i, i, getNoiseWeighter().calcNoisyValue(modelDispersionValues.get(i), rmsValues.get(i)));
+            sensitivityMatrix.set(i, i, getNoiseWeighter().calcNoisyValue(modelDispersionValues.get(i), rmsValues.get(i)));
         }
-        return sensityMatrix;
+        return sensitivityMatrix;
     }
 
     @Override
@@ -98,8 +98,8 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
         List<Boolean> validity = getDispersionData().getValidity();
         List<Double> rmsValues = getDispersionData().getRms();
 
-        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
-        Matrix sensityMatrix = new Matrix(monitorCount, 1);
+        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensitivity-matrix-column...");
+        Matrix sensitivityMatrix = new Matrix(monitorCount, 1);
 
         Matrix deltaVector = calcDeltaVector(delta);
 
@@ -122,10 +122,10 @@ public class DispersionSensitivityMatrixContributor implements SensitivityMatrix
                 continue;
             }
 
-            sensityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
+            sensitivityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
                     rmsValues.get(i)));
         }
-        return new PerturbedColumn(sensityMatrix, normalizationFactor);
+        return new PerturbedColumn(sensitivityMatrix, normalizationFactor);
     }
 
     /**

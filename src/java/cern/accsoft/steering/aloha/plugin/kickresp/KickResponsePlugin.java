@@ -25,88 +25,91 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KickResponsePlugin extends AbstractAlohaPlugin implements
-		SensitivityMatrixContributorFactory, DisplaySetFactory, AnalyzerFactory,
-		ReaderProvider, ChartFactoryAware {
+        SensitivityMatrixContributorFactory, DisplaySetFactory, AnalyzerFactory,
+        ReaderProvider, ChartFactoryAware {
 
-	/** The chart factory */
-	private ChartFactory chartFactory;
+    /**
+     * The chart factory
+     */
+    private ChartFactory chartFactory;
 
-	/** all the readers this plugin provides */
-	private List<Reader> readers = new ArrayList<Reader>();
+    /**
+     * all the readers this plugin provides
+     */
+    private List<Reader> readers = new ArrayList<>();
 
-	/**
-	 * this method is called automatically by the {@link AlohaBeanFactory}
-	 */
-	@InitMethod
-	public void init() {
-		this.readers.add(getAlohaBeanFactory().create(
-				YaspKickResponseDataReader.class));
-	}
+    /**
+     * this method is called automatically by the {@link AlohaBeanFactory}
+     */
+    @InitMethod
+    public void init() {
+        this.readers.add(getAlohaBeanFactory().create(
+                YaspKickResponseDataReader.class));
+    }
 
-	@Override
-	public List<SensitivityMatrixContributor> createContributors(
-			Measurement measurement) {
-		List<SensitivityMatrixContributor> contributors = new ArrayList<SensitivityMatrixContributor>();
-		if (measurement instanceof KickResponseMeasurement) {
-			KickResponseSensitivityMatrixContributor kickResponseSensityMatrixContributor = this.alohaBeanFactory
-					.create(KickResponseSensitivityMatrixContributor.class);
-			kickResponseSensityMatrixContributor
-					.setMeasurement((KickResponseMeasurementImpl) measurement);
-			contributors.add(kickResponseSensityMatrixContributor);
-		}
-		return contributors;
-	}
+    @Override
+    public List<SensitivityMatrixContributor> createContributors(
+            Measurement measurement) {
+        List<SensitivityMatrixContributor> contributors = new ArrayList<>();
+        if (measurement instanceof KickResponseMeasurement) {
+            KickResponseSensitivityMatrixContributor kickResponseSensitivityMatrixContributor = this.alohaBeanFactory
+                    .create(KickResponseSensitivityMatrixContributor.class);
+            kickResponseSensitivityMatrixContributor.setMeasurement((KickResponseMeasurementImpl) measurement);
+            contributors.add(kickResponseSensitivityMatrixContributor);
+        }
+        return contributors;
+    }
 
-	@Override
-	public DisplaySet createDisplaySet(Measurement measurement) {
-		if (measurement instanceof KickResponseMeasurement) {
-			KickResponseDisplaySet displaySet = new KickResponseDisplaySet(
-					(KickResponseMeasurementImpl) measurement, getChartFactory());
-			getAlohaBeanFactory().configure(displaySet);
-			return displaySet;
-		}
-		return null;
-	}
+    @Override
+    public DisplaySet createDisplaySet(Measurement measurement) {
+        if (measurement instanceof KickResponseMeasurement) {
+            KickResponseDisplaySet displaySet = new KickResponseDisplaySet(
+                    (KickResponseMeasurementImpl) measurement, getChartFactory());
+            getAlohaBeanFactory().configure(displaySet);
+            return displaySet;
+        }
+        return null;
+    }
 
-	@Override
-	public List<Analyzer> createAnalyzers(Measurement measurement) {
-		List<Analyzer> analyzers = new ArrayList<Analyzer>();
-		if (measurement instanceof KickResponseMeasurement) {
-			// NormalizedResponseAnalyzer a1 =
-			// createNormalizedResponseAnalyzer();
-			// a1.setMeasurement((KickResponseMeasurement) measurement);
-			// analyzers.add(a1);
-			//
-			// NormalizedResponseDiffAnalyzer a2 =
-			// createNormalizedResponseDiffAnalyzer();
-			// a2.setMeasurement((KickResponseMeasurement) measurement);
-			// analyzers.add(a2);
+    @Override
+    public List<Analyzer> createAnalyzers(Measurement measurement) {
+        List<Analyzer> analyzers = new ArrayList<>();
+        if (measurement instanceof KickResponseMeasurement) {
+            // NormalizedResponseAnalyzer a1 =
+            // createNormalizedResponseAnalyzer();
+            // a1.setMeasurement((KickResponseMeasurement) measurement);
+            // analyzers.add(a1);
+            //
+            // NormalizedResponseDiffAnalyzer a2 =
+            // createNormalizedResponseDiffAnalyzer();
+            // a2.setMeasurement((KickResponseMeasurement) measurement);
+            // analyzers.add(a2);
 
-			ResponseTrajAnalyzer a3 = getAlohaBeanFactory().create(
-					ResponseTrajAnalyzer.class);
-			a3.setMeasurement((KickResponseMeasurement) measurement);
-			analyzers.add(a3);
-		}
-		return analyzers;
-	}
+            ResponseTrajAnalyzer a3 = getAlohaBeanFactory().create(
+                    ResponseTrajAnalyzer.class);
+            a3.setMeasurement((KickResponseMeasurement) measurement);
+            analyzers.add(a3);
+        }
+        return analyzers;
+    }
 
-	@Override
-	public String getName() {
-		return "Yasp kickrespons analysis";
-	}
+    @Override
+    public String getName() {
+        return "Yasp kickrespons analysis";
+    }
 
-	@Override
-	public void setChartFactory(ChartFactory chartFactory) {
-		this.chartFactory = chartFactory;
-	}
+    @Override
+    public void setChartFactory(ChartFactory chartFactory) {
+        this.chartFactory = chartFactory;
+    }
 
-	private ChartFactory getChartFactory() {
-		return this.chartFactory;
-	}
+    private ChartFactory getChartFactory() {
+        return this.chartFactory;
+    }
 
-	@Override
-	public List<Reader> getReaders() {
-		return this.readers;
-	}
+    @Override
+    public List<Reader> getReaders() {
+        return this.readers;
+    }
 
 }

@@ -178,14 +178,14 @@ public class FitDataSetManager {
     }
 
     /**
-     * @param sensitivityMatrixManager the sensityMatrixManager to set
+     * @param sensitivityMatrixManager the sensitivityMatrixManager to set
      */
     public void setSensitivityMatrixManager(SensitivityMatrixManager sensitivityMatrixManager) {
         this.sensitivityMatrixManager = sensitivityMatrixManager;
     }
 
     /**
-     * @return the sensityMatrixManager
+     * @return the sensitivityMatrixManager
      */
     public SensitivityMatrixManager getSensitivityMatrixManager() {
         return sensitivityMatrixManager;

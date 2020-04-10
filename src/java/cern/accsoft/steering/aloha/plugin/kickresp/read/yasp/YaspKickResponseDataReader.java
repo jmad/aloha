@@ -118,7 +118,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
          * we use the name of the parent dir as name of the measurement
          */
         String name = file.getAbsoluteFile().getParentFile().getName();
-        LOGGER.info("reading data from dir '" + basePath.toString() + "'");
+        LOGGER.info("reading data from dir '{}'", basePath);
 
         NameListReadSelectionFilter selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
 
@@ -214,8 +214,8 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
         /* number of available corrector - files. */
         int correctorFilesCount = 0;
 
-        List<String> fileNamesPlus = getStearingFileNames(DeflectionSign.PLUS);
-        List<String> fileNamesMinus = getStearingFileNames(DeflectionSign.MINUS);
+        List<String> fileNamesPlus = getSteeringFileNames(DeflectionSign.PLUS);
+        List<String> fileNamesMinus = getSteeringFileNames(DeflectionSign.MINUS);
 
         correctorFilesCount = fileNamesPlus.size();
         /*
@@ -257,12 +257,12 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
      * sets status of each corrector to NOT_OK for which there is no stearing file.
      */
     private void readCorrectorStati(KickResponseDataImpl data) {
-        Map<String, Corrector> correctors = new HashMap<String, Corrector>();
+        Map<String, Corrector> correctors = new HashMap<>();
         for (Corrector corrector : getMachineElementsManager().getAllCorrectors()) {
             correctors.put(corrector.getKey(), corrector);
         }
 
-        ArrayList<String> uninterestingKeys = new ArrayList<String>();
+        ArrayList<String> uninterestingKeys = new ArrayList<>();
         for (CorrectorKickData cfPlus : data.getCorrectorKickDataPlus().values()) {
             String key = cfPlus.getCorrectorKey();
             Corrector corrector = correctors.get(key);
@@ -304,10 +304,10 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
         getMachineElementsManager().deactivateUnavailableMonitors(correctorDatas);
     }
 
-    protected List<String> getStearingFileNames(DeflectionSign sign) throws YaspReaderException {
+    protected List<String> getSteeringFileNames(DeflectionSign sign) throws YaspReaderException {
 
         List<String> correctorNames = getSelection().getCorrectorNames();
-        ArrayList<String> stearingFileNames = new ArrayList<String>(correctorNames.size());
+        ArrayList<String> stearingFileNames = new ArrayList<>(correctorNames.size());
 
         for (Plane plane : Plane.values()) {
             for (int i = 0; i < correctorNames.size(); i++) {
@@ -340,7 +340,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
     }
 
     private String partition(List<String> names) {
-        List<String> sublistStrings = new ArrayList<String>();
+        List<String> sublistStrings = new ArrayList<>();
         Joiner sublistJoiner = Joiner.on(", ");
         for (List<String> list : Lists.partition(names, 10)) {
             sublistStrings.add(sublistJoiner.join(list));

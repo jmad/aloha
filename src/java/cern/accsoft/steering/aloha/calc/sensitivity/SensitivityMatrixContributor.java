@@ -1,5 +1,5 @@
 /*
- * $Id: SensityMatrixContributor.java,v 1.1 2008-12-19 13:55:27 kfuchsbe Exp $
+ * $Id: SensitivityMatrixContributor.java,v 1.1 2008-12-19 13:55:27 kfuchsbe Exp $
  * 
  * $Date: 2008-12-19 13:55:27 $ $Revision: 1.1 $ $Author: kfuchsbe $
  * 
@@ -11,7 +11,7 @@ import Jama.Matrix;
 import cern.accsoft.steering.aloha.meas.Measurement;
 
 /**
- * this interface defines methods for classes, that can contribute to the overall sensity-matrix. It defines methods
+ * this interface defines methods for classes, that can contribute to the overall sensitivity-matrix. It defines methods
  * which then can be used by {@link SensitivityMatrixManagerImpl} to query parts of the matrix. NOTE: All matrices must
  * have to same number of rows. The number of columns in general are different.
  * 

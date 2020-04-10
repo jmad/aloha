@@ -29,7 +29,7 @@ public class FitFrame extends JFrame {
     /** the info-panel of the calculator */
     private JPanel calculatorInfoPanel;
 
-    /** the panel to configure the contributors to the sensity matrix */
+    /** the panel to configure the contributors to the sensitivity matrix */
     private JPanel sensitivityMatrixContributorConfigsPanel;
 
     /** the panel which contains the buttons to start the fits */

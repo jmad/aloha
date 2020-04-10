@@ -1,5 +1,5 @@
 /*
- * $Id: SensityMatrixManager.java,v 1.3 2009-03-16 16:38:11 kfuchsbe Exp $
+ * $Id: SensitivityMatrixManager.java,v 1.3 2009-03-16 16:38:11 kfuchsbe Exp $
  * 
  * $Date: 2009-03-16 16:38:11 $ $Revision: 1.3 $ $Author: kfuchsbe $
  * 
@@ -15,8 +15,8 @@ import cern.accsoft.steering.aloha.meas.Measurement;
 import java.util.List;
 
 /**
- * this interface defines the methods of a class, that provides a sensity matrix for a fit. It also provides a method to
- * apply the found changes in the parameters (corresponding to the columns of the sensity matrix) to the correct
+ * this interface defines the methods of a class, that provides a sensitivity matrix for a fit. It also provides a method to
+ * apply the found changes in the parameters (corresponding to the columns of the sensitivity matrix) to the correct
  * parameters of the model.
  * 
  * @author kfuchsbe
@@ -24,7 +24,7 @@ import java.util.List;
 public interface SensitivityMatrixManager {
 
     /**
-     * @return the difference vector, corresponding to the rows of the sensity matrix
+     * @return the difference vector, corresponding to the rows of the sensitivity matrix
      */
     Matrix getActiveDifferenceVector();
 
@@ -34,14 +34,14 @@ public interface SensitivityMatrixManager {
     Matrix getAllDifferenceVector();
 
     /**
-     * @return the errors on the difference vector, corresponding to the rows of the sensity matrix
+     * @return the errors on the difference vector, corresponding to the rows of the sensitivity matrix
      */
     Matrix getActiveDifferenceVectorErrors();
 
     /**
-     * creates the sensity matrix
+     * creates the sensitivity matrix
      * 
-     * @return the sensity matrix.
+     * @return the sensitivity matrix.
      * @throws CalculatorException
      */
     Matrix createSensitivityMatrix() throws CalculatorException;

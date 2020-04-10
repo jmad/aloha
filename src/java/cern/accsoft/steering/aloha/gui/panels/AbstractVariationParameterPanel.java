@@ -26,9 +26,6 @@ import cern.accsoft.steering.util.gui.dialog.SimplePanelDialog;
 import cern.accsoft.steering.util.gui.table.TableModelSelectionAdapter;
 
 public abstract class AbstractVariationParameterPanel extends JPanel {
-
-    private static final long serialVersionUID = 1L;
-
     private VariationParametersTableModel parametersTableModel = new VariationParametersTableModel();
 
     private VariationData variationData = null;
@@ -134,15 +131,13 @@ public abstract class AbstractVariationParameterPanel extends JPanel {
     protected abstract List<Action> getAdditionalButtonActions();
 
     private class VariationParametersTableModel extends AbstractTableModel {
-        private static final long serialVersionUID = -4226614514958848262L;
-
         private final static int COLUMN_COUNT = 9;
 
         private final static int COL_NAME = 0;
         private final static int COL_DELTA = 1;
         private final static int COL_CHANGE_FACTOR = 2;
         private final static int COL_INITIAL_VALUE = 3;
-        private final static int COL_SENSITY = 4;
+        private final static int COL_SENSITIVITY = 4;
         private final static int COL_ACTUAL_VALUE = 5;
         private final static int COL_DIFFERENCE = 6;
         private final static int COL_REL_DIFFERENCE = 7;
@@ -189,9 +184,9 @@ public abstract class AbstractVariationParameterPanel extends JPanel {
                 return parameter.getDelta();
             case COL_CHANGE_FACTOR:
                 return parameter.getUpdateFactor();
-            case COL_SENSITY:
-                if (parameter.getSensity() != 0) {
-                    return parameter.getSensity();
+            case COL_SENSITIVITY:
+                if (parameter.getSensitivity() != 0) {
+                    return parameter.getSensitivity();
                 } else {
                     return null;
                 }
@@ -238,7 +233,7 @@ public abstract class AbstractVariationParameterPanel extends JPanel {
                 return Double.class;
             case COL_CHANGE_FACTOR:
                 return Double.class;
-            case COL_SENSITY:
+            case COL_SENSITIVITY:
                 return Double.class;
             case COL_INITIAL_VALUE:
                 return Double.class;
@@ -264,8 +259,8 @@ public abstract class AbstractVariationParameterPanel extends JPanel {
                 return "variation delta";
             case COL_CHANGE_FACTOR:
                 return "change factor";
-            case COL_SENSITY:
-                return "sensity";
+            case COL_SENSITIVITY:
+                return "sensitivity";
             case COL_INITIAL_VALUE:
                 return "initial value";
             case COL_ACTUAL_VALUE:

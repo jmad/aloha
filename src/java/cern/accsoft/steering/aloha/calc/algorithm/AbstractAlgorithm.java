@@ -22,7 +22,7 @@ public abstract class AbstractAlgorithm<T extends Solver> implements Algorithm,
 	private T solver;
 
 	/**
-	 * the class which takes care of creating the sensity-matrix and applying
+	 * the class which takes care of creating the sensitivity-matrix and applying
 	 * the calculated values,
 	 */
 	private SensitivityMatrixManager sensitivityMatrixManager;

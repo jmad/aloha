@@ -10,7 +10,7 @@ public abstract class AbstractVariationParameter implements VariationParameter {
 
 	private String key = null;
 	private double initialOffset = 0.0;
-	private double sensity = 0.0;
+	private double sensitivity = 0.0;
 	private double delta = DEFAULT_DELTA;
 	private double updateFactor = 1.0;
 	private double error = 0.0;
@@ -25,7 +25,7 @@ public abstract class AbstractVariationParameter implements VariationParameter {
 	protected final void init() {
 		actualOffset = initialOffset;
 		lastOffset = initialOffset;
-		sensity = 0.0;
+		sensitivity = 0.0;
 		error = 0.0;
 	}
 
@@ -66,13 +66,13 @@ public abstract class AbstractVariationParameter implements VariationParameter {
 	}
 
 	@Override
-	public final double getSensity() {
-		return this.sensity;
+	public final double getSensitivity() {
+		return this.sensitivity;
 	}
 
 	@Override
-	public final void setSensity(double sensity) {
-		this.sensity = sensity;
+	public final void setSensitivity(double sensitivity) {
+		this.sensitivity = sensitivity;
 	}
 
 	@Override

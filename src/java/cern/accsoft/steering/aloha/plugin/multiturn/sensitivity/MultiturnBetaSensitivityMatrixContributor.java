@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cern.accsoft.steering.aloha.plugin.multiturn.sensity;
+package cern.accsoft.steering.aloha.plugin.multiturn.sensitivity;
 
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -26,9 +26,9 @@ import java.util.List;
 /**
  * @author kfuchsbe
  */
-public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixContributor,
+public class MultiturnBetaSensitivityMatrixContributor implements SensitivityMatrixContributor,
         MachineElementsManagerAware, NoiseWeighterAware {
-    private final static Logger LOGGER = LoggerFactory.getLogger(MultiturnBetaSensityMatrixContributor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MultiturnBetaSensitivityMatrixContributor.class);
 
     private MultiturnMeasurement multiturnMeasurement;
 
@@ -44,7 +44,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
     /** the norm of the unperturbed vector */
     private double unperturbedNorm = 1;
 
-    public MultiturnBetaSensityMatrixContributor(MultiturnMeasurement multiturnMeasurement) {
+    public MultiturnBetaSensitivityMatrixContributor(MultiturnMeasurement multiturnMeasurement) {
         this.multiturnMeasurement = multiturnMeasurement;
     }
 
@@ -74,8 +74,8 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
         List<Boolean> validity = getMultiturnMeasurement().getData().getValidityValues();
         List<Double> errorValues = getMultiturnMeasurement().getData().getValues(MultiturnVar.BETA_ERROR);
 
-        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
-        Matrix sensityMatrix = new Matrix(monitorCount, 1);
+        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensitivity-matrix-column...");
+        Matrix sensitivityMatrix = new Matrix(monitorCount, 1);
 
         Matrix deltaVector = calcDeltaVector(delta);
 
@@ -98,10 +98,10 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
                 continue;
             }
 
-            sensityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
+            sensitivityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
                     errorValues.get(i)));
         }
-        return new PerturbedColumn(sensityMatrix, normalizationFactor);
+        return new PerturbedColumn(sensitivityMatrix, normalizationFactor);
     }
 
     /**
@@ -118,7 +118,7 @@ public class MultiturnBetaSensityMatrixContributor implements SensitivityMatrixC
 
     @Override
     public Matrix getDifferenceVector() {
-        List<Double> values = new ArrayList<Double>();
+        List<Double> values = new ArrayList<>();
         values.addAll(calcNoisyMonitorBetaDiff(Plane.HORIZONTAL));
         values.addAll(calcNoisyMonitorBetaDiff(Plane.VERTICAL));
         return MatrixUtil.createVector(values);

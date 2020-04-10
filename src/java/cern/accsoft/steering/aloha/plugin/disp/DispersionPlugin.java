@@ -46,10 +46,10 @@ public class DispersionPlugin extends AbstractAlohaPlugin implements Sensitivity
         List<SensitivityMatrixContributor> contributors = new ArrayList<SensitivityMatrixContributor>();
         if (measurement instanceof DispersionMeasurement) {
 
-            DispersionSensitivityMatrixContributor dispersionSensityMatrixContributor = this.alohaBeanFactory
+            DispersionSensitivityMatrixContributor dispersionSensitivityMatrixContributor = this.alohaBeanFactory
                     .create(DispersionSensitivityMatrixContributor.class);
-            dispersionSensityMatrixContributor.setDispersionMeasurement((DispersionMeasurementImpl) measurement);
-            contributors.add(dispersionSensityMatrixContributor);
+            dispersionSensitivityMatrixContributor.setDispersionMeasurement((DispersionMeasurementImpl) measurement);
+            contributors.add(dispersionSensitivityMatrixContributor);
         }
         return contributors;
     }

@@ -1,4 +1,4 @@
-package cern.accsoft.steering.aloha.plugin.traj.sensity;
+package cern.accsoft.steering.aloha.plugin.traj.sensitivity;
 
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -18,20 +18,20 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /*
- * $Id: DispersionSensityMatrixContributor.java,v 1.2 2009-01-15 11:46:24 kfuchsbe Exp $
+ * $Id: DispersionSensitivityMatrixContributor.java,v 1.2 2009-01-15 11:46:24 kfuchsbe Exp $
  * 
  * $Date: 2009-01-15 11:46:24 $ $Revision: 1.2 $ $Author: kfuchsbe $
  * 
  * Copyright CERN, All Rights Reserved.
  */
 /**
- * This class is responsible for creating correct parts of the sensity-matrix, corresponding to the dispersion-data
+ * This class is responsible for creating correct parts of the sensitivity-matrix, corresponding to the dispersion-data
  * 
  * @author kfuchsbe, tbaer
  */
-public class TrajectorySensityMatrixContributor implements SensitivityMatrixContributor, NoiseWeighterAware,
+public class TrajectorySensitivityMatrixContributor implements SensitivityMatrixContributor, NoiseWeighterAware,
         MachineElementsManagerAware {
-    private final static Logger LOGGER = LoggerFactory.getLogger(TrajectorySensityMatrixContributor.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TrajectorySensitivityMatrixContributor.class);
 
     /** the name of this contributor */
     private final static String CONTRIBUTOR_NAME = "Trajectory";
@@ -75,8 +75,8 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
         List<Double> modelTrajectoryValues = getModelOpticsData().getMonitorPos();
         int monitorCount = getMachineElementsManager().getActiveMonitorsCount();
 
-        LOGGER.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensity-matrix...");
-        Matrix sensityMatrix = new Matrix(monitorCount, monitorCount);
+        LOGGER.debug("creating " + monitorCount + "x" + monitorCount + " monitor-sensitivity-matrix...");
+        Matrix sensitivityMatrix = new Matrix(monitorCount, monitorCount);
 
         for (int i = 0; i < monitorCount; i++) {
             /* just leave the values for defect monitors at zero. */
@@ -87,9 +87,9 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
             /*
              * rows and columns correspond to the monitor number (matrix is diagonal)
              */
-            sensityMatrix.set(i, i, getNoiseWeighter().calcNoisyValue(modelTrajectoryValues.get(i), rmsValues.get(i)));
+            sensitivityMatrix.set(i, i, getNoiseWeighter().calcNoisyValue(modelTrajectoryValues.get(i), rmsValues.get(i)));
         }
-        return sensityMatrix;
+        return sensitivityMatrix;
     }
 
     @Override
@@ -98,8 +98,8 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
         List<Boolean> validity = getTrajectoryData().getValidityValues();
         List<Double> rmsValues = getTrajectoryData().getRmsValues();
 
-        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensity-matrix-column...");
-        Matrix sensityMatrix = new Matrix(monitorCount, 1);
+        LOGGER.debug("creating " + monitorCount + "x" + 1 + " disturbed-sensitivity-matrix-column...");
+        Matrix sensitivityMatrix = new Matrix(monitorCount, 1);
 
         Matrix deltaVector = calcDeltaVector(delta);
 
@@ -122,10 +122,10 @@ public class TrajectorySensityMatrixContributor implements SensitivityMatrixCont
                 continue;
             }
 
-            sensityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
+            sensitivityMatrix.set(i, 0, getNoiseWeighter().calcNoisyValue(deltaVector.get(i, 0) / normalizationFactor,
                     rmsValues.get(i)));
         }
-        return new PerturbedColumn(sensityMatrix, normalizationFactor);
+        return new PerturbedColumn(sensitivityMatrix, normalizationFactor);
     }
 
     /**

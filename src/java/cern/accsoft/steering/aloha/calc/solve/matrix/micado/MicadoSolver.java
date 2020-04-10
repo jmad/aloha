@@ -102,9 +102,9 @@ public class MicadoSolver extends AbstractMatrixSolver implements MatrixSolver,
 			outVector.set(parameterChangesIndizes[i], 0,
 					-parameterChangesValues[i]);
 
-			double sensityValue = Math.abs(pivots[i]);
-			sensitivities.set(parameterChangesIndizes[i], 0, sensityValue);
-			sum += sensityValue;
+			double sensitivityValue = Math.abs(pivots[i]);
+			sensitivities.set(parameterChangesIndizes[i], 0, sensitivityValue);
+			sum += sensitivityValue;
 		}
 
 		MatrixSolverResultImpl result = new MatrixSolverResultImpl(outVector);
