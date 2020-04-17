@@ -150,8 +150,11 @@ public class JMadModelDelegate implements ModelDelegate {
     public NameListReadSelectionFilter createReadSelectionFilter(BeamNumber beamNumber) {
         Range activeRange = getJMadModel().getActiveRange();
 
+        List<String> correctorNames = new ArrayList<>();
+        correctorNames.addAll(activeRange.getElementNames(JMadElementType.CORRECTOR));
+        correctorNames.addAll(activeRange.getElementNames(JMadElementType.BEND));
         return new NameListReadSelectionFilter(
-                activeRange.getElementNames(JMadElementType.CORRECTOR),
+                correctorNames,
                 activeRange.getElementNames(JMadElementType.MONITOR), beamNumber);
     }
 

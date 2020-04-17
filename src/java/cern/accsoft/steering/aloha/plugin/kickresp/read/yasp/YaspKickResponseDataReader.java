@@ -256,7 +256,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
     }
 
     /**
-     * sets status of each corrector to NOT_OK for which there is no stearing file.
+     * sets status of each corrector to NOT_OK for which there is no steering file.
      */
     private void readCorrectorStati(KickResponseDataImpl data) {
         Map<String, Corrector> correctors = new HashMap<>();
