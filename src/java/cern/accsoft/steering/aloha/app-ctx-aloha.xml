@@ -58,7 +58,7 @@
     <bean id="machineElementsManager"
           class="cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerImpl"/>
     <bean id="measurementManager" class="cern.accsoft.steering.aloha.meas.MeasurementManagerImpl">
-        <property name="modelManager" ref="modelManager"/>
+        <property name="modelManager" ref="jmadModelManager"/>
     </bean>
 
 
@@ -131,6 +131,7 @@
         <property name="displaySetManager" ref="displaySetManager"/>
         <property name="preferences" ref="alohaPreferences"/>
         <property name="jMadGui" ref="jmadGui"/>
+        <property name="jMadModelSelectionDialogFactory" ref="jmadModelSelectionDialogFactory"/>
         <property name="jMadService" ref="jmadService"/>
         <lookup-method name="getFitGui" bean="fitFrame"/>
     </bean>
@@ -268,7 +269,7 @@
     <bean id="modelDelegatesPanel"
           class="cern.accsoft.steering.aloha.gui.panels.ModelDelegatesPanel">
         <property name="modelDelegateManager" ref="measurementManager"/>
-        <property name="modelManager" ref="modelManager"/>
+        <property name="modelManager" ref="jmadModelManager"/>
     </bean>
     <bean id="helperDataPanel" class="cern.accsoft.steering.aloha.gui.panels.HelperDataPanel">
         <property name="helperDataManager" ref="helperDataManager"/>
@@ -337,7 +338,7 @@
         <property name="contextObjects">
             <map>
                 <entry key="ws" value-ref="helperDataManager"/>
-                <entry key="mm" value-ref="modelManager"/>
+                <entry key="mm" value-ref="jmadModelManager"/>
             </map>
         </property>
     </bean>
@@ -372,14 +373,4 @@
             </list>
         </property>
     </bean>
-
-    <!-- the jmad stuff -->
-    <bean id="jmad" class="cern.accsoft.steering.jmad.gui.JMad" factory-method="createStandaloneJMad"/>
-    <bean id="jmadGui" factory-bean="jmad" factory-method="getJMadGui"/>
-    <bean id="jmadService" factory-bean="jmad" factory-method="getJMadService"/>
-    <bean id="jmadPreferences" factory-bean="jmad" factory-method="getJMadPreferences"/>
-    <bean id="modelManager" factory-bean="jmad" factory-method="getModelManager"/>
-    <bean id="markedElementsManager" factory-bean="jmad" factory-method="getMarkedElementsManager"/>
-    <bean id="jmadPanelFactory" factory-bean="jmad" factory-method="getJMadPanelFactory" lazy-init="true"/>
-
 </beans>

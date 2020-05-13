@@ -1,5 +1,13 @@
 package cern.accsoft.steering.aloha.gui.menus;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cern.accsoft.gui.beans.SwingUtil;
 import cern.accsoft.gui.frame.Task;
 import cern.accsoft.steering.aloha.app.HelperDataManager;
@@ -24,21 +32,15 @@ import cern.accsoft.steering.aloha.read.Reader;
 import cern.accsoft.steering.aloha.read.ReaderManager;
 import cern.accsoft.steering.jmad.domain.ex.JMadModelException;
 import cern.accsoft.steering.jmad.gui.JMadGui;
+import cern.accsoft.steering.jmad.gui.dialog.JMadOptionPane;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.service.JMadService;
 import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
+import org.jmad.modelpack.gui.conf.JMadModelSelectionDialogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * this singleton class handles the actions performed by menus and toolbars
@@ -48,7 +50,7 @@ import java.util.List;
 public abstract class MenuActionHandler {
 
     /** the logger for the class */
-    private final static Logger LOGGER = LoggerFactory.getLogger(MenuActionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MenuActionHandler.class);
 
     /** The file chooser, which will be instantiated the first time it will be used and reused afterwards */
     private JFileChooser fileChooser = null;
@@ -89,6 +91,8 @@ public abstract class MenuActionHandler {
 
     private JMadGui jMadGui;
 
+    private JMadModelSelectionDialogFactory jMadModelSelectionDialogFactory;
+
     public void showChartRendererOptionsDialog() {
         if (getChartRendererPanel() != null) {
             PanelDialog.show(getChartRendererPanel(), mainFrame, false);
@@ -124,7 +128,7 @@ public abstract class MenuActionHandler {
          * now we have to select the correct reader. We try first if one or more of them can handle the file
          * automatically:
          */
-        List<Reader> readers = new ArrayList<Reader>();
+        List<Reader> readers = new ArrayList<>();
         for (Reader r : getReaders()) {
             if (r.isHandling(files)) {
                 readers.add(r);
@@ -176,13 +180,13 @@ public abstract class MenuActionHandler {
              */
             JMadModel model = null;
             ModelDelegate modelDelegate = null;
-            if (this.modelDelegateManager.getModelDelegateInstances().size() == 0) {
+            if (this.modelDelegateManager.getModelDelegateInstances().isEmpty()) {
                 /*
                  * If this is the first measurement, the model is choosen and created from all available definitions.
                  */
-                model = jMadGui.showCreateModelDialog();
+                model = JMadOptionPane.showCreateModelDialog(jMadModelSelectionDialogFactory, jMadService);
                 if (model == null) {
-                    LOGGER.debug("No model was choosen. Aborting loading data.");
+                    LOGGER.debug("No model was chosen. Aborting loading data.");
                     return;
                 }
 
@@ -194,7 +198,7 @@ public abstract class MenuActionHandler {
                 modelDelegate = showSelectModelDelegateDialog();
             }
             if ((model == null) && (modelDelegate == null)) {
-                LOGGER.debug("No model was choosen. Aborting loading data.");
+                LOGGER.debug("No model was chosen. Aborting loading data.");
                 return;
             }
 
@@ -511,8 +515,10 @@ public abstract class MenuActionHandler {
     }
 
     public void setJMadGui(JMadGui jMadGui) {
-        jMadGui.getJmadGuiPreferences().setExitOnClose(false);
         this.jMadGui = jMadGui;
     }
 
+    public void setJMadModelSelectionDialogFactory(JMadModelSelectionDialogFactory jMadModelSelectionDialogFactory) {
+        this.jMadModelSelectionDialogFactory = jMadModelSelectionDialogFactory;
+    }
 }
