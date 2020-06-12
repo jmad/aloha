@@ -1,17 +1,16 @@
 /*
  * $Id: YaspDispersionDataReader.java,v 1.1 2008-12-19 13:55:28 kfuchsbe Exp $
- * 
+ *
  * $Date: 2008-12-19 13:55:28 $ $Revision: 1.1 $ $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.plugin.disp.read.yasp;
 
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
 
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
@@ -26,6 +25,7 @@ import cern.accsoft.steering.aloha.plugin.disp.meas.data.DispersionData;
 import cern.accsoft.steering.aloha.plugin.disp.meas.data.DispersionDataImpl;
 import cern.accsoft.steering.aloha.plugin.disp.read.DispersionMeasurementReader;
 import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
+import cern.accsoft.steering.aloha.read.yasp.AbstractYaspMeasurementReader;
 import cern.accsoft.steering.util.meas.data.yasp.ReadingData;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.read.ReadingDataReader;
@@ -35,19 +35,25 @@ import cern.accsoft.steering.util.meas.read.yasp.YaspReaderException;
 
 /**
  * this is the implementation of a reader for dispersion data out of yasp files
- * 
+ *
  * @author kfuchsbe
  */
-public class YaspDispersionMeasurementReader implements DispersionMeasurementReader, AlohaBeanFactoryAware,
-        MachineElementsManagerAware {
+public class YaspDispersionMeasurementReader extends AbstractYaspMeasurementReader<DispersionMeasurement>
+        implements DispersionMeasurementReader, AlohaBeanFactoryAware, MachineElementsManagerAware {
 
-    /** the prefix, which identifies a yasp-dispersion file */
-    private final static String FILENAME_PREFIX = "disp";
+    /**
+     * the prefix, which identifies a yasp-dispersion file
+     */
+    private static final String FILENAME_PREFIX = "disp";
 
-    /** the delimiter, which is used in yasp dispersion - filenames */
-    private final static String FILENAME_TOKEN_DELIMITER = ".";
+    /**
+     * the delimiter, which is used in yasp dispersion - filenames
+     */
+    private static final String FILENAME_TOKEN_DELIMITER = ".";
 
-    /** the factory to create correctly configured beans */
+    /**
+     * the factory to create correctly configured beans
+     */
     private AlohaBeanFactory alohaBeanFactory;
 
     private MachineElementsManager machineElementsManager;
@@ -115,7 +121,7 @@ public class YaspDispersionMeasurementReader implements DispersionMeasurementRea
 
     /**
      * determines, a file of the given name is a yasp dispersion-file.
-     * 
+     *
      * @param fileName the filename to check
      * @return true, if it is a dispersion-file, false if not.
      */

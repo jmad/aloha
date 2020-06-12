@@ -132,6 +132,7 @@
         <property name="preferences" ref="alohaPreferences"/>
         <property name="jMadGui" ref="jmadGui"/>
         <property name="jMadModelSelectionDialogFactory" ref="jmadModelSelectionDialogFactory"/>
+        <property name="jMadModelPackageService" ref="jmadModelPackageService"/>
         <property name="jMadService" ref="jmadService"/>
         <lookup-method name="getFitGui" bean="fitFrame"/>
     </bean>

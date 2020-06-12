@@ -3,6 +3,9 @@
  */
 package cern.accsoft.steering.aloha.plugin.multiturn.sensitivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -15,13 +18,10 @@ import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.multiturn.meas.MultiturnMeasurement;
 import cern.accsoft.steering.aloha.plugin.multiturn.meas.data.MultiturnVar;
 import cern.accsoft.steering.jmad.util.ListUtil;
-import cern.accsoft.steering.jmad.util.MatrixUtil;
+import cern.accsoft.steering.util.MatrixUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author kfuchsbe

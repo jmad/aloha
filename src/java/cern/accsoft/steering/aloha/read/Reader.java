@@ -6,21 +6,20 @@ import java.util.List;
 
 public interface Reader {
 
-	/**
-	 * @return the file filter which can be used for a file-open dialog.
-	 */
-	public abstract FileFilter getFileFilter();
+    /**
+     * @return the file filter which can be used for a file-open dialog.
+     */
+    FileFilter getFileFilter();
 
-	/**
-	 * @return a description of the files to handle
-	 */
-	public abstract String getDescription();
+    /**
+     * @return a description of the files to handle
+     */
+    String getDescription();
 
-	/**
-	 * @param files
-	 *            the files to test
-	 * @return true if this Reader can handle all the given files, false if not
-	 */
-	public abstract boolean isHandling(List<File> files);
+    /**
+     * @param files the files to test
+     * @return true if this Reader can handle all the given files, false if not
+     */
+    boolean isHandling(List<File> files);
 
 }

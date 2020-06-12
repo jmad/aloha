@@ -1,16 +1,15 @@
 /*
  * $Id: YaspTrimDataReader.java,v 1.1 2009-01-15 11:46:25 kfuchsbe Exp $
- * 
+ *
  * $Date: 2009-01-15 11:46:25 $ $Revision: 1.1 $ $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.read.yasp;
 
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.util.List;
-
-import javax.swing.filechooser.FileFilter;
 
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
@@ -28,10 +27,11 @@ import cern.accsoft.steering.util.meas.yasp.browse.YaspFilters;
 
 /**
  * The reader for trim data out of yasp files.
- * 
+ *
  * @author kfuchsbe
  */
-public class YaspTrimDataReader implements TrimMeasurementReader, AlohaBeanFactoryAware {
+public class YaspTrimDataReader extends AbstractYaspMeasurementReader<TrimMeasurement>
+        implements TrimMeasurementReader, AlohaBeanFactoryAware {
 
     private ReadingDataReader readingDataReader = new YaspFileReader();
 

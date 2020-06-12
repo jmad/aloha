@@ -7,6 +7,8 @@
  */
 package cern.accsoft.steering.aloha.plugin.disp.sensitivity;
 
+import java.util.List;
+
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -18,11 +20,9 @@ import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurementImpl;
 import cern.accsoft.steering.aloha.plugin.disp.meas.data.DispersionData;
-import cern.accsoft.steering.jmad.util.MatrixUtil;
+import cern.accsoft.steering.util.MatrixUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * This class is responsible for creating correct parts of the sensitivity-matrix, corresponding to the dispersion-data

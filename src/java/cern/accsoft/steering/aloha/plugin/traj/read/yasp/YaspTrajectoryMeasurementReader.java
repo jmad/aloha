@@ -1,5 +1,10 @@
 package cern.accsoft.steering.aloha.plugin.traj.read.yasp;
 
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -12,6 +17,7 @@ import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
 import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryDataImpl;
 import cern.accsoft.steering.aloha.plugin.traj.read.TrajectoryMeasurementReader;
 import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
+import cern.accsoft.steering.aloha.read.yasp.AbstractYaspMeasurementReader;
 import cern.accsoft.steering.aloha.read.yasp.YaspUtil;
 import cern.accsoft.steering.aloha.util.io.NameListException;
 import cern.accsoft.steering.util.meas.data.yasp.MonitorValue;
@@ -25,30 +31,33 @@ import cern.accsoft.steering.util.meas.yasp.browse.YaspFilters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * this class is a reader for the Noise data acquired by yasp.
- * 
+ *
  * @author kfuchsbe
  */
-public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementReader, AlohaBeanFactoryAware,
-        MachineElementsManagerAware {
-    private final static Logger LOGGER = LoggerFactory.getLogger(YaspTrajectoryMeasurementReader.class);
+public class YaspTrajectoryMeasurementReader extends AbstractYaspMeasurementReader<TrajectoryMeasurement>
+        implements TrajectoryMeasurementReader, AlohaBeanFactoryAware, MachineElementsManagerAware {
+    private static final Logger LOGGER = LoggerFactory.getLogger(YaspTrajectoryMeasurementReader.class);
 
-    /** the selected monitors and correctors */
+    /**
+     * the selected monitors and correctors
+     */
     private ReadSelectionFilter selection = null;
 
-    /** the reader to read the single files */
+    /**
+     * the reader to read the single files
+     */
     private ReadingDataReader readingDataReader = new YaspFileReader();
 
-    /** the factory for all the aloha beans */
+    /**
+     * the factory for all the aloha beans
+     */
     private AlohaBeanFactory alohaBeanFactory;
 
-    /** the {@link MachineElementsManager} injected by {@link AlohaBeanFactory} */
+    /**
+     * the {@link MachineElementsManager} injected by {@link AlohaBeanFactory}
+     */
     private MachineElementsManager machineElementsManager;
 
     /**
@@ -91,7 +100,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
 
     /* package visibility for testing */
     TrajectoryData read(List<File> files) throws ReaderException {
-        if (files.size() < 1) {
+        if (files.isEmpty()) {
             throw new ReaderException("No files to read!");
         }
 
@@ -107,7 +116,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
 
     /**
      * reads the data from the files and calculates the noise for each monitor.
-     * 
+     *
      * @param files a list of files to read
      * @return the noiseData
      * @throws ReaderException
@@ -120,7 +129,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
             getMachineElementsManager().deactivateUnavailableMonitors(measurementDatas);
         }
 
-        if (!(measurementDatas.size() > 0)) {
+        if (measurementDatas.isEmpty()) {
             LOGGER.warn("No stability Files to read!?");
             return null;
         }
@@ -128,7 +137,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
         TrajectoryDataImpl noiseData = getAlohaBeanFactory().create(TrajectoryDataImpl.class);
         for (MonitorValue activeMonitorValue : measurementDatas.get(0).getMonitorValues()) {
 
-            ArrayList<Double> values = new ArrayList<Double>();
+            ArrayList<Double> values = new ArrayList<>();
             String monitorKey = activeMonitorValue.getKey();
 
             for (ReadingData measurementData : measurementDatas) {
@@ -150,7 +159,7 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
             mean = sum / values.size();
 
             boolean valid = true;
-            if (values.size() > 0) {
+            if (!values.isEmpty()) {
                 double sum2 = 0;
                 for (double value : values) {
                     sum2 += Math.pow(value - mean, 2);
@@ -170,13 +179,13 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
 
     /**
      * reads all the given stabilityFiles and returns the measurement-data as a list
-     * 
+     *
      * @param files the stability-files to read
      * @return the measurement-data as a list
      * @throws ReaderException
      */
     private List<ReadingData> readStabilityFiles(List<File> files) throws ReaderException {
-        List<ReadingData> measurementDatas = new ArrayList<ReadingData>();
+        List<ReadingData> measurementDatas = new ArrayList<>();
         for (File file : files) {
             measurementDatas.add(getReadingDataReader().read(file, this.selection));
         }
@@ -185,12 +194,12 @@ public class YaspTrajectoryMeasurementReader implements TrajectoryMeasurementRea
 
     /**
      * parses the stability-list and returns a list of files that have to be parsed.
-     * 
+     *
      * @return a list of stearingFiles.
      * @throws YaspReaderException
      */
     private List<File> readStabilityList(File stabilityListFile) throws YaspReaderException {
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         YaspStabilityList stabilityList = new YaspStabilityList(stabilityListFile);
 
         try {

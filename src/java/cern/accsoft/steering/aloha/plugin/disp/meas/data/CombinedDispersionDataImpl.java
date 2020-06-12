@@ -9,21 +9,21 @@
  */
 package cern.accsoft.steering.aloha.plugin.disp.meas.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
 import cern.accsoft.steering.aloha.calc.NoiseWeighter;
 import cern.accsoft.steering.aloha.meas.data.DynamicDataListener;
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.disp.meas.DispersionMeasurementImpl;
-import cern.accsoft.steering.jmad.util.MatrixUtil;
+import cern.accsoft.steering.util.MatrixUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * this class provides data, which is calculated as a combination of

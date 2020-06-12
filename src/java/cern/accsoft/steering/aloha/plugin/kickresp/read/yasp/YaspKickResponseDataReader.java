@@ -1,5 +1,13 @@
 package cern.accsoft.steering.aloha.plugin.kickresp.read.yasp;
 
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactory;
 import cern.accsoft.steering.aloha.bean.aware.AlohaBeanFactoryAware;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -17,6 +25,7 @@ import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.ModelKickResponseDa
 import cern.accsoft.steering.aloha.plugin.kickresp.read.KickResponseMaesurementReader;
 import cern.accsoft.steering.aloha.read.CorrectorKickDataReader;
 import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
+import cern.accsoft.steering.aloha.read.yasp.AbstractYaspMeasurementReader;
 import cern.accsoft.steering.aloha.read.yasp.YaspCorrectorKickDataReader;
 import cern.accsoft.steering.aloha.read.yasp.YaspUtil;
 import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
@@ -30,16 +39,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class YaspKickResponseDataReader implements KickResponseMaesurementReader, AlohaBeanFactoryAware,
-        MachineElementsManagerAware {
+public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<KickResponseMeasurement>
+        implements KickResponseMaesurementReader, AlohaBeanFactoryAware, MachineElementsManagerAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(YaspKickResponseDataReader.class);
 
@@ -118,7 +119,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
         }
         File file = files.get(0);
 
-        String basePath = file.getAbsoluteFile().getParentFile().getAbsolutePath();
+        basePath = file.getAbsoluteFile().getParentFile().getAbsolutePath();
 
         /*
          * we use the name of the parent dir as name of the measurement
@@ -126,13 +127,11 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
         String name = file.getAbsoluteFile().getParentFile().getName();
         LOGGER.info("reading data from dir '{}'", basePath);
 
-        NameListReadSelectionFilter selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
+        selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
 
-        KickResponseData kickResponseData = read(file, selection);
-        KickResponseMeasurement measurement = createYaspMeasurement(name, kickResponseData, modelDelegate);
+        KickResponseData kickResponseData = readData();
 
-        System.gc();
-        return measurement;
+        return createYaspMeasurement(name, kickResponseData, modelDelegate);
     }
 
     /**
@@ -143,7 +142,7 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
      * @return the {@link KickResponseMeasurementImpl}
      */
     private KickResponseMeasurement createYaspMeasurement(String name, KickResponseData data,
-                                                          ModelDelegate modelDelegate) {
+            ModelDelegate modelDelegate) {
 
         /*
          * create the model - data
@@ -182,12 +181,6 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
      */
     public NameListReadSelectionFilter getSelection() {
         return selection;
-    }
-
-    public KickResponseData read(File file, NameListReadSelectionFilter selection) throws ReaderException {
-        this.basePath = file.getAbsoluteFile().getParent();
-        this.selection = selection;
-        return readData();
     }
 
     private KickResponseData readData() throws YaspReaderException {
@@ -302,27 +295,25 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
         readStati(data.getCorrectorKickDataMinus().values());
     }
 
-    private void readStati(Collection<CorrectorKickData> correctorDatas) throws InconsistentDataException {
+    private void readStati(Collection<CorrectorKickData> correctorDatas) {
         getMachineElementsManager().deactivateUnavailableMonitors(correctorDatas);
     }
 
-    protected List<String> getSteeringFileNames(DeflectionSign sign) throws YaspReaderException {
+    private List<String> getSteeringFileNames(DeflectionSign sign) throws YaspReaderException {
 
         List<String> correctorNames = getSelection().getCorrectorNames();
         ArrayList<String> steeringFileNames = new ArrayList<>(correctorNames.size());
 
         for (Plane plane : Plane.values()) {
             for (String correctorName : correctorNames) {
-                String fileName = basePath + File.separatorChar
-                        + YaspCorrectorKickDataReader.constructFileName(correctorName, plane, sign,
-                        getMeasurementNumber(), false);
+                String fileName = basePath + File.separatorChar + YaspCorrectorKickDataReader
+                        .constructFileName(correctorName, plane, sign, getMeasurementNumber(), false);
                 if ((new File(fileName)).exists()) {
                     steeringFileNames.add(fileName);
                 } else {
                     /* try gzipped version */
-                    String gzippedFileName = basePath + File.separatorChar
-                            + YaspCorrectorKickDataReader.constructFileName(correctorName, plane, sign,
-                            getMeasurementNumber(), true);
+                    String gzippedFileName = basePath + File.separatorChar + YaspCorrectorKickDataReader
+                            .constructFileName(correctorName, plane, sign, getMeasurementNumber(), true);
                     if ((new File(gzippedFileName)).exists()) {
                         steeringFileNames.add(gzippedFileName);
                     }
@@ -330,10 +321,11 @@ public class YaspKickResponseDataReader implements KickResponseMaesurementReader
             }
         }
 
-        if (steeringFileNames.size() == 0) {
-            throw new YaspReaderException("No datafiles could be found for sign '" + sign + "' at path '" + basePath
-                    + "'!\n" + "Maybe you have selected the wrong model for this data?.\n"
-                    + "The Corrector names found in the model are:\n" + partition(correctorNames));
+        if (steeringFileNames.isEmpty()) {
+            throw new YaspReaderException(
+                    "No datafiles could be found for sign '" + sign + "' at path '" + basePath + "'!\n"
+                            + "Maybe you have selected the wrong model for this data?.\n"
+                            + "The Corrector names found in the model are:\n" + partition(correctorNames));
         }
 
         return steeringFileNames;

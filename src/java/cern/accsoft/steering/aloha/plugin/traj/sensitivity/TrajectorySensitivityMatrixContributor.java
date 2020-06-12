@@ -1,5 +1,7 @@
 package cern.accsoft.steering.aloha.plugin.traj.sensitivity;
 
+import java.util.List;
+
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
 import cern.accsoft.steering.aloha.bean.aware.NoiseWeighterAware;
@@ -11,11 +13,9 @@ import cern.accsoft.steering.aloha.meas.Measurement;
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.traj.meas.TrajectoryMeasurement;
 import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
-import cern.accsoft.steering.jmad.util.MatrixUtil;
+import cern.accsoft.steering.util.MatrixUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /*
  * $Id: DispersionSensitivityMatrixContributor.java,v 1.2 2009-01-15 11:46:24 kfuchsbe Exp $

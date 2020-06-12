@@ -25,40 +25,40 @@ public interface CorrectorKickData extends ReadingData {
 	/**
 	 * @return the key of the corrector, which was kicked.
 	 */
-	public String getCorrectorKey();
+	String getCorrectorKey();
 
 	/**
 	 * @return the name of the corrector, which was kicked.
 	 */
-	public String getCorrectorName();
+	String getCorrectorName();
 
 	/**
 	 * determines if the file corresponds to a vertical active Corrector
 	 * 
 	 * @return true if vertical corrector
 	 */
-	public boolean isVertical();
+	boolean isVertical();
 
 	/**
 	 * determines if the file corresponds to a horizontal active Corrector
 	 * 
 	 * @return true if horizontal corrector
 	 */
-	public boolean isHorizontal();
+	boolean isHorizontal();
 
 	/**
 	 * determines if the file corresponds to a 'plus' measurement.
 	 * 
 	 * @return true, if 'plus' measurement.
 	 */
-	public boolean isPlus();
+	boolean isPlus();
 
 	/**
 	 * determines if the file corresponds to a 'minus' measurement.
 	 * 
 	 * @return true, if 'minus' measurement.
 	 */
-	public boolean isMinus();
+	boolean isMinus();
 
     /**
      * @return the beam number to which this data belongs to

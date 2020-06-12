@@ -14,7 +14,7 @@ import cern.accsoft.steering.aloha.calc.solve.matrix.AbstractMatrixSolver;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolver;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResult;
 import cern.accsoft.steering.aloha.calc.solve.matrix.MatrixSolverResultImpl;
-import cern.accsoft.steering.jmad.util.MatrixUtil;
+import cern.accsoft.steering.util.MatrixUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

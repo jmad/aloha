@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,29 +40,40 @@ import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
 import org.jmad.modelpack.gui.conf.JMadModelSelectionDialogFactory;
+import org.jmad.modelpack.service.JMadModelPackageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * this singleton class handles the actions performed by menus and toolbars
- * 
+ *
  * @author kfuchsbe
  */
 public abstract class MenuActionHandler {
 
-    /** the logger for the class */
+    /**
+     * the logger for the class
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(MenuActionHandler.class);
 
-    /** The file chooser, which will be instantiated the first time it will be used and reused afterwards */
+    /**
+     * The file chooser, which will be instantiated the first time it will be used and reused afterwards
+     */
     private JFileChooser fileChooser = null;
 
-    /** the aloha main frame */
+    /**
+     * the aloha main frame
+     */
     private Frame mainFrame = null;
 
-    /** the mangaer which keeps track about modelAdapters */
+    /**
+     * the mangaer which keeps track about modelAdapters
+     */
     private ModelAdapterManager modelAdapterManager = null;
 
-    /** the workingset, from which to get all the data */
+    /**
+     * the workingset, from which to get all the data
+     */
     private HelperDataManager workingSet = null;
 
     /**
@@ -70,21 +82,31 @@ public abstract class MenuActionHandler {
      */
     private ReaderManager readerManager;
 
-    /** the manager, which keeps track of all loaded models */
+    /**
+     * the manager, which keeps track of all loaded models
+     */
     private ModelDelegateManager modelDelegateManager;
 
-    /** the manager which keeps track of all loaded measurements */
+    /**
+     * the manager which keeps track of all loaded measurements
+     */
     private MeasurementManager measurementManager;
 
-    /** the manager which keeps track of all active elements */
+    /**
+     * the manager which keeps track of all active elements
+     */
     private MachineElementsManager machineElementsManager;
 
     private DisplaySetManager displaySetManager;
 
-    /** a panel to provide options for the charts */
+    /**
+     * a panel to provide options for the charts
+     */
     private JPanel chartRendererPanel;
 
-    /** The aloha preferences */
+    /**
+     * The aloha preferences
+     */
     private Preferences preferences;
 
     private JMadService jMadService;
@@ -92,6 +114,8 @@ public abstract class MenuActionHandler {
     private JMadGui jMadGui;
 
     private JMadModelSelectionDialogFactory jMadModelSelectionDialogFactory;
+
+    private JMadModelPackageService jMadModelPackageService;
 
     public void showChartRendererOptionsDialog() {
         if (getChartRendererPanel() != null) {
@@ -166,9 +190,10 @@ public abstract class MenuActionHandler {
          * now we have two choices: Measurement or global data
          */
         if (reader instanceof MeasurementReader<?>) {
+            MeasurementReader<?> measurementReader = (MeasurementReader<?>) reader;
             /*
              * XXX Dirty: For YASP-KickResponse reader we have to additionaly set the measurement number.
-             * 
+             *
              * TODO: Should be more general!
              */
             if (reader instanceof YaspKickResponseDataReader) {
@@ -182,14 +207,9 @@ public abstract class MenuActionHandler {
             ModelDelegate modelDelegate = null;
             if (this.modelDelegateManager.getModelDelegateInstances().isEmpty()) {
                 /*
-                 * If this is the first measurement, the model is choosen and created from all available definitions.
+                 * If this is the first measurement, the model is chosen and created from all available definitions.
                  */
-                model = JMadOptionPane.showCreateModelDialog(jMadModelSelectionDialogFactory, jMadService);
-                if (model == null) {
-                    LOGGER.debug("No model was chosen. Aborting loading data.");
-                    return;
-                }
-
+                model = selectNewModel(measurementReader.proposedModelDefinitionUri(files));
             } else {
                 /*
                  * If there are already existing measurements, then we can either reuse one of the model-instances or
@@ -198,7 +218,7 @@ public abstract class MenuActionHandler {
                 modelDelegate = showSelectModelDelegateDialog();
             }
             if ((model == null) && (modelDelegate == null)) {
-                LOGGER.debug("No model was chosen. Aborting loading data.");
+                LOGGER.info("No model was chosen. Aborting loading data.");
                 return;
             }
 
@@ -206,7 +226,7 @@ public abstract class MenuActionHandler {
              * ask the user for options
              */
             MeasurementReaderOptions options = null;
-            if (((MeasurementReader<?>) reader).requiresOptions()) {
+            if (measurementReader.requiresOptions()) {
                 options = new MeasurementReaderOptions();
                 if (!PanelDialog.show(new MeasurementReaderOptionsPanel(options), mainFrame, true)) {
                     LOGGER.debug("Options aborted. Aborting loading data.");
@@ -217,7 +237,7 @@ public abstract class MenuActionHandler {
             /*
              * finally we are ready to read the data and add it to the measurement manager.
              */
-            Task<Object> task = new LoadDataTask(reader, modelDelegate, model, files, options);
+            Task<Object> task = new LoadDataTask(measurementReader, modelDelegate, model, files, options);
             task.start();
 
         } else if (reader instanceof HelperDataReader<?>) {
@@ -226,27 +246,43 @@ public abstract class MenuActionHandler {
                 data = ((HelperDataReader<?>) reader).read(files);
             } catch (ReaderException e) {
                 LOGGER.error("Error while reading data", e);
-                JOptionPane.showMessageDialog(mainFrame, "Could not read data from files <br>'" + files.toString()
-                        + "'.\n" + "Exception was: '" + e.getMessage() + "'", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(mainFrame,
+                        "Could not read data from files <br>'" + files.toString() + "'.\n" //
+                                + "Exception was: '" + e.getMessage() + "'", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            getWorkingSet().putData(data);
+            workingSet.putData(data);
         } else {
-            LOGGER.error("Unknown instance of reader '" + reader.getClass().getCanonicalName()
-                    + "'. Do not know what to do.");
+            LOGGER.error("Unknown instance of reader '{}'. Do not know what to do.",
+                    reader.getClass().getCanonicalName());
+        }
+    }
+
+    private JMadModel selectNewModel(URI modelDefinitionUri) {
+        if (modelDefinitionUri == null) {
+            return JMadOptionPane.showCreateModelDialog(jMadModelSelectionDialogFactory, jMadService);
+        }
+        int userResponse = JOptionPane.showConfirmDialog(mainFrame,
+                "Proposed JMad model for this data:\n" + modelDefinitionUri.toASCIIString()
+                        + "\nUse this model (select 'No' to manually select another model)?", "Select JMad model",
+                JOptionPane.YES_NO_OPTION);
+        if (userResponse == JOptionPane.NO_OPTION) {
+            return JMadOptionPane.showCreateModelDialog(jMadModelSelectionDialogFactory, jMadService);
+        } else {
+            return jMadModelPackageService.createModelFromUri(modelDefinitionUri).block();
         }
     }
 
     private class LoadDataTask extends Task<Object> {
 
-        private Reader reader;
+        private MeasurementReader<?> reader;
         private ModelDelegate modelDelegate;
         private JMadModel model;
         private List<File> files;
         private MeasurementReaderOptions options;
 
-        private LoadDataTask(Reader reader, ModelDelegate modelDelegate, JMadModel model, List<File> files,
-                MeasurementReaderOptions options) {
+        private LoadDataTask(MeasurementReader<?> reader, ModelDelegate modelDelegate, JMadModel model,
+                List<File> files, MeasurementReaderOptions options) {
             this.reader = reader;
             this.modelDelegate = modelDelegate;
             this.files = files;
@@ -261,7 +297,8 @@ public abstract class MenuActionHandler {
 
             if (modelDelegate == null) {
                 if (model == null) {
-                    LOGGER.error("No model was choosen, aborting.");
+                    LOGGER.error("No model was chosen, aborting.");
+                    return null;
                 }
                 try {
                     model.reset();
@@ -275,7 +312,7 @@ public abstract class MenuActionHandler {
             LOGGER.info("Start loading data .");
             ModelAwareMeasurement measurement;
             try {
-                measurement = ((MeasurementReader<?>) reader).read(files, modelDelegate, options);
+                measurement = reader.read(files, modelDelegate, options);
             } catch (ReaderException e) {
                 LOGGER.error("Error while reading measurement", e);
                 JOptionPane.showMessageDialog(mainFrame,
@@ -284,7 +321,7 @@ public abstract class MenuActionHandler {
                 return null;
 
             }
-            getMeasurementManager().addMeasurement(measurement);
+            MenuActionHandler.this.measurementManager.addMeasurement(measurement);
             getDisplaySetManager().display(measurement);
             LOGGER.info("Data successfully loaded.");
             return null;
@@ -295,11 +332,11 @@ public abstract class MenuActionHandler {
     /**
      * determines the measurement number to use for loading kick-response data. This is required for YASP Kick-Response
      * files. (last digit in filename)
-     * 
+     *
      * @return the measurement number
      */
     private int getMeasurementNumber() {
-        Integer measurementNumber = getPreferences().getMeasurementNumber();
+        Integer measurementNumber = this.preferences.getMeasurementNumber();
         if (measurementNumber == null) {
             String response = JOptionPane.showInputDialog(mainFrame, "Measurement number", "1");
             try {
@@ -314,7 +351,7 @@ public abstract class MenuActionHandler {
 
     /**
      * creates a file chooser with the additional custom file-filter.
-     * 
+     *
      * @return the fileChooser
      */
     private JFileChooser createFileChooser() {
@@ -324,7 +361,7 @@ public abstract class MenuActionHandler {
             chooser.addChoosableFileFilter(customFileFilter);
         }
         chooser.setAcceptAllFileFilterUsed(true);
-        String dataPath = getPreferences().getDataPath();
+        String dataPath = this.preferences.getDataPath();
         if (dataPath != null) {
             chooser.setCurrentDirectory(new File(dataPath));
         }
@@ -332,7 +369,7 @@ public abstract class MenuActionHandler {
     }
 
     private List<FileFilter> collectFileFilters() {
-        List<FileFilter> fileFilters = new ArrayList<FileFilter>();
+        List<FileFilter> fileFilters = new ArrayList<>();
         for (Reader reader : getReaders()) {
             fileFilters.add(reader.getFileFilter());
         }
@@ -341,7 +378,7 @@ public abstract class MenuActionHandler {
 
     /**
      * shows a dialog for selecting a new or old instance of a model-delegate.
-     * 
+     *
      * @return the model-delegate (if one is selected or correctly created)
      */
     private ModelDelegate showSelectModelDelegateDialog() {
@@ -377,18 +414,8 @@ public abstract class MenuActionHandler {
     }
 
     /**
-     * @return the actual {@link HelperDataManager}
-     */
-    private HelperDataManager getWorkingSet() {
-        if (this.workingSet == null) {
-            LOGGER.warn("workingSet not set! Maybe config error!");
-        }
-        return this.workingSet;
-    }
-
-    /**
      * used by spring to inject the workingSet
-     * 
+     *
      * @param workingSet the {@link HelperDataManager} to set
      */
     public final void setWorkingSet(HelperDataManager workingSet) {
@@ -396,22 +423,8 @@ public abstract class MenuActionHandler {
     }
 
     /**
-     * @return the actual preferences
-     */
-    private Preferences getPreferences() {
-        return this.preferences;
-    }
-
-    /**
-     * @return the measurement-manager
-     */
-    private MeasurementManager getMeasurementManager() {
-        return this.measurementManager;
-    }
-
-    /**
      * setter used by spring to set the main panel
-     * 
+     *
      * @param panel
      */
     public void setMainFrame(Frame panel) {
@@ -432,7 +445,7 @@ public abstract class MenuActionHandler {
 
     /**
      * creates a {@link ModelDelegate} for the model.
-     * 
+     *
      * @param model the model for which to create a model delegate
      * @return the {@link ModelDelegate}
      */
@@ -442,7 +455,7 @@ public abstract class MenuActionHandler {
 
     /**
      * returns the model-adapter for the given model if the modelAdapterManager is correctly set
-     * 
+     *
      * @param model the model for which to find a model-adapter
      * @return the modelAdapter for the model
      */
@@ -469,7 +482,7 @@ public abstract class MenuActionHandler {
     /**
      * Lookup method for the fitting GUI. Will be injected by spring. This has the advantage, that it will only be
      * created as soon as we need it.
-     * 
+     *
      * @return a new GUI-frame which provides the fitting options.
      */
     public abstract JFrame getFitGui();
@@ -520,5 +533,9 @@ public abstract class MenuActionHandler {
 
     public void setJMadModelSelectionDialogFactory(JMadModelSelectionDialogFactory jMadModelSelectionDialogFactory) {
         this.jMadModelSelectionDialogFactory = jMadModelSelectionDialogFactory;
+    }
+
+    public void setJMadModelPackageService(JMadModelPackageService jMadModelPackageService) {
+        this.jMadModelPackageService = jMadModelPackageService;
     }
 }
