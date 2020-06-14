@@ -22,6 +22,14 @@
 
 package cern.accsoft.steering.util.meas.yasp.browse;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import cern.accsoft.steering.util.gui.menu.MousePopupListener;
 import cern.accsoft.steering.util.gui.menu.TablePopupMenu;
 import cern.accsoft.steering.util.gui.panels.TableFilterPanel;
@@ -30,34 +38,19 @@ import cern.accsoft.steering.util.gui.table.TableModelSelectionAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A simple dialog to browse through yasp files in a directory and preview the contents.
  * 
  * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
  */
 public class YaspFileBrowser extends JDialog {
-    private static final long serialVersionUID = 8936666262913943289L;
-
-    /** The logger for the class */
-    private final static Logger logger = LoggerFactory.getLogger(YaspFileBrowser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(YaspFileBrowser.class);
 
     /** the table model for the files */
     private FileTableModel tableModel = new FileTableModel();
 
     /** the panel containing the dataviewer */
-    private DataViewerPanel dvPanel = new DataViewerPanel();
+    private YaspPreviewPanel dvPanel = new YaspPreviewPanel();
 
     /** the current directory to browse */
     private File currentDir = null;
@@ -95,13 +88,7 @@ public class YaspFileBrowser extends JDialog {
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         JButton btn = new JButton("change dir");
-        btn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeDirectory();
-            }
-        });
+        btn.addActionListener(e -> changeDirectory());
         tablePanel.add(btn, BorderLayout.SOUTH);
 
         /*
@@ -133,14 +120,14 @@ public class YaspFileBrowser extends JDialog {
             return;
         }
 
-        logger.info("parsing files in dir to '" + this.currentDir.toString() + "'");
+        LOGGER.info("parsing files in dir to '" + this.currentDir.toString() + "'");
 
         List<File> files = java.util.Arrays.asList(this.currentDir.listFiles(YaspFilters.TRAJECTORY_FILENAME_FILTER));
         tableModel.setFiles(files);
     }
 
     /**
-     * This class is the implementation of a listener to change the displayed Data in the {@link DataViewerPanel}.
+     * This class is the implementation of a listener to change the displayed Data in the {@link YaspPreviewPanel}.
      * 
      * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
      */
@@ -216,32 +203,4 @@ public class YaspFileBrowser extends JDialog {
         }
 
     }
-
-    /**
-     * the main method.
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        File dir = null;
-        if (args.length > 0) {
-            dir = new File(args[0].trim());
-        }
-
-        JDialog dialog;
-        if (dir != null) {
-            dialog = new YaspFileBrowser(dir);
-        } else {
-            dialog = new YaspFileBrowser();
-        }
-
-        dialog.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        dialog.pack();
-        dialog.setVisible(true);
-    }
-
 }

@@ -26,9 +26,7 @@ import org.apache.log4j.Logger;
  * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
  */
 public class YaspFileReader implements ReadingDataReader {
-
-    /** the logger for the class */
-    private final static Logger logger = Logger.getLogger(YaspFileReader.class);
+    private final static Logger LOGGER = Logger.getLogger(YaspFileReader.class);
 
     /** The text-parser, which we use when looping through the lines */
     private TextFileParser textFileParser = new TextFileParserImpl();
@@ -85,10 +83,10 @@ public class YaspFileReader implements ReadingDataReader {
                 // switch between monitors and corrector magnets:
                 if (line.startsWith("# MONITOR")) {
                     readMode = ReadMode.MONITOR;
-                    logger.debug("Switched to MONITOR mode for file '" + file.getAbsolutePath() + "'");
+                    LOGGER.debug("Switched to MONITOR mode for file '" + file.getAbsolutePath() + "'");
                 } else if (line.startsWith("# CORRECTOR")) {
                     readMode = ReadMode.CORRECTOR;
-                    logger.debug("Switched to CORRECTOR mode for file '" + file.getAbsolutePath() + "'");
+                    LOGGER.debug("Switched to CORRECTOR mode for file '" + file.getAbsolutePath() + "'");
                 } else {
                     throw new InconsistentYaspFileException("Unkown tag '" + line + "' in file '" + file + "'");
                 }
