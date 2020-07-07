@@ -80,7 +80,6 @@ dependencies {
 
     compile group: 'gov.nist.math', name: 'jama', version: '1.0.3'
     compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
-    compile group: 'cern.dm', name: 'jdataviewer', version: '1.8.8'
 
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
@@ -96,7 +95,7 @@ dependencies {
     compile group: 'net.sourceforge.javacsv', name: 'javacsv', version: '2.0'
     compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
 
-    compile group: 'jmad', name: 'jmad-gui', version: '0.7.4'
+    compile group: 'jmad', name: 'jmad-gui', version: '0.7.6'
 
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
