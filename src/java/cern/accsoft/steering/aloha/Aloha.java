@@ -16,6 +16,8 @@ import cern.accsoft.steering.aloha.app.AlohaCommandLineParser;
 import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.gui.manage.SplashFactory;
 import cern.accsoft.steering.jmad.util.JMadPreferences;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -24,6 +26,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author kfuchsbe
  */
 public class Aloha {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Aloha.class);
     private static final String BEAN_NAME_ALOHA_GUI = "alohaGui";
     private static final String BEAN_NAME_ALOHA_PREFERENCES = "alohaPreferences";
     private static final String BEAN_NAME_JMAD_PREFERENCES = "jmadPreferences";
@@ -53,6 +56,8 @@ public class Aloha {
     }
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+        Thread.setDefaultUncaughtExceptionHandler((th, e) -> LOGGER
+                .error("Unhandled {} in thread {}: {}", e.getClass().getSimpleName(), th.getName(), e.getMessage(), e));
         SplashFactory.getSplashScreen();
         Aloha aloha = new Aloha();
 
