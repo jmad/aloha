@@ -29,7 +29,7 @@ public abstract class AbstractYaspMeasurementReader<T extends ModelAwareMeasurem
             }
             YaspHeader header = data.getHeader();
             String modelUri = header.getStringData(YaspHeaderData.MODEL_URI);
-            if (modelUri == null || modelUri.isEmpty()) {
+            if (modelUri == null || modelUri.isEmpty() || modelUri.equals("null")) {
                 LOGGER.info("Found no model URI.");
                 return null;
             }
