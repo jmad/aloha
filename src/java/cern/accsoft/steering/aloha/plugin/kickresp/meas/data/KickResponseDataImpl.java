@@ -7,6 +7,10 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.meas.data;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Jama.Matrix;
 import cern.accsoft.steering.aloha.machine.Corrector;
 import cern.accsoft.steering.aloha.machine.Monitor;
@@ -22,10 +26,6 @@ import cern.accsoft.steering.util.meas.data.yasp.CorrectorValue;
 import cern.accsoft.steering.util.meas.data.yasp.MonitorValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * this is the basic implementation of the data of a kick-response-measurement.
@@ -133,13 +133,13 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                     /* do we get values from both files? */
                     CorrectorValue correctorValueMinus = dataMinus.getCorrectorValue(corrector.getKey());
                     if (correctorValueMinus == null) {
-                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.getName()
+                        throw new InconsistentDataException("No corrector value for corrector '" + corrector.getName()
                                 + "' found in minus file for corrector '" + activeCorrector.getName() + "'!");
                     }
 
                     CorrectorValue correctorValuePlus = dataPlus.getCorrectorValue(corrector.getKey());
                     if (correctorValuePlus == null) {
-                        throw new InconsistentDataException("No correcor value for corrector '" + corrector.getName()
+                        throw new InconsistentDataException("No corrector value for corrector '" + corrector.getName()
                                 + "' found in plus file for corrector '" + activeCorrector.getName() + "'!");
                     }
 
@@ -157,8 +157,9 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                             correctorKick = deltaKick;
                         } else {
                             throw new InconsistentDataException(
-                                    "There seem to be more than one nozero kicks in one datafile (datafile for corrector '"
-                                            + dataPlus.getCorrectorName() + "')! - This is not allowed.");
+                                    "There seem to be more than one nonzero kicks in one datafile (datafile for"
+                                            + " corrector '" + dataPlus.getCorrectorName()
+                                            + "')! - This is not allowed.");
                         }
                     }
                 }
