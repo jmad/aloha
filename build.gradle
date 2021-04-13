@@ -35,8 +35,8 @@ repositories {
         mavenCentral()
         /* Temporary workaround for internal CERN dependencies */
         ivy {
-            url "http://jmad.web.cern.ch/jmad/static/ws/lib/"
-            layout "pattern", { artifact "[artifact].[ext]" }
+            url "http://jmad.web.cern.ch/jmad/static/lib/"
+            layout "pattern", { artifact "[artifact]-[revision].[ext]" }
             metadataSources { artifact() }
         }
     }
