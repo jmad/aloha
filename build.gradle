@@ -33,6 +33,12 @@ repositories {
         maven { url 'http://artifactory.cern.ch/development' }
     } else {
         mavenCentral()
+        /* Temporary workaround for internal CERN dependencies */
+        ivy {
+            url "http://jmad.web.cern.ch/jmad/static/ws/lib/"
+            layout "pattern", { artifact "[artifact].[ext]" }
+            metadataSources { artifact() }
+        }
     }
 }
 
