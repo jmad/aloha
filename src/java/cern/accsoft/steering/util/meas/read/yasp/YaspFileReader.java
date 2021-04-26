@@ -1,5 +1,8 @@
 package cern.accsoft.steering.util.meas.read.yasp;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+
 import java.io.File;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -199,8 +202,8 @@ public class YaspFileReader implements ReadingDataReader {
 
         StringTokenizer tokenizer = new StringTokenizer(line, " \t");
         int countTokens = tokenizer.countTokens();
-        if (countTokens != 9) {
-            throw new InconsistentYaspFileException("Monitor line '" + line + "' must have 9 fields, but has "
+        if (countTokens < 8) { /* Michi 2021-04-26: be lenient on the status tag, as we don't read it anyway */
+            throw new InconsistentYaspFileException("Monitor line '" + line + "' must have at least 8 fields, but has "
                     + countTokens + ".");
         }
 
@@ -209,12 +212,12 @@ public class YaspFileReader implements ReadingDataReader {
         try {
             monitor.setName(tokenizer.nextToken());
             monitor.setPlane(Plane.fromTag(tokenizer.nextToken()));
-            monitor.setBeamNumber(BeamNumber.fromInt(new Integer(tokenizer.nextToken())));
-            monitor.setBeamPosition(new Double(tokenizer.nextToken()));
-            monitor.rms = new Double(tokenizer.nextToken());
-            monitor.sum = new Double(tokenizer.nextToken());
-            monitor.hwStatus = new Integer(tokenizer.nextToken());
-            monitor.status = new Integer(tokenizer.nextToken());
+            monitor.setBeamNumber(BeamNumber.fromInt(parseInt(tokenizer.nextToken())));
+            monitor.setBeamPosition(parseDouble(tokenizer.nextToken()));
+            monitor.rms =parseDouble(tokenizer.nextToken());
+            monitor.sum = parseDouble(tokenizer.nextToken());
+            monitor.hwStatus = parseInt(tokenizer.nextToken());
+            monitor.status = parseInt(tokenizer.nextToken());
             // we do not process status tag at the moment.
         } catch (RuntimeException e) {
             throw new InconsistentYaspFileException("Error while processing Monitor - line '" + line + "'", e);
