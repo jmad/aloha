@@ -194,9 +194,15 @@
         <property name="sensitivityMatrixManager" ref="sensitivityMatrixManager"/>
     </bean>
 
+    <bean id="resultExportActionHandler" class="cern.accsoft.steering.aloha.gui.panels.fit.ResultExportActionHandler">
+        <property name="variationData" ref="variationData"/>
+        <property name="machineElementsManager" ref="machineElementsManager"/>
+    </bean>
+
     <bean id="calcButtonsPanel" class="cern.accsoft.steering.aloha.gui.panels.fit.CalcButtonsPanel"
           init-method="init">
         <property name="calcActionHandler" ref="calcActionHandler"/>
+        <property name="resultExportActionHandler" ref="resultExportActionHandler"/>
     </bean>
     <bean id="sensitivityMatrixContributorConfigsPanel"
           class="cern.accsoft.steering.aloha.gui.panels.fit.SensitivityMatrixContributorConfigsPanel"
