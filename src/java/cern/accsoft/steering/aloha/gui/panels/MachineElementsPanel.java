@@ -1,5 +1,14 @@
 package cern.accsoft.steering.aloha.gui.panels;
 
+import static cern.accsoft.gui.frame.util.CompletableFutureTasks.backgroundTask;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import cern.accsoft.steering.aloha.app.Preferences;
 import cern.accsoft.steering.aloha.gui.components.DoubleTableCellRenderer;
 import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
@@ -17,15 +26,6 @@ import cern.accsoft.steering.util.gui.table.TableModelSelectionAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import static cern.accsoft.gui.frame.util.CompletableFutureTasks.backgroundTask;
-
 public abstract class MachineElementsPanel extends JPanel implements Applyable, TableModelListener {
     private final static Logger LOGGER = LoggerFactory.getLogger(MachineElementsPanel.class);
 
@@ -36,12 +36,13 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
     private static final long serialVersionUID = 1L;
 
     private boolean dataChanged = false;
-    private AbstractMachineElement[] elements = null;
+    private AbstractMachineElement[] elements;
 
     private ArrayList<Double> gainBuffer = new ArrayList<>();
     private ArrayList<Boolean> activeBuffer = new ArrayList<>();
 
-    private ElementsTableModel tableModel = null;
+    private ElementsTableModel tableModel;
+    private JTable table;
 
     private Preferences preferences;
 
@@ -132,7 +133,7 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
         tableModel = new ElementsTableModel();
         tableModel.addTableModelListener(this);
 
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         table.setDefaultRenderer(Double.class, new DoubleTableCellRenderer(getPreferences()));
         tableModel.setTableModelSelectionAdapter(new TableModelSelectionAdapter(table) {
 
@@ -164,8 +165,14 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
         JScrollPane scroller = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        table.getColumnModel().getColumn(0).setMaxWidth(30);
+
+        JCheckBox showGainsCheckbox = new JCheckBox("display initial gains");
+        showGainsCheckbox.addActionListener(e -> setDisplayGains(showGainsCheckbox.isSelected()));
+
         add(new TableFilterPanel(table), BorderLayout.NORTH);
         add(scroller, BorderLayout.CENTER);
+        add(showGainsCheckbox, BorderLayout.SOUTH);
     }
 
     @Override
@@ -181,8 +188,12 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
 
     public void setDisplayGains(boolean displayGains) {
         this.displayGains = displayGains;
-        if (tableModel != null) {
-            tableModel.fireTableDataChanged();
+        if (tableModel != null && table != null) {
+            tableModel.fireTableStructureChanged();
+            table.getColumnModel().getColumn(0).setMaxWidth(30);
+            if (displayGains) {
+                table.getColumnModel().getColumn(2).setMaxWidth(50);
+            }
         }
     }
 
@@ -249,7 +260,9 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
                 break;
             case COL_GAIN:
                 gainBuffer.set(row, (Double) value);
-                fireTableCellUpdated(row, col);
+                if (isDisplayGains()) {
+                    fireTableCellUpdated(row, col);
+                }
                 break;
             }
         }
@@ -284,11 +297,11 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
         public String getColumnName(int col) {
             switch (col) {
             case COL_ACTIVE:
-                return "active";
+                return "act";
             case COL_NAME:
                 return "name";
             case COL_GAIN:
-                return "initial gain";
+                return "gain";
             default:
                 return null;
             }
@@ -321,7 +334,7 @@ public abstract class MachineElementsPanel extends JPanel implements Applyable, 
 
         @Override
         public String getValueName() {
-            return "gain factor";
+            return "initial gain";
         }
 
     }

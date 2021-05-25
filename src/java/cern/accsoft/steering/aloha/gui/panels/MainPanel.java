@@ -1,12 +1,8 @@
 package cern.accsoft.steering.aloha.gui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.*;
 
 import cern.accsoft.gui.beans.MultiSplitLayout;
 import cern.accsoft.gui.beans.MultiSplitPane;
@@ -57,7 +53,7 @@ public class MainPanel extends JPanel {
 		 * others.
 		 */
 		String layoutDef = "(COLUMN (ROW weight=0.5 "
-				+ "(LEAF name=left.top1 weight=0.2) (LEAF name=left.top2 weight=0.2) (LEAF name=right.top weight=0.6)) "
+				+ "(LEAF name=left.top1 weight=0.2) (LEAF name=left.top2 weight=0.25) (LEAF name=right.top weight=0.55)) "
 				+ "(LEAF name=bottom weight=0.5))";
 		MultiSplitLayout.Node layoutModel = MultiSplitLayout
 				.parseModel(layoutDef);
