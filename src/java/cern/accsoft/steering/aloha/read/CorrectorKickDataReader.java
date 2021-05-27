@@ -25,5 +25,5 @@ public interface CorrectorKickDataReader {
      * 
      * @return the {@link CorrectorKickData}
      */
-    CorrectorKickData read(File file, ReadSelectionFilter selection) throws ReaderException;
+    CorrectorKickData read(File file, ReadSelectionFilter selection, MeasurementReaderOptions options) throws ReaderException;
 }

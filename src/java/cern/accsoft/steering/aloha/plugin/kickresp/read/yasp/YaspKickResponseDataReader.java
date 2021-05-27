@@ -60,6 +60,11 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
     private NameListReadSelectionFilter selection;
 
     /**
+     * the reader options
+     */
+    private MeasurementReaderOptions options;
+
+    /**
      * the class to create all the classes the and configure them with the commonly used beans.
      */
     private AlohaBeanFactory alohaBeanFactory;
@@ -119,7 +124,7 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
         }
         File file = files.get(0);
 
-        basePath = file.getAbsoluteFile().getParentFile().getAbsolutePath();
+        this.basePath = file.getAbsoluteFile().getParentFile().getAbsolutePath();
 
         /*
          * we use the name of the parent dir as name of the measurement
@@ -127,7 +132,8 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
         String name = file.getAbsoluteFile().getParentFile().getName();
         LOGGER.info("reading data from dir '{}'", basePath);
 
-        selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
+        this.selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());
+        this.options = options;
 
         KickResponseData kickResponseData = readData();
 
@@ -176,13 +182,6 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
 
     }
 
-    /**
-     * @return the selection
-     */
-    public NameListReadSelectionFilter getSelection() {
-        return selection;
-    }
-
     private KickResponseData readData() throws YaspReaderException {
         KickResponseDataImpl data = getAlohaBeanFactory().create(KickResponseDataImpl.class);
 
@@ -226,22 +225,14 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
             File fileMinus = new File(fileNamesMinus.get(i));
 
             try {
-                CorrectorKickData dataPlus = readFile(filePlus);
-                CorrectorKickData dataMinus = readFile(fileMinus);
+                CorrectorKickData dataPlus = correctorKickDataReader.read(filePlus, selection, options);
+                CorrectorKickData dataMinus = correctorKickDataReader.read(fileMinus, selection, options);
                 data.addDataPlus(dataPlus);
                 data.addDataMinus(dataMinus);
             } catch (ReaderException e) {
                 throw new YaspReaderException("Error while parsing Data-files!", e);
             }
         }
-    }
-
-    private CorrectorKickData readFile(File file) throws ReaderException {
-        return getCorrectorKickDataReader().read(file, getSelection());
-    }
-
-    public Integer getMeasurementNumber() {
-        return measurementNumber;
     }
 
     public void setMeasurementNumber(Integer measurementNumber) {
@@ -301,19 +292,19 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
 
     private List<String> getSteeringFileNames(DeflectionSign sign) throws YaspReaderException {
 
-        List<String> correctorNames = getSelection().getCorrectorNames();
+        List<String> correctorNames = selection.getCorrectorNames();
         ArrayList<String> steeringFileNames = new ArrayList<>(correctorNames.size());
 
         for (Plane plane : Plane.values()) {
             for (String correctorName : correctorNames) {
                 String fileName = basePath + File.separatorChar + YaspCorrectorKickDataReader
-                        .constructFileName(correctorName, plane, sign, getMeasurementNumber(), false);
+                        .constructFileName(correctorName, plane, sign, measurementNumber, false);
                 if ((new File(fileName)).exists()) {
                     steeringFileNames.add(fileName);
                 } else {
                     /* try gzipped version */
                     String gzippedFileName = basePath + File.separatorChar + YaspCorrectorKickDataReader
-                            .constructFileName(correctorName, plane, sign, getMeasurementNumber(), true);
+                            .constructFileName(correctorName, plane, sign, measurementNumber, true);
                     if ((new File(gzippedFileName)).exists()) {
                         steeringFileNames.add(gzippedFileName);
                     }
@@ -360,13 +351,6 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
      */
     public void setCorrectorKickDataReader(CorrectorKickDataReader correctorKickDataReader) {
         this.correctorKickDataReader = correctorKickDataReader;
-    }
-
-    /**
-     * @return the correctorKickDataReader
-     */
-    private CorrectorKickDataReader getCorrectorKickDataReader() {
-        return correctorKickDataReader;
     }
 
     @Override

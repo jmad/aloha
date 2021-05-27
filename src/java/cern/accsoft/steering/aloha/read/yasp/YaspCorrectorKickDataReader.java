@@ -6,8 +6,8 @@ import java.util.StringTokenizer;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CorrectorKickData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.CorrectorKickDataImpl;
 import cern.accsoft.steering.aloha.read.CorrectorKickDataReader;
+import cern.accsoft.steering.aloha.read.MeasurementReaderOptions;
 import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
-import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.io.impl.TextFileParserImpl;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.read.filter.ReadSelectionFilter;
@@ -28,12 +28,11 @@ public class YaspCorrectorKickDataReader extends YaspFileReader implements Corre
 
     /**
      * reads the data from files.
-     *
-     * @throws YaspReaderException
      */
     @Override
-    public CorrectorKickData read(File file, ReadSelectionFilter selection) throws YaspReaderException {
+    public CorrectorKickData read(File file, ReadSelectionFilter selection, MeasurementReaderOptions options) throws YaspReaderException {
         CorrectorKickDataImpl data = new CorrectorKickDataImpl();
+        data.setBeamNumber(options.getBeamNumber());
         parseFileName(file, data);
         super.read(file, selection, data);
         return data;
@@ -41,10 +40,8 @@ public class YaspCorrectorKickDataReader extends YaspFileReader implements Corre
 
     /**
      * extracts the Name of the activated Corrector-magnet out of the filename.
-     *
-     * @throws YaspReaderException
      */
-    void parseFileName(File file, CorrectorKickDataImpl data) throws YaspReaderException {
+    private void parseFileName(File file, CorrectorKickDataImpl data) throws YaspReaderException {
         if (file == null) {
             throw new YaspReaderException("File 'null' is not allowed!");
         }
@@ -98,11 +95,6 @@ public class YaspCorrectorKickDataReader extends YaspFileReader implements Corre
             count++;
         }
 
-        BeamNumber beamNumber = BeamNumber.fromElementName(correctorName);
-        if (beamNumber == null) {
-            beamNumber = BeamNumber.BEAM_1;
-        }
-        data.setBeamNumber(beamNumber);
         data.setCorrectorName(correctorName);
         data.setSignToken(signToken);
         data.setPlaneToken(planeToken);

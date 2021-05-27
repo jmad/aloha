@@ -1,15 +1,9 @@
 package cern.accsoft.steering.aloha.plugin.traj.read.yasp;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.Collections;
 
 import cern.accsoft.steering.aloha.bean.AlohaBeanFactoryImpl;
 import cern.accsoft.steering.aloha.machine.Monitor;
@@ -18,14 +12,18 @@ import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerImpl;
 import cern.accsoft.steering.aloha.plugin.traj.meas.data.TrajectoryData;
 import cern.accsoft.steering.aloha.util.LoggedTestCase;
 import cern.accsoft.steering.aloha.util.TestFile;
+import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.read.yasp.YaspFileReader;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class StearingDataNoiseTest extends LoggedTestCase {
+public class SteeringDataNoiseTest extends LoggedTestCase {
 
     private TestFile stabilityList = new TestFile(YaspStabilityList.STABILITY_LIST_FILENAME);
-    private ArrayList<TestFile> testFiles = new ArrayList<TestFile>();
+    private ArrayList<TestFile> testFiles = new ArrayList<>();
 
     private YaspTrajectoryMeasurementReader YaspTrajectDataNoise = null;
 
@@ -70,16 +68,15 @@ public class StearingDataNoiseTest extends LoggedTestCase {
     public void testGetNoise() throws ReaderException {
         YaspTrajectDataNoise = new MockStabilityDataReader();
 
-        TrajectoryData data = YaspTrajectDataNoise.read(Arrays.asList(new File[] { stabilityList.getFile() }));
+        TrajectoryData data = YaspTrajectDataNoise.read(Collections.singletonList(stabilityList.getFile()));
 
-        assertNotNull(data.getRmsValue(new Monitor("BPCK.610015", Plane.HORIZONTAL)));
-        assertEquals(3.631167e-4, data.getRmsValue(new Monitor("BPCK.610015", Plane.HORIZONTAL)), 0.0001);
-        assertEquals(1.928500e-4, data.getRmsValue(new Monitor("BPCK.610211", Plane.HORIZONTAL)), 0.0001);
-        assertEquals(3.406647e-4, data.getRmsValue(new Monitor("BPCK.610312", Plane.HORIZONTAL)), 0.0001);
+        assertEquals(3.631167e-4, data.getRmsValue(new Monitor("BPCK.610015", Plane.HORIZONTAL, BeamNumber.BEAM_1)), 0.0001);
+        assertEquals(1.928500e-4, data.getRmsValue(new Monitor("BPCK.610211", Plane.HORIZONTAL, BeamNumber.BEAM_1)), 0.0001);
+        assertEquals(3.406647e-4, data.getRmsValue(new Monitor("BPCK.610312", Plane.HORIZONTAL, BeamNumber.BEAM_1)), 0.0001);
 
         /* these values should be zero, since they are not available: */
-        assertEquals(0.0, data.getRmsValue(new Monitor("BPCK.610312", Plane.VERTICAL)), 0.0);
-        assertEquals(0.0, data.getRmsValue(new Monitor("BPCK.612312", Plane.HORIZONTAL)), 0.0);
+        assertEquals(0.0, data.getRmsValue(new Monitor("BPCK.610312", Plane.VERTICAL, BeamNumber.BEAM_1)), 0.0);
+        assertEquals(0.0, data.getRmsValue(new Monitor("BPCK.612312", Plane.HORIZONTAL, BeamNumber.BEAM_1)), 0.0);
     }
 
     /**

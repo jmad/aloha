@@ -27,18 +27,10 @@ public abstract class AbstractMachineElement {
     /** the listeners to the elements */
     private List<MachineElementListener> listeners = new ArrayList<MachineElementListener>();
 
-    public AbstractMachineElement(String name, Plane plane) {
+    public AbstractMachineElement(String name, Plane plane, BeamNumber beamNumber) {
         this.name = name;
         this.plane = plane;
-        this.beamNumber = getBeamNumber(name);
-    }
-
-    private BeamNumber getBeamNumber(String elementName) {
-        BeamNumber number = BeamNumber.fromElementName(elementName);
-        if (number == null) {
-            return BeamNumber.BEAM_1;
-        }
-        return number;
+        this.beamNumber = beamNumber;
     }
 
     @Override

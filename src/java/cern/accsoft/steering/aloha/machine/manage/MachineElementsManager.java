@@ -7,18 +7,19 @@
  */
 package cern.accsoft.steering.aloha.machine.manage;
 
+import java.util.Collection;
+import java.util.List;
+
 import cern.accsoft.steering.aloha.conf.MonitorSelection;
 import cern.accsoft.steering.aloha.machine.Corrector;
 import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.meas.data.Data;
+import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
 import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.util.meas.data.DataValue;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * this is the interface for a class, that keeps track of the active elements (correctors and monitors)
@@ -38,60 +39,60 @@ public interface MachineElementsManager extends Data {
      * @param allMonitorIndex the index in the all-monitors list
      * @return the index related to active monitors if the corrector is a
      */
-    public Integer convertToActiveMonitorIndex(int allMonitorIndex);
+    Integer convertToActiveMonitorIndex(int allMonitorIndex);
 
     /**
      * @return all available Monitors
      */
-    public abstract List<Monitor> getAllMonitors();
+    List<Monitor> getAllMonitors();
 
     /**
      * collects all working monitors and returns an ArrayList.
      * 
      * @return the functional monitors.
      */
-    public abstract List<Monitor> getActiveMonitors();
+    List<Monitor> getActiveMonitors();
 
     /**
      * @return the gains of the active monitors
      */
-    public abstract List<Double> getActiveMonitorGains();
+    List<Double> getActiveMonitorGains();
 
     /**
      * @return the errors on the gains of the active monitors
      */
-    public abstract List<Double> getActiveMonitorGainErrors();
+    List<Double> getActiveMonitorGainErrors();
 
     /**
      * @return the names of all active monitors
      */
-    public abstract List<String> getActiveMonitorNames();
+    List<String> getActiveMonitorNames();
 
     /**
      * @param plane the plane for which to return the active monitor names
      * @return the active monitor names for that plane
      */
-    public abstract List<String> getActiveMonitorNames(Plane plane);
+    List<String> getActiveMonitorNames(Plane plane);
 
     /**
      * counts the monitors which have an OK status.
      * 
      * @return the number of monitors with status OK.
      */
-    public abstract int getActiveMonitorsCount();
+    int getActiveMonitorsCount();
 
     /**
      * @param plane the plane for which to retrieve the count
      * @return the amount of active monitors in the given plane
      */
-    public abstract int getActiveMonitorsCount(Plane plane);
+    int getActiveMonitorsCount(Plane plane);
 
     /**
      * determines, which monitors are actually selected and returns the keys in an object.
      * 
      * @return The object containing all the selected keys.
      */
-    public MonitorSelection getActiveMonitorSelection();
+    MonitorSelection getActiveMonitorSelection();
 
     /**
      * activates all monitors, whose key is contained in the {@link MonitorSelection} object. All other monitors will be
@@ -99,7 +100,7 @@ public interface MachineElementsManager extends Data {
      * 
      * @param monitorSelection the object from which to take the active keys.
      */
-    public void apply(MonitorSelection monitorSelection);
+    void apply(MonitorSelection monitorSelection);
 
     //
     // correctors
@@ -112,70 +113,70 @@ public interface MachineElementsManager extends Data {
      * @param allCorrectorIndex the index in the all-correctors list
      * @return the index related to active correctors if the corrector is a
      */
-    public Integer convertToActiveCorrectorIndex(int allCorrectorIndex);
+    Integer convertToActiveCorrectorIndex(int allCorrectorIndex);
 
     /**
      * @return all available Correctors
      */
-    public abstract List<Corrector> getAllCorrectors();
+    List<Corrector> getAllCorrectors();
 
     /**
      * Collects all active correctors in an ArrayList.
      * 
      * @return the active Correctors
      */
-    public abstract List<Corrector> getActiveCorrectors();
+    List<Corrector> getActiveCorrectors();
 
     /**
      * determines the number of correctors which were activated during the measurement. (= number of StearingFiles)
      * 
      * @return
      */
-    public abstract int getActiveCorrectorsCount();
+    int getActiveCorrectorsCount();
 
     /**
      * @param plane the plane for which to retrieve the count
      * @return the amount of active correctors in the given plane
      */
-    public abstract int getActiveCorrectorsCount(Plane plane);
+    int getActiveCorrectorsCount(Plane plane);
 
     /**
      * @return the names of all active correctors
      */
-    public abstract List<String> getActiveCorrectorNames();
+    List<String> getActiveCorrectorNames();
 
     /**
      * @return the gains of the active correctors
      */
-    public List<Double> getActiveCorrectorGains();
+    List<Double> getActiveCorrectorGains();
 
     /**
      * @return the errors of the gains of the active correctors
      */
-    public List<Double> getActiveCorrectorGainErrors();
+    List<Double> getActiveCorrectorGainErrors();
 
     /**
      * @param plane the plane for which to get the monitor names
      * @return the names of the active monitors for the given plane
      */
-    public abstract List<String> getActiveCorrectorNames(Plane plane);
+    List<String> getActiveCorrectorNames(Plane plane);
 
     /**
      * @return true, if the manager already has its correctors, false, if not.
      */
-    public abstract boolean isFilled();
+    boolean isFilled();
 
     /**
      * fills the lists with the initial values from the model
      * 
      * @param model the {@link JMadModel} to use for filling the lists
      */
-    public void fill(JMadModel model);
+    void fill(JMadModel model, JMadModelAdapter jMadModelAdapter);
 
     /**
      * removes all the element-entries.
      */
-    public void clear();
+    void clear();
 
     //
     // listener-handling
@@ -186,48 +187,48 @@ public interface MachineElementsManager extends Data {
      * 
      * @param listener the listener to add
      */
-    public abstract void addListener(MachineElementsManagerListener listener);
+    void addListener(MachineElementsManagerListener listener);
 
     /**
      * removes a {@link MachineElementsManagerListener}
      * 
      * @param listener the listener to remove
      */
-    public abstract void removeListener(MachineElementsManagerListener listener);
+    void removeListener(MachineElementsManagerListener listener);
 
     /**
      * @return the actual displayed Corrector - number (out of the active Correctors)
      */
-    public int getActiveCorrectorNumber();
+    int getActiveCorrectorNumber();
 
     /**
      * @return the actual displayed monitor - number
      */
-    public int getActiveMonitorNumber();
+    int getActiveMonitorNumber();
 
     /**
      * set the actually displayed corrector-number
      * 
      * @param activeCorrectorNumber
      */
-    public void setActiveCorrectorNumber(int activeCorrectorNumber);
+    void setActiveCorrectorNumber(int activeCorrectorNumber);
 
     /**
      * set the actually displayed monitor-number
      * 
      * @param activeMonitorNumber
      */
-    public void setActiveMonitorNumber(int activeMonitorNumber);
+    void setActiveMonitorNumber(int activeMonitorNumber);
 
     /**
      * @return a provider for aloha-charts, which indicates the border between x and y monitors
      */
-    public MarkerXProvider getMonitorHVBorderProvider();
+    MarkerXProvider getMonitorHVBorderProvider();
 
     /**
      * @return a provider for aloha-charts, which indicates the border between x and y correctors
      */
-    public MarkerXProvider getCorrectorHVBorderProvider();
+    MarkerXProvider getCorrectorHVBorderProvider();
 
     /**
      * if this property is set to true, then no listener is notified, that one of the elements changed its state. This
@@ -244,24 +245,24 @@ public interface MachineElementsManager extends Data {
      * 
      * @param readingDatas the data read from files
      */
-    public <T extends DataValue> void deactivateUnavailableMonitors(Collection<? extends MeasuredData<T>> readingDatas);
+    <T extends DataValue> void deactivateUnavailableMonitors(Collection<? extends MeasuredData<T>> readingDatas);
 
     /**
      * @param plane
      * @return the active monitors for the given plane
      */
-    public List<Monitor> getActiveMonitors(Plane plane);
+    List<Monitor> getActiveMonitors(Plane plane);
 
     /**
      * @param plane
      * @return the active correctors for the given plane
      */
-    public List<Corrector> getActiveCorrectors(Plane plane);
+    List<Corrector> getActiveCorrectors(Plane plane);
 
     /**
      * resets the gains of all monitors and correctors to their initial value.
      */
-    public void resetAllGains();
+    void resetAllGains();
 
     void setSuppressChangedCorrectorGainsEvent(boolean suppressChangedCorrectorGainsEvent);
 

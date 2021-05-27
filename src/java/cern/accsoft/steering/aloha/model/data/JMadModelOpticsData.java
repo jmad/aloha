@@ -9,6 +9,11 @@
  */
 package cern.accsoft.steering.aloha.model.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cern.accsoft.steering.aloha.machine.Monitor;
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.meas.data.AbstractDynamicData;
@@ -23,11 +28,6 @@ import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.util.meas.data.Plane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * this is the basic implementation of a class, that provides data from the
@@ -91,6 +91,9 @@ public class JMadModelOpticsData extends AbstractDynamicData implements ModelOpt
      */
     private void addValue(ListPrefix listPrefix, KeyPrefix keyPrefix,
                           Plane plane, Double value) {
+        if (keyPrefix == KeyPrefix.S_POSITION) {
+            plane = null;
+        }
         getValueList(listPrefix, keyPrefix, plane).add(value);
     }
 

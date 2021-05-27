@@ -36,6 +36,7 @@ import cern.accsoft.steering.jmad.gui.JMadGui;
 import cern.accsoft.steering.jmad.gui.dialog.JMadOptionPane;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.service.JMadService;
+import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.gui.dialog.PanelDialog;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.yasp.browse.YaspFileChooser;
@@ -302,6 +303,7 @@ public abstract class MenuActionHandler {
                 }
                 try {
                     model.reset();
+                    activateDefaultSequenceForBeam(model, options.getBeamNumber());
                 } catch (JMadModelException e) {
                     LOGGER.error("Error while initializing model. aborting.", e);
                     return null;
@@ -327,6 +329,13 @@ public abstract class MenuActionHandler {
             return null;
         }
 
+    }
+
+    private void activateDefaultSequenceForBeam(JMadModel model, BeamNumber beam) throws JMadModelException {
+        JMadModelAdapter modelAdapter = getModelAdapter(model);
+        if (modelAdapter != null) {
+            model.setActiveRangeDefinition(modelAdapter.defaultRangeDefinitionFor(model.getModelDefinition(), beam));
+        }
     }
 
     /**

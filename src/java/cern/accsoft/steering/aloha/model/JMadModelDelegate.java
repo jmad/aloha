@@ -7,6 +7,9 @@
  */
 package cern.accsoft.steering.aloha.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cern.accsoft.steering.aloha.machine.manage.MachineElementsManager;
 import cern.accsoft.steering.aloha.meas.data.align.AlignmentData;
 import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
@@ -27,9 +30,6 @@ import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author kfuchsbe
@@ -64,7 +64,7 @@ public class JMadModelDelegate implements ModelDelegate {
         }
 
         if (!machineElementsManager.isFilled()) {
-            machineElementsManager.fill(model);
+            machineElementsManager.fill(model, modelAdapter);
         }
     }
 

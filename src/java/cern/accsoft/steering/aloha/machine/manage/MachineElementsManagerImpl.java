@@ -1,28 +1,13 @@
 /*
  * $Id: MachineElementsManagerImpl.java,v 1.3 2009-02-25 18:48:41 kfuchsbe Exp $
- * 
+ *
  * $Date: 2009-02-25 18:48:41 $ $Revision: 1.3 $ $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.machine.manage;
 
-import cern.accsoft.steering.aloha.conf.MonitorSelection;
-import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
-import cern.accsoft.steering.aloha.machine.Corrector;
-import cern.accsoft.steering.aloha.machine.MachineElementListener;
-import cern.accsoft.steering.aloha.machine.Monitor;
-import cern.accsoft.steering.jmad.domain.elem.Element;
-import cern.accsoft.steering.jmad.domain.elem.JMadElementType;
-import cern.accsoft.steering.jmad.domain.elem.MadxElementType;
-import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
-import cern.accsoft.steering.jmad.model.JMadModel;
-import cern.accsoft.steering.util.meas.data.DataValue;
-import cern.accsoft.steering.util.meas.data.Plane;
-import cern.accsoft.steering.util.meas.data.Status;
-import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,30 +15,57 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.stream.Collectors.toList;
+import cern.accsoft.steering.aloha.conf.MonitorSelection;
+import cern.accsoft.steering.aloha.machine.AbstractMachineElement;
+import cern.accsoft.steering.aloha.machine.Corrector;
+import cern.accsoft.steering.aloha.machine.MachineElementListener;
+import cern.accsoft.steering.aloha.machine.Monitor;
+import cern.accsoft.steering.aloha.model.adapt.JMadModelAdapter;
+import cern.accsoft.steering.jmad.domain.elem.Element;
+import cern.accsoft.steering.jmad.domain.elem.JMadElementType;
+import cern.accsoft.steering.jmad.domain.elem.MadxElementType;
+import cern.accsoft.steering.jmad.domain.machine.Range;
+import cern.accsoft.steering.jmad.domain.machine.SequenceDefinition;
+import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
+import cern.accsoft.steering.jmad.model.JMadModel;
+import cern.accsoft.steering.util.acc.BeamNumber;
+import cern.accsoft.steering.util.meas.data.DataValue;
+import cern.accsoft.steering.util.meas.data.Plane;
+import cern.accsoft.steering.util.meas.data.Status;
+import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * the basic implementation of a class, that keeps track of active monitors and correctors.
- * 
+ *
  * @author kfuchsbe
  */
 public class MachineElementsManagerImpl implements MachineElementsManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(MachineElementsManagerImpl.class);
 
-    /** the list of all correctors */
+    /**
+     * the list of all correctors
+     */
     private List<Corrector> correctors = new ArrayList<>();
 
-    /** the list of all monitors */
+    /**
+     * the list of all monitors
+     */
     private List<Monitor> monitors = new ArrayList<>();
 
-    /** the listeners to this class */
+    /**
+     * the listeners to this class
+     */
     private List<MachineElementsManagerListener> listeners = new ArrayList<>();
 
     /* the actual corrector/monitor, which is displayed at the moment. */
     private int activeCorrectorNumber = 0;
     private int activeMonitorNumber = 0;
 
-    /** indicates, if the element-lists are filled */
+    /**
+     * indicates, if the element-lists are filled
+     */
     private boolean filled = false;
 
     /**
@@ -135,12 +147,19 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     }
 
     @Override
-    public void fill(JMadModel model) {
+    public void fill(JMadModel model, JMadModelAdapter jMadModelAdapter) {
         clear();
         /*
          * first we look for all correctors in both planes
          */
-        List<Element> modelCorrectors = model.getActiveRange().getElements(JMadElementType.CORRECTOR);
+        Range activeRange = model.getActiveRange();
+        List<Element> modelCorrectors = activeRange.getElements(JMadElementType.CORRECTOR);
+        BeamNumber beam = BeamNumber.BEAM_1;
+        if (jMadModelAdapter != null) {
+            SequenceDefinition sequenceDefinition = activeRange.getRangeDefinition().getSequenceDefinition();
+            beam = jMadModelAdapter.beamNumberFor(sequenceDefinition);
+            LOGGER.info("The active sequence {} is mapped to {}", sequenceDefinition.getName(), beam);
+        }
         for (Plane plane : Plane.values()) {
             for (Element modelCorrector : modelCorrectors) {
                 Plane typePlane = getPlaneFromMadxElementType(modelCorrector.getMadxElementType());
@@ -151,7 +170,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 if ((typePlane != null) && (!plane.equals(typePlane))) {
                     continue;
                 }
-                Corrector corrector = new Corrector(modelCorrector.getName(), plane);
+                Corrector corrector = new Corrector(modelCorrector.getName(), plane, beam);
                 /*
                  * for correctors we set the status to NOT_OK, since it makes no sense to assume use them, if we have no
                  * measurements (which is most likely for most correctors)
@@ -164,11 +183,11 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         /*
          * add bends to the corrector list
          */
-        List<Element> modelBends = model.getActiveRange().getElements(JMadElementType.BEND);
+        List<Element> modelBends = activeRange.getElements(JMadElementType.BEND);
         for (Element modelBend : modelBends) {
             Plane tiltPlane = getPlaneForBend(modelBend);
             if (tiltPlane != null) {
-                Corrector corrector = new Corrector(modelBend.getName(), tiltPlane);
+                Corrector corrector = new Corrector(modelBend.getName(), tiltPlane, beam);
                 corrector.setStatus(Status.NOT_OK);
                 this.correctors.add(corrector);
             } else {
@@ -179,7 +198,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         /*
          * then for all monitors
          */
-        List<Element> modelMonitors = model.getActiveRange().getElements(JMadElementType.MONITOR);
+        List<Element> modelMonitors = activeRange.getElements(JMadElementType.MONITOR);
         for (Plane plane : Plane.values()) {
             for (Element modelMonitor : modelMonitors) {
                 Plane typePlane = getPlaneFromMadxElementType(modelMonitor.getMadxElementType());
@@ -190,7 +209,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 if ((typePlane != null) && (!plane.equals(typePlane))) {
                     continue;
                 }
-                Monitor monitor = new Monitor(modelMonitor.getName(), plane);
+                Monitor monitor = new Monitor(modelMonitor.getName(), plane, beam);
                 this.monitors.add(monitor);
             }
         }
@@ -202,7 +221,8 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     }
 
     @Override
-    public <T extends DataValue> void deactivateUnavailableMonitors(Collection<? extends MeasuredData<T>> readingDatas) {
+    public <T extends DataValue> void deactivateUnavailableMonitors(
+            Collection<? extends MeasuredData<T>> readingDatas) {
         boolean oldSuppress = this.suppressActiveElementsChangedEvent;
         setSuppressActiveElementsChangedEvent(true);
         for (Monitor monitor : getAllMonitors()) {
@@ -646,7 +666,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     private static Plane getPlaneForBend(Element bend) {
         double tiltTolerance = 1e-5;
         double tilt = Optional.ofNullable(bend.getAttribute("tilt")).orElse(0.0);
-        if (Math.abs(Math.abs(tilt) - Math.PI/2) < tiltTolerance) {
+        if (Math.abs(Math.abs(tilt) - Math.PI / 2) < tiltTolerance) {
             return Plane.VERTICAL;
         } else if (Math.abs(tilt) < tiltTolerance) {
             return Plane.HORIZONTAL;

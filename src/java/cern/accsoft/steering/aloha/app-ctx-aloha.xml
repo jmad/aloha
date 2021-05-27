@@ -372,11 +372,13 @@
     <!-- some more knowledge of specific jmad-models -->
     <bean id="lhcModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.LhcModelAdapter"/>
     <bean id="tiModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.TiModelAdapter"/>
+    <bean id="psbModelAdapter" class="cern.accsoft.steering.aloha.model.adapt.impl.PsbModelAdapter"/>
     <bean id="modelAdapterManager" class="cern.accsoft.steering.aloha.model.adapt.ModelAdapterManagerImpl">
         <property name="modelAdapters">
             <list>
                 <ref bean="lhcModelAdapter"/>
                 <ref bean="tiModelAdapter"/>
+                <ref bean="psbModelAdapter"/>
             </list>
         </property>
     </bean>
