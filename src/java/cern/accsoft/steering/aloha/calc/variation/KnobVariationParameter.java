@@ -67,9 +67,8 @@ public class KnobVariationParameter extends AbstractVariationParameter implement
             if (knob != null) {
                 knob.setOffset(getActualOffset());
             } else {
-                LOGGER.warn(
-                        "could not find knob of type '" + this.knobType + "' and key '" + this.knobKey + "' in model '"
-                                + instance.toString() + "'. Cannot apply value.");
+                LOGGER.warn("Could not find parameter {} {} in model '{}'. Cannot apply value to this model.", //
+                        knobType, knobKey, model.getDescription());
             }
         }
     }
