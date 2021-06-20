@@ -13,5 +13,5 @@ import cern.accsoft.steering.aloha.machine.Corrector;
  */
 public interface KickConfiguration {
 	
-	public Double getCorrectorKick(Corrector corrector);
+	Double getCorrectorKick(Corrector corrector);
 }

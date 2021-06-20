@@ -2,6 +2,7 @@ package cern.accsoft.steering.aloha.machine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.ElementKeyUtil;
@@ -39,7 +40,7 @@ public abstract class AbstractMachineElement {
     }
 
     public String getKey() {
-        return ElementKeyUtil.composeKey(this.name, this.plane, this.beamNumber);
+        return ElementKeyUtil.composeKey(this.name, this.plane);
     }
 
     public boolean isActive() {
@@ -145,4 +146,18 @@ public abstract class AbstractMachineElement {
         return plane;
     }
 
+    @Override
+    public int hashCode() {
+        return getKey().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AbstractMachineElement that = (AbstractMachineElement) o;
+        return Objects.equals(getKey(), that.getKey());
+    }
 }

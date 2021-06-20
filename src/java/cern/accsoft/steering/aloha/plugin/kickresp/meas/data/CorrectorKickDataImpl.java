@@ -67,7 +67,7 @@ public class CorrectorKickDataImpl extends ReadingDataImpl implements CorrectorK
 
     @Override
     public String getCorrectorKey() {
-        return ElementKeyUtil.composeKey(this.correctorName, Plane.fromTag(this.planeToken), this.beamNumber);
+        return ElementKeyUtil.composeKey(this.correctorName, Plane.fromTag(this.planeToken));
     }
 
     @Override

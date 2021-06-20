@@ -33,12 +33,12 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @param key
      * @return the {@link CorrectorValue}
      */
-    public CorrectorValue getCorrectorValue(String key);
+    CorrectorValue getCorrectorValue(String key);
 
     /**
      * @return all available correctorValues
      */
-    public Collection<CorrectorValue> getCorrectorValues();
+    Collection<CorrectorValue> getCorrectorValues();
 
     /**
      * collects all corrector Values for the correctors of the given names and plane
@@ -47,7 +47,7 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @param plane the plane for which toretrieve the values
      * @return the corrector-values
      */
-    public List<CorrectorValue> getCorrectorValues(List<String> correctorNames, Plane plane);
+    List<CorrectorValue> getCorrectorValues(List<String> correctorNames, Plane plane);
 
     /**
      * collects all monitor values for monitors of the given names and plane
@@ -56,7 +56,7 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @param plane the plane for which to retrieve the values
      * @return the corrector-values
      */
-    public List<MonitorValue> getMonitorValues(List<String> monitorNames, Plane plane);
+    List<MonitorValue> getMonitorValues(List<String> monitorNames, Plane plane);
 
     /**
      * returns all the corrector values for the plane
@@ -65,7 +65,7 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @param beamNumber The beam number for which to get the values
      * @return the {@link CorrectorValue}s
      */
-    public List<CorrectorValue> getCorrectorValues(Plane plane, BeamNumber beamNumber);
+    List<CorrectorValue> getCorrectorValues(Plane plane, BeamNumber beamNumber);
 
     /**
      * returns all the {@link MonitorValue}s for one plane
@@ -74,10 +74,10 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @param beamNumber the beam number for which to get the values
      * @return all the {@link MonitorValue}s for the given plane
      */
-    public List<MonitorValue> getMonitorValues(Plane plane, BeamNumber beamNumber);
+    List<MonitorValue> getMonitorValues(Plane plane, BeamNumber beamNumber);
 
     /**
      * @return the yasp header data in this reading data
      */
-    public YaspHeader getHeader();
+    YaspHeader getHeader();
 }

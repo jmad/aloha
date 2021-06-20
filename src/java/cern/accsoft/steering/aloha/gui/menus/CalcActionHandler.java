@@ -7,15 +7,14 @@
  */
 package cern.accsoft.steering.aloha.gui.menus;
 
+import javax.swing.*;
+
 import cern.accsoft.gui.frame.util.CompletableFutureTasks;
 import cern.accsoft.steering.aloha.calc.Calculator;
-import cern.accsoft.steering.aloha.calc.CalculatorException;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
 import cern.accsoft.steering.aloha.model.ModelDelegateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
 
 /**
  * This singleton class handles actions related to calculations.
@@ -51,12 +50,8 @@ public class CalcActionHandler {
 
         CompletableFutureTasks.backgroundTask("Calculating fit", () -> {
             LOGGER.info("Starting calculation.");
-            try {
-                for (int i = 0; i < taskIterations; i++) {
-                    getCalculator().calc();
-                }
-            } catch (CalculatorException ex) {
-                LOGGER.error("Error while calculating fit!", ex);
+            for (int i = 0; i < taskIterations; i++) {
+                getCalculator().calc();
             }
         });
     }
@@ -65,20 +60,18 @@ public class CalcActionHandler {
      * recalc measurement and reset the calculator
      */
     public void reset() {
-        try {
-            getCalculator().reset();
-        } catch (CalculatorException ex) {
-            LOGGER.error("Error resetting calculator!", ex);
-        }
+        CompletableFutureTasks.backgroundTask("Resetting Parameters", () -> getCalculator().reset());
     }
 
     /**
      * reset the model
      */
     public void resetModels() {
-        for (ModelDelegate modelDelegate : getModelDelegateManager().getModelDelegates()) {
-            modelDelegate.reset();
-        }
+        CompletableFutureTasks.backgroundTask("Resetting Models", () -> {
+            for (ModelDelegate modelDelegate : getModelDelegateManager().getModelDelegates()) {
+                modelDelegate.reset();
+            }
+        });
     }
 
     /**

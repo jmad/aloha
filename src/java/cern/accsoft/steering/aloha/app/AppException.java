@@ -1,6 +1,6 @@
 package cern.accsoft.steering.aloha.app;
 
-public class AppException extends Exception {
+public class AppException extends RuntimeException {
 
 	/**
 	 * 

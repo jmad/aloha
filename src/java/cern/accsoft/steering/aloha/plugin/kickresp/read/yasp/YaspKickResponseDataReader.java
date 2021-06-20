@@ -129,7 +129,7 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
         /*
          * we use the name of the parent dir as name of the measurement
          */
-        String name = file.getAbsoluteFile().getParentFile().getName();
+        String name = file.getAbsoluteFile().getParentFile().getName() + " - " + options.getBeamNumber();
         LOGGER.info("reading data from dir '{}'", basePath);
 
         this.selection = modelDelegate.createReadSelectionFilter(options.getBeamNumber());

@@ -11,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,12 +48,12 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     /**
      * the list of all correctors
      */
-    private List<Corrector> correctors = new ArrayList<>();
+    private LinkedHashSet<Corrector> correctors = new LinkedHashSet<>();
 
     /**
      * the list of all monitors
      */
-    private List<Monitor> monitors = new ArrayList<>();
+    private LinkedHashSet<Monitor> monitors = new LinkedHashSet<>();
 
     /**
      * the listeners to this class
@@ -148,7 +149,6 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public void fill(JMadModel model, JMadModelAdapter jMadModelAdapter) {
-        clear();
         /*
          * first we look for all correctors in both planes
          */
@@ -218,6 +218,10 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         registerListener(this.monitors);
         this.filled = true;
         fireChangedElements();
+    }
+
+    private static boolean containsElementByName(List<? extends AbstractMachineElement> elements, Element newElement) {
+        return elements.stream().anyMatch(c -> c.getName().equals(newElement.getName()));
     }
 
     @Override
@@ -360,7 +364,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         }
     }
 
-    private void registerListener(List<? extends AbstractMachineElement> elements) {
+    private void registerListener(Collection<? extends AbstractMachineElement> elements) {
         for (AbstractMachineElement element : elements) {
             element.addListener(this.machineElementListener);
         }
@@ -368,12 +372,12 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
 
     @Override
     public List<Corrector> getAllCorrectors() {
-        return correctors;
+        return new ArrayList<>(correctors);
     }
 
     @Override
     public List<Monitor> getAllMonitors() {
-        return monitors;
+        return new ArrayList<>(monitors);
     }
 
     @Override

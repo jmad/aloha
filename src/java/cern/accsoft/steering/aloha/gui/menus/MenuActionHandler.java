@@ -216,7 +216,11 @@ public abstract class MenuActionHandler {
                  * If there are already existing measurements, then we can either reuse one of the model-instances or
                  * create a new instance with the same model-definition.
                  */
-                modelDelegate = showSelectModelDelegateDialog();
+                modelDelegate = selectModelDelegateToReuse();
+                if (modelDelegate == null) {
+                    /* if no model delegate is to be re-used - allow selecting another model */
+                    model = selectNewModel(measurementReader.proposedModelDefinitionUri(files));
+                }
             }
             if ((model == null) && (modelDelegate == null)) {
                 LOGGER.info("No model was chosen. Aborting loading data.");
@@ -390,22 +394,13 @@ public abstract class MenuActionHandler {
      *
      * @return the model-delegate (if one is selected or correctly created)
      */
-    private ModelDelegate showSelectModelDelegateDialog() {
+    private ModelDelegate selectModelDelegateToReuse() {
         ModelInstanceSelectionPanel modelInstanceSelectionPanel = new ModelInstanceSelectionPanel();
         modelInstanceSelectionPanel.setModelDelegateManager(this.modelDelegateManager);
         modelInstanceSelectionPanel.init();
         if (PanelDialog.show(modelInstanceSelectionPanel, this.mainFrame)) {
             ModelDelegate modelDelegate = null;
-            if (modelInstanceSelectionPanel.isNewInstance()) {
-                JMadModel model = jMadService.createModel(
-                        modelInstanceSelectionPanel.getSelectedModelDelegate().getJMadModel().getModelDefinition());
-                try {
-                    model.reset();
-                    modelDelegate = createModelDelegate(model);
-                } catch (JMadModelException e) {
-                    LOGGER.error("Error while creating new model.", e);
-                }
-            } else {
+            if (!modelInstanceSelectionPanel.isNewInstance()) {
                 modelDelegate = modelInstanceSelectionPanel.getSelectedModelDelegate();
             }
             modelInstanceSelectionPanel.dispose();

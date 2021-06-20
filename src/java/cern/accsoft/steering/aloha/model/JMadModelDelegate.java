@@ -26,6 +26,7 @@ import cern.accsoft.steering.jmad.domain.machine.Range;
 import cern.accsoft.steering.jmad.domain.misalign.MisalignmentConfiguration;
 import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.jmad.model.JMadModelListener;
+import cern.accsoft.steering.jmad.model.JMadModelStartupConfiguration;
 import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import org.slf4j.Logger;
@@ -63,9 +64,7 @@ public class JMadModelDelegate implements ModelDelegate {
             this.model.addListener(modelListener);
         }
 
-        if (!machineElementsManager.isFilled()) {
-            machineElementsManager.fill(model, modelAdapter);
-        }
+        machineElementsManager.fill(model, modelAdapter);
     }
 
     /**
@@ -99,6 +98,11 @@ public class JMadModelDelegate implements ModelDelegate {
     @Override
     public void reset() {
         try {
+            /* make sure we still keep the right optics / range after reset */
+            JMadModelStartupConfiguration restartConfig = new JMadModelStartupConfiguration();
+            restartConfig.setInitialOpticsDefinition(getJMadModel().getActiveOpticsDefinition());
+            restartConfig.setInitialRangeDefinition(getJMadModel().getActiveRangeDefinition());
+            getJMadModel().setStartupConfiguration(restartConfig);
             getJMadModel().reset();
         } catch (JMadModelException e) {
             LOGGER.error("Error while resetting the model", e);

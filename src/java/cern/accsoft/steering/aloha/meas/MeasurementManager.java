@@ -3,10 +3,10 @@
  */
 package cern.accsoft.steering.aloha.meas;
 
-import cern.accsoft.steering.aloha.model.ModelDelegate;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import cern.accsoft.steering.aloha.model.ModelDelegate;
 
 /**
  * This is the interface for a class, which keeps track of the loaded
@@ -20,20 +20,20 @@ public interface MeasurementManager {
 	/**
 	 * @return all loaded measurements
 	 */
-	public List<ModelAwareMeasurement> getMeasurements();
+	List<ModelAwareMeasurement> getMeasurements();
 
 	/**
 	 * @param type
 	 *            the type of the measurements to retrieve
 	 * @return all the measurements of a given type
 	 */
-	public List<ModelAwareMeasurement> getMeasurements(MeasurementType type);
+	List<ModelAwareMeasurement> getMeasurements(MeasurementType type);
 
 	/**
 	 * @param measurement
 	 *            the measurement to add to the manager
 	 */
-	public void addMeasurement(ModelAwareMeasurement measurement);
+	void addMeasurement(ModelAwareMeasurement measurement);
 
 	/**
 	 * @param index
@@ -47,7 +47,7 @@ public interface MeasurementManager {
 	 * @param index
 	 *            the index of measurement to set as active
 	 */
-	public void setActiveMeasurement(int index);
+	void setActiveMeasurement(int index);
 
 	/**
 	 * sets the given measurement as the active one. The settings are then
@@ -57,12 +57,12 @@ public interface MeasurementManager {
 	 * 
 	 * @param measurement
 	 */
-	public void setActiveMeasurement(ModelAwareMeasurement measurement);
+	void setActiveMeasurement(ModelAwareMeasurement measurement);
 
 	/**
 	 * @return the actually active measurement
 	 */
-	public Measurement getActiveMeasurement();
+	Measurement getActiveMeasurement();
 
 	/**
 	 * add a listener
@@ -70,7 +70,7 @@ public interface MeasurementManager {
 	 * @param listener
 	 *            the listener to add
 	 */
-	public void addListener(MeasurementManagerListener listener);
+	void addListener(MeasurementManagerListener listener);
 
 	/**
 	 * removes a listener
@@ -78,7 +78,7 @@ public interface MeasurementManager {
 	 * @param listener
 	 *            the listener to remove
 	 */
-	public void removeListener(MeasurementManagerListener listener);
+	void removeListener(MeasurementManagerListener listener);
 
 	/**
 	 * This class is a helper class which holds one model instance and
@@ -94,7 +94,7 @@ public interface MeasurementManager {
 	 * @author kfuchsbe
 	 * 
 	 */
-	public static class ModelDelegateInstance {
+	class ModelDelegateInstance {
 
 		/** The used model */
 		private ModelDelegate modelDelegate;

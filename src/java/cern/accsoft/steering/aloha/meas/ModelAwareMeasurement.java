@@ -20,7 +20,7 @@ public interface ModelAwareMeasurement extends Measurement {
 	 * @return the model delegate which shall be used for calculations of this
 	 *         measurement.
 	 */
-	public ModelDelegate getModelDelegate();
+	ModelDelegate getModelDelegate();
 
 	/**
 	 * this must return the {@link MachineElementsManager} to use for this
@@ -28,6 +28,6 @@ public interface ModelAwareMeasurement extends Measurement {
 	 * 
 	 * @return the {@link MachineElementsManager}
 	 */
-	public MachineElementsManager getMachineElementsManager();
+	MachineElementsManager getMachineElementsManager();
 
 }

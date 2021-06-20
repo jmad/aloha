@@ -15,7 +15,7 @@ public abstract class AbstractDataValue implements DataValue {
 
     @Override
     public final String getKey() {
-        return ElementKeyUtil.composeKey(getName(), getPlane(), getBeam());
+        return ElementKeyUtil.composeKey(getName(), getPlane());
     }
 
     public final void setPlane(Plane plane) {

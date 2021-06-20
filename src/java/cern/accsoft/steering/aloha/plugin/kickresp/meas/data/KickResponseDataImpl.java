@@ -132,12 +132,17 @@ public class KickResponseDataImpl extends AbstractDynamicData implements KickRes
                 for (Corrector corrector : activeCorrectors) {
                     /* do we get values from both files? */
                     CorrectorValue correctorValueMinus = dataMinus.getCorrectorValue(corrector.getKey());
+                    CorrectorValue correctorValuePlus = dataPlus.getCorrectorValue(corrector.getKey());
+
+                    if (correctorValueMinus == null && correctorValuePlus == null) {
+                        continue;
+                    }
+
                     if (correctorValueMinus == null) {
                         throw new InconsistentDataException("No corrector value for corrector '" + corrector.getName()
                                 + "' found in minus file for corrector '" + activeCorrector.getName() + "'!");
                     }
 
-                    CorrectorValue correctorValuePlus = dataPlus.getCorrectorValue(corrector.getKey());
                     if (correctorValuePlus == null) {
                         throw new InconsistentDataException("No corrector value for corrector '" + corrector.getName()
                                 + "' found in plus file for corrector '" + activeCorrector.getName() + "'!");

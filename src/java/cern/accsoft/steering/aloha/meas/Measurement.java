@@ -5,11 +5,11 @@ public interface Measurement {
 	/**
 	 * @return a name of the measurement
 	 */
-	public abstract String getName();
+	String getName();
 
 	/**
 	 * @return the type of the measurement
 	 */
-	public abstract MeasurementType getType();
+	MeasurementType getType();
 
 }

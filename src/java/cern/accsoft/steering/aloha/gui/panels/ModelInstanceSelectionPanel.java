@@ -3,15 +3,15 @@
  */
 package cern.accsoft.steering.aloha.gui.panels;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
+
 import cern.accsoft.steering.aloha.meas.MeasurementManager.ModelDelegateInstance;
 import cern.accsoft.steering.aloha.model.ModelDelegate;
 import cern.accsoft.steering.aloha.model.ModelDelegateManager;
 import cern.accsoft.steering.util.gui.panels.Applyable;
 import cern.accsoft.steering.util.gui.panels.Titleable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Collection;
 
 /**
  * This class displays a panel, which allows the user to select, if a new
@@ -127,9 +127,7 @@ public class ModelInstanceSelectionPanel extends JPanel implements Titleable, Ap
         if (instances.size() > 0) {
             ModelDelegateInstance instance = instances.iterator().next();
             cboModelDelegateInstances.setSelectedItem(instance);
-            btnNewInstance.setText("New Instance of Model '"
-                    + instance.getModelDelegate().getJMadModel().getName()
-                    + "'");
+            btnNewInstance.setText("New Model instance.");
         }
     }
 
