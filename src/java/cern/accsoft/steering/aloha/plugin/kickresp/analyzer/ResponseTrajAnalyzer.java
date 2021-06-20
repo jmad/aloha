@@ -9,6 +9,10 @@
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.analyzer;
 
+import static cern.accsoft.steering.jmad.util.ListUtil.createOneElementOrEmptyList;
+
+import java.util.List;
+
 import cern.accsoft.steering.aloha.analyzer.AbstractAnalyzer;
 import cern.accsoft.steering.aloha.bean.annotate.InitMethod;
 import cern.accsoft.steering.aloha.bean.aware.MachineElementsManagerAware;
@@ -18,16 +22,12 @@ import cern.accsoft.steering.aloha.machine.manage.MachineElementsManagerListener
 import cern.accsoft.steering.aloha.model.data.ModelOpticsData;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.KickResponseMeasurement;
 import cern.accsoft.steering.aloha.plugin.kickresp.meas.data.KickResponseData;
-import cern.accsoft.steering.jmad.gui.mark.MarkerXProvider;
 import cern.accsoft.steering.jmad.tools.response.DeflectionSign;
-import cern.accsoft.steering.jmad.util.ListUtil;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart;
 import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.accsoft.steering.util.gui.dv.ds.MatrixColumnDataSet;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.jdve.viewer.DVView;
-
-import java.util.List;
 
 /**
  * This analyzer displays the measured trajectories which were used to calc the
@@ -75,46 +75,26 @@ public class ResponseTrajAnalyzer extends
 		Aloha2DChart chart;
 		chart = getChartFactory().createBarChart(this.dataHUp, null, null,
 				"mux [2pi]", "pos x [m]");
-		chart.setMarkerXProvider(new MarkerXProvider() {
-			@Override
-			public List<Double> getXPositions(String elementName) {
-				return ListUtil.createOneElementList(getModelOpticsData()
-						.getPhase(elementName, Plane.HORIZONTAL));
-			}
-		});
+		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
+				.getPhase(elementName, Plane.HORIZONTAL)));
 		this.dvView.addDataView(DvUtils.createDataView(chart));
 
 		chart = getChartFactory().createBarChart(this.dataHDown, null, null,
 				"mux [2pi]", "pos x [m]");
-		chart.setMarkerXProvider(new MarkerXProvider() {
-			@Override
-			public List<Double> getXPositions(String elementName) {
-				return ListUtil.createOneElementList(getModelOpticsData()
-						.getPhase(elementName, Plane.HORIZONTAL));
-			}
-		});
+		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
+				.getPhase(elementName, Plane.HORIZONTAL)));
 		this.dvView.addDataView(DvUtils.createDataView(chart));
 
 		chart = getChartFactory().createBarChart(this.dataVUp, null, null,
 				"muy [2pi]", "pos y [m]");
-		chart.setMarkerXProvider(new MarkerXProvider() {
-			@Override
-			public List<Double> getXPositions(String elementName) {
-				return ListUtil.createOneElementList(getModelOpticsData()
-						.getPhase(elementName, Plane.VERTICAL));
-			}
-		});
+		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
+				.getPhase(elementName, Plane.VERTICAL)));
 		this.dvView.addDataView(DvUtils.createDataView(chart));
 
 		chart = getChartFactory().createBarChart(this.dataVDown, null, null,
 				"muy [2pi]", "pos y [m]");
-		chart.setMarkerXProvider(new MarkerXProvider() {
-			@Override
-			public List<Double> getXPositions(String elementName) {
-				return ListUtil.createOneElementList(getModelOpticsData()
-						.getPhase(elementName, Plane.VERTICAL));
-			}
-		});
+		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
+				.getPhase(elementName, Plane.VERTICAL)));
 		this.dvView.addDataView(DvUtils.createDataView(chart));
 	}
 
