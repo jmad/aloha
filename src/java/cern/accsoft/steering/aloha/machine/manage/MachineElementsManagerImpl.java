@@ -210,6 +210,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                     continue;
                 }
                 Monitor monitor = new Monitor(modelMonitor.getName(), plane, beam);
+                monitor.setActive(false);
                 this.monitors.add(monitor);
             }
         }
@@ -220,35 +221,22 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         fireChangedElements();
     }
 
-    private static boolean containsElementByName(List<? extends AbstractMachineElement> elements, Element newElement) {
-        return elements.stream().anyMatch(c -> c.getName().equals(newElement.getName()));
-    }
-
     @Override
-    public <T extends DataValue> void deactivateUnavailableMonitors(
-            Collection<? extends MeasuredData<T>> readingDatas) {
+    public <T extends DataValue> void activateAvailableMonitors(Collection<? extends MeasuredData<T>> readingDatas) {
         boolean oldSuppress = this.suppressActiveElementsChangedEvent;
         setSuppressActiveElementsChangedEvent(true);
         for (Monitor monitor : getAllMonitors()) {
             for (MeasuredData<T> readingData : readingDatas) {
                 DataValue monitorValue = readingData.getMonitorValue(monitor.getKey());
-                if (monitorValue != null) {
-                    if (!Status.OK.equals(monitorValue.getStatus())) {
-                        LOGGER.debug("Found bad monitor status for monitor '" + monitor.getName()
-                                + "' in at least one file");
-                        monitor.setStatus(Status.NOT_OK);
-                        break;
-                    }
-                } else {
-                    LOGGER.debug("Setting status for monitor '" + monitor.getName()
-                            + "' to NOT_OK, because not entries in all datas available.");
+                if (monitorValue == null) {
+                    continue;
+                }
+                if (!Status.OK.equals(monitorValue.getStatus())) {
+                    LOGGER.info("Found bad monitor status for monitor '{}' in at least one file", monitor.getKey());
                     monitor.setStatus(Status.NOT_OK);
-                    /*
-                     * We do not deactivate monitors that are found in the data, but with bad status. They shall be
-                     * visible!
-                     */
-                    monitor.setActive(false);
                     break;
+                } else if (monitor.getStatus() == Status.OK) {
+                    monitor.setActive(true);
                 }
             }
         }

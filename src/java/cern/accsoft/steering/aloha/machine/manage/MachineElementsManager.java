@@ -245,7 +245,7 @@ public interface MachineElementsManager extends Data {
      * 
      * @param readingDatas the data read from files
      */
-    <T extends DataValue> void deactivateUnavailableMonitors(Collection<? extends MeasuredData<T>> readingDatas);
+    <T extends DataValue> void activateAvailableMonitors(Collection<? extends MeasuredData<T>> readingDatas);
 
     /**
      * @param plane

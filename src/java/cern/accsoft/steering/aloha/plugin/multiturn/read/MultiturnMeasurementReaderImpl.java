@@ -99,7 +99,7 @@ public class MultiturnMeasurementReaderImpl implements
 		}
 
 		/* ensure that the unavailable bpms are deactivated */
-		getMachineElementsManager().deactivateUnavailableMonitors(
+		getMachineElementsManager().activateAvailableMonitors(
 				Arrays.asList(new MultiturnData[] { data }));
 
 		MultiturnDifferenceDataImpl diffData = getAlohaBeanFactory().create(

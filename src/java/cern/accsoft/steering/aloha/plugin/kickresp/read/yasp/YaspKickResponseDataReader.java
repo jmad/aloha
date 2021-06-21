@@ -287,7 +287,7 @@ public class YaspKickResponseDataReader extends AbstractYaspMeasurementReader<Ki
     }
 
     private void readStati(Collection<CorrectorKickData> correctorDatas) {
-        getMachineElementsManager().deactivateUnavailableMonitors(correctorDatas);
+        getMachineElementsManager().activateAvailableMonitors(correctorDatas);
     }
 
     private List<String> getSteeringFileNames(DeflectionSign sign) throws YaspReaderException {

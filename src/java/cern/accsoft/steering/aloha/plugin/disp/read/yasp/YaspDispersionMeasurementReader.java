@@ -83,7 +83,7 @@ public class YaspDispersionMeasurementReader extends AbstractYaspMeasurementRead
         ReadingData readingData = this.readingDataReader.read(file, selection);
 
         /* ensure that the unavailable bpms are deactivated */
-        getMachineElementsManager().deactivateUnavailableMonitors(Arrays.asList(new ReadingData[] { readingData }));
+        getMachineElementsManager().activateAvailableMonitors(Arrays.asList(new ReadingData[] { readingData }));
 
         DispersionDataImpl dispersionData = getAlohaBeanFactory().create(DispersionDataImpl.class);
         dispersionData.setReadingData(readingData);

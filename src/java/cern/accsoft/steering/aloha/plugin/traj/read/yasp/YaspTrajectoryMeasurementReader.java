@@ -126,7 +126,7 @@ public class YaspTrajectoryMeasurementReader extends AbstractYaspMeasurementRead
 
         if (getMachineElementsManager() != null) {
             /* ensure that the unavailable monitors are deactivated */
-            getMachineElementsManager().deactivateUnavailableMonitors(measurementDatas);
+            getMachineElementsManager().activateAvailableMonitors(measurementDatas);
         }
 
         if (measurementDatas.isEmpty()) {
