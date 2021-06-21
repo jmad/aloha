@@ -48,6 +48,12 @@ public class NameListReadSelectionFilter implements ReadSelectionFilter {
         this.beamNumber = beamNumber;
     }
 
+    public NameListReadSelectionFilter(BeamNumber beamNumber) {
+        this.allBeamCorrectors = true;
+        this.allBeamMonitors = true;
+        this.beamNumber = beamNumber;
+    }
+
     /**
      * @return the correctorNames
      */

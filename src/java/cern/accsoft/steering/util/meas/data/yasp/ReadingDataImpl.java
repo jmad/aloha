@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.ElementKeyUtil;
 import cern.accsoft.steering.util.meas.data.Plane;
 
@@ -25,10 +24,10 @@ import cern.accsoft.steering.util.meas.data.Plane;
 public class ReadingDataImpl implements ReadingData {
 
     /** the values for the correctors */
-    private Map<String, CorrectorValue> correctors = new LinkedHashMap<String, CorrectorValue>();
+    private Map<String, CorrectorValue> correctors = new LinkedHashMap<>();
 
     /** the values for the monitors */
-    private Map<String, MonitorValue> monitors = new LinkedHashMap<String, MonitorValue>();
+    private Map<String, MonitorValue> monitors = new LinkedHashMap<>();
 
     /** the header of this reading data */
     private YaspHeader yaspHeader;
@@ -73,7 +72,7 @@ public class ReadingDataImpl implements ReadingData {
 
     @Override
     public List<CorrectorValue> getCorrectorValues(List<String> correctorNames, Plane plane) {
-        List<CorrectorValue> correctorValues = new ArrayList<CorrectorValue>(correctorNames.size());
+        List<CorrectorValue> correctorValues = new ArrayList<>(correctorNames.size());
         for (String name : correctorNames) {
             String key = ElementKeyUtil.composeKey(name, plane);
             /*
@@ -86,35 +85,13 @@ public class ReadingDataImpl implements ReadingData {
 
     @Override
     public List<MonitorValue> getMonitorValues(List<String> monitorNames, Plane plane) {
-        List<MonitorValue> monitorValues = new ArrayList<MonitorValue>(monitorNames.size());
+        List<MonitorValue> monitorValues = new ArrayList<>(monitorNames.size());
         for (String name : monitorNames) {
             String key = ElementKeyUtil.composeKey(name, plane);
             /*
              * be aware: this may add NULL - values. (on perpose, since the length shall be correct!)
              */
             monitorValues.add(getMonitorValue(key));
-        }
-        return monitorValues;
-    }
-
-    @Override
-    public List<CorrectorValue> getCorrectorValues(Plane plane, BeamNumber beamNumber) {
-        List<CorrectorValue> correctorValues = new ArrayList<CorrectorValue>();
-        for (CorrectorValue correctorValue : this.correctors.values()) {
-            if ((plane == correctorValue.getPlane()) && (beamNumber == correctorValue.getBeam())) {
-                correctorValues.add(correctorValue);
-            }
-        }
-        return correctorValues;
-    }
-
-    @Override
-    public List<MonitorValue> getMonitorValues(Plane plane, BeamNumber beamNumber) {
-        List<MonitorValue> monitorValues = new ArrayList<MonitorValue>();
-        for (MonitorValue monitorValue : this.monitors.values()) {
-            if (plane == monitorValue.getPlane() && beamNumber == monitorValue.getBeam()) {
-                monitorValues.add(monitorValue);
-            }
         }
         return monitorValues;
     }

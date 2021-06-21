@@ -12,10 +12,10 @@ public interface MeasuredData<T extends DataValue> {
 	 * @param key
 	 * @return the {@link MonitorValue}
 	 */
-	public abstract T getMonitorValue(String key);
+	T getMonitorValue(String key);
 
 	/**
 	 * @return all available monitorValues
 	 */
-	public abstract Collection<T> getMonitorValues();
+	Collection<T> getMonitorValues();
 }

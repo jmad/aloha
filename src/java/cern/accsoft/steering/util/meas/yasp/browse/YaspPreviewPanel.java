@@ -22,10 +22,13 @@
 
 package cern.accsoft.steering.util.meas.yasp.browse;
 
+import static cern.accsoft.steering.util.gui.dv.ds.ColorConstants.COLOR_MEAS_DATA_TRAJECTORY;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,6 @@ import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.gui.dv.ds.AbstractJmadDataSet;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart;
 import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart.ChartRendererRole;
-import cern.accsoft.steering.util.gui.dv.ds.ColorConstants;
 import cern.accsoft.steering.util.gui.dv.ds.ValidityDataSet;
 import cern.accsoft.steering.util.meas.data.Plane;
 import cern.accsoft.steering.util.meas.data.yasp.CorrectorValue;
@@ -42,7 +44,9 @@ import cern.accsoft.steering.util.meas.data.yasp.MonitorValue;
 import cern.accsoft.steering.util.meas.data.yasp.ReadingData;
 import cern.accsoft.steering.util.meas.read.ReaderException;
 import cern.accsoft.steering.util.meas.read.ReadingDataReader;
+import cern.accsoft.steering.util.meas.read.filter.impl.NameListReadSelectionFilter;
 import cern.accsoft.steering.util.meas.read.yasp.YaspFileReader;
+import cern.jdve.Style;
 import cern.jdve.data.DataSet;
 import cern.jdve.data.DefaultDataSource;
 import cern.jdve.viewer.DVView;
@@ -53,7 +57,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The panel to display the yasp-traj data
- * 
+ *
  * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
  */
 public class YaspPreviewPanel extends JPanel {
@@ -78,13 +82,10 @@ public class YaspPreviewPanel extends JPanel {
 
         for (Plane plane : Plane.values()) {
             for (BeamNumber beamNumber : BeamNumber.values()) {
-                this.monitorValueDataSets
-                        .put(createKey(plane, beamNumber),
-                                new MonitorValueDataSet(beamNumber.toString() + ", " + plane.toString()
-                                        + " - monitor readings"));
-                this.correctorValueDataSets.put(createKey(plane, beamNumber),
-                        new CorrectorValuesDataSet(beamNumber.toString() + ", " + plane.toString()
-                                + " - corrector kicks"));
+                this.monitorValueDataSets.put(createKey(plane, beamNumber), new MonitorValueDataSet(
+                        beamNumber.toString() + ", " + plane.toString() + " - monitor readings"));
+                this.correctorValueDataSets.put(createKey(plane, beamNumber), new CorrectorValuesDataSet(
+                        beamNumber.toString() + ", " + plane.toString() + " - corrector kicks"));
             }
         }
 
@@ -97,52 +98,28 @@ public class YaspPreviewPanel extends JPanel {
         dataViewer.setPreferredSize(new Dimension(500, 500));
         add(dataViewer, BorderLayout.CENTER);
 
-        /*
-         * the views
-         */
-        DVView view1 = new DVView("Beam 1");
-        view1.setLayout(DVView.VERTICAL_LAYOUT);
-        dataViewer.addView(view1);
+        Style trajectoryStyle = new Style(COLOR_MEAS_DATA_TRAJECTORY, COLOR_MEAS_DATA_TRAJECTORY);
+        for (BeamNumber beam : BeamNumber.values()) {
+            DVView view = new DVView(beam.toString());
+            view.setLayout(DVView.VERTICAL_LAYOUT);
+            dataViewer.addView(view);
 
-        DVView view2 = new DVView("Beam 2");
-        view2.setLayout(DVView.VERTICAL_LAYOUT);
-        dataViewer.addView(view2);
+            for (Plane plane : Plane.values()) {
+                Aloha2DChart chart = new Aloha2DChart();
+                chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+                DataSet dataSet = monitorValueDataSets.get(createKey(plane, beam));
+                chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
+                chart.getArea().setBackground(YaspColors.BEAM_COLOR.get(beam));
+                view.addDataView(new DataView(chart));
 
-        /*
-         * the charts for beam 1
-         */
-
-        for (Plane plane : Plane.values()) {
-            Aloha2DChart chart = new Aloha2DChart();
-            DataSet dataSet = this.monitorValueDataSets.get(createKey(plane, BeamNumber.BEAM_1));
-            chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
-            chart.getArea().setBackground(ColorConstants.CHARTBG_BEAM_1);
-            view1.addDataView(new DataView(chart));
-
-            chart = new Aloha2DChart();
-            dataSet = this.correctorValueDataSets.get(createKey(plane, BeamNumber.BEAM_1));
-            chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
-            chart.getArea().setBackground(ColorConstants.CHARTBG_BEAM_1);
-            view1.addDataView(new DataView(chart));
+                chart = new Aloha2DChart();
+                chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+                dataSet = correctorValueDataSets.get(createKey(plane, beam));
+                chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
+                chart.getArea().setBackground(YaspColors.BEAM_COLOR.get(beam));
+                view.addDataView(new DataView(chart));
+            }
         }
-
-        /*
-         * and for beam 2
-         */
-        for (Plane plane : Plane.values()) {
-            Aloha2DChart chart = new Aloha2DChart();
-            DataSet dataSet = this.monitorValueDataSets.get(createKey(plane, BeamNumber.BEAM_2));
-            chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
-            chart.getArea().setBackground(ColorConstants.CHARTBG_BEAM_2);
-            view2.addDataView(new DataView(chart));
-
-            chart = new Aloha2DChart();
-            dataSet = this.correctorValueDataSets.get(createKey(plane, BeamNumber.BEAM_2));
-            chart.setRenderDataSource(ChartRendererRole.MEAS_DATA, new DefaultDataSource(dataSet));
-            chart.getArea().setBackground(ColorConstants.CHARTBG_BEAM_2);
-            view2.addDataView(new DataView(chart));
-        }
-
     }
 
     private String createKey(Plane plane, BeamNumber beamNumber) {
@@ -150,46 +127,30 @@ public class YaspPreviewPanel extends JPanel {
     }
 
     public void setYaspFile(File file) {
-        ReadingData readingData = null;
         try {
-            readingData = reader.read(file, null);
-        } catch (ReaderException e) {
-            LOGGER.warn("Error while reading file '" + file.getAbsolutePath() + "'. Maybe it is not a yasp file?", e);
-        }
-
-        if (readingData != null) {
-            for (Plane plane : Plane.values()) {
-                for (BeamNumber beamNumber : BeamNumber.values()) {
-                    MonitorValueDataSet monitorValueDataSet = this.monitorValueDataSets
-                            .get(createKey(plane, beamNumber));
-                    if (monitorValueDataSet != null) {
-                        monitorValueDataSet.setMonitorValues(readingData.getMonitorValues(plane, beamNumber));
-                    } else {
-                        LOGGER.warn("no MonitorValueDataset for plane '" + plane.toString() + "' and BeamNumber '"
-                                + beamNumber.toString() + "'.");
-                    }
-
-                    CorrectorValuesDataSet correctorValuesDataSet = this.correctorValueDataSets.get(createKey(plane,
-                            beamNumber));
-                    if (correctorValuesDataSet != null) {
-                        correctorValuesDataSet.setCorrectorValues(readingData.getCorrectorValues(plane, beamNumber));
-                    } else {
-                        LOGGER.warn("no CorrectorValueDataset for plane '" + plane.toString() + "' and BeamNumber '"
-                                + beamNumber.toString() + "'.");
-                    }
+            for (BeamNumber beamNumber : BeamNumber.values()) {
+                ReadingData readingData = reader.read(file, new NameListReadSelectionFilter(beamNumber));
+                for (Plane plane : Plane.values()) {
+                    String key = createKey(plane, beamNumber);
+                    monitorValueDataSets.get(key).setMonitorValues(readingData.getMonitorValues());
+                    correctorValueDataSets.get(key).setCorrectorValues(readingData.getCorrectorValues());
                 }
             }
+        } catch (ReaderException e) {
+            LOGGER.warn("Error while reading file '" + file.getAbsolutePath() + "'. Maybe it is not a yasp file?", e);
         }
     }
 
     /**
      * the dataset for monitor-values
-     * 
+     *
      * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
      */
     private class MonitorValueDataSet extends AbstractJmadDataSet implements ValidityDataSet {
 
-        /** the data to display */
+        /**
+         * the data to display
+         */
         private List<MonitorValue> monitorValues = new ArrayList<>();
 
         protected MonitorValueDataSet(String name) {
@@ -221,20 +182,22 @@ public class YaspPreviewPanel extends JPanel {
             return this.monitorValues.get(index).getName();
         }
 
-        private void setMonitorValues(List<MonitorValue> monitorValues) {
-            this.monitorValues = monitorValues;
+        private void setMonitorValues(Collection<MonitorValue> monitorValues) {
+            this.monitorValues = new ArrayList<>(monitorValues);
             refresh();
         }
     }
 
     /**
      * the dataset for corrector-values
-     * 
+     *
      * @author Kajetan Fuchsberger (kajetan.fuchsberger at cern.ch)
      */
     private class CorrectorValuesDataSet extends AbstractJmadDataSet {
 
-        /** the data to display */
+        /**
+         * the data to display
+         */
         private List<CorrectorValue> correctorValues = new ArrayList<>();
 
         protected CorrectorValuesDataSet(String name) {
@@ -251,8 +214,8 @@ public class YaspPreviewPanel extends JPanel {
             return this.correctorValues.get(index).kick;
         }
 
-        private void setCorrectorValues(List<CorrectorValue> correctorValues) {
-            this.correctorValues = correctorValues;
+        private void setCorrectorValues(Collection<CorrectorValue> correctorValues) {
+            this.correctorValues = new ArrayList<>(correctorValues);
             refresh();
         }
 

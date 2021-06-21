@@ -7,12 +7,15 @@
  */
 package cern.accsoft.steering.aloha.machine.manage;
 
+import static cern.accsoft.steering.util.meas.data.Plane.HORIZONTAL;
+import static cern.accsoft.steering.util.meas.data.Plane.VERTICAL;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,6 +35,7 @@ import cern.accsoft.steering.jmad.model.JMadModel;
 import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.DataValue;
 import cern.accsoft.steering.util.meas.data.Plane;
+import cern.accsoft.steering.util.meas.data.PlaneUtil;
 import cern.accsoft.steering.util.meas.data.Status;
 import cern.accsoft.steering.util.meas.data.yasp.MeasuredData;
 import org.slf4j.Logger;
@@ -48,12 +52,12 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
     /**
      * the list of all correctors
      */
-    private LinkedHashSet<Corrector> correctors = new LinkedHashSet<>();
+    private Map<Plane, LinkedHashSet<Corrector>> correctors = PlaneUtil.planeMap(LinkedHashSet::new);
 
     /**
      * the list of all monitors
      */
-    private LinkedHashSet<Monitor> monitors = new LinkedHashSet<>();
+    private Map<Plane, LinkedHashSet<Monitor>> monitors = PlaneUtil.planeMap(LinkedHashSet::new);
 
     /**
      * the listeners to this class
@@ -91,7 +95,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         List<Double> xValues = new ArrayList<>();
         if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
             int allMonitorsCount = getActiveMonitorsCount();
-            int horMonitorsCount = getActiveMonitorsCount(Plane.HORIZONTAL);
+            int horMonitorsCount = getActiveMonitorsCount(HORIZONTAL);
             if (allMonitorsCount > horMonitorsCount) {
                 xValues.add(horMonitorsCount - 0.5);
             }
@@ -106,7 +110,7 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         List<Double> xValues = new ArrayList<>();
         if (MarkerXProvider.ELEMENT_NAME_HV_BORDER.equals(elementName)) {
             int allCorrectorsCount = getActiveCorrectorsCount();
-            int horCorrectorsCount = getActiveCorrectorsCount(Plane.HORIZONTAL);
+            int horCorrectorsCount = getActiveCorrectorsCount(HORIZONTAL);
             if (allCorrectorsCount > horCorrectorsCount) {
                 xValues.add(horCorrectorsCount - 0.5);
             }
@@ -140,11 +144,13 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
      */
     @Override
     public void clear() {
-        this.activeCorrectorNumber = 0;
-        this.activeMonitorNumber = 0;
-        this.correctors.clear();
-        this.monitors.clear();
-        this.filled = false;
+        activeCorrectorNumber = 0;
+        activeMonitorNumber = 0;
+        monitors.values().stream().flatMap(Set::stream).forEach(c -> c.removeListener(machineElementListener));
+        correctors.values().stream().flatMap(Set::stream).forEach(c -> c.removeListener(machineElementListener));
+        correctors = PlaneUtil.planeMap(LinkedHashSet::new);
+        monitors = PlaneUtil.planeMap(LinkedHashSet::new);
+        filled = false;
     }
 
     @Override
@@ -176,7 +182,9 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                  * measurements (which is most likely for most correctors)
                  */
                 corrector.setStatus(Status.NOT_OK);
-                this.correctors.add(corrector);
+                if (correctors.get(plane).add(corrector)) {
+                    corrector.addListener(machineElementListener);
+                }
             }
         }
 
@@ -189,7 +197,9 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
             if (tiltPlane != null) {
                 Corrector corrector = new Corrector(modelBend.getName(), tiltPlane, beam);
                 corrector.setStatus(Status.NOT_OK);
-                this.correctors.add(corrector);
+                if (correctors.get(tiltPlane).add(corrector)) {
+                    corrector.addListener(machineElementListener);
+                }
             } else {
                 LOGGER.warn("Ignoring bend {} for kicks - tilt too far from 0 or pi/2", modelBend.getName());
             }
@@ -211,12 +221,11 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
                 }
                 Monitor monitor = new Monitor(modelMonitor.getName(), plane, beam);
                 monitor.setActive(false);
-                this.monitors.add(monitor);
+                if (monitors.get(plane).add(monitor)) {
+                    monitor.addListener(machineElementListener);
+                }
             }
         }
-
-        registerListener(this.correctors);
-        registerListener(this.monitors);
         this.filled = true;
         fireChangedElements();
     }
@@ -352,20 +361,21 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         }
     }
 
-    private void registerListener(Collection<? extends AbstractMachineElement> elements) {
-        for (AbstractMachineElement element : elements) {
-            element.addListener(this.machineElementListener);
-        }
-    }
-
     @Override
     public List<Corrector> getAllCorrectors() {
-        return new ArrayList<>(correctors);
+        return asHorVerArrayList(correctors);
     }
 
     @Override
     public List<Monitor> getAllMonitors() {
-        return new ArrayList<>(monitors);
+        return asHorVerArrayList(monitors);
+    }
+
+    private <T> List<T> asHorVerArrayList(Map<Plane, LinkedHashSet<T>> planeMap) {
+        List<T> list = new ArrayList<>();
+        list.addAll(planeMap.get(HORIZONTAL));
+        list.addAll(planeMap.get(VERTICAL));
+        return list;
     }
 
     @Override
@@ -641,9 +651,9 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
      */
     private static Plane getPlaneFromMadxElementType(MadxElementType type) {
         if (MadxElementType.HKICKER.equals(type) || MadxElementType.HMONITOR.equals(type)) {
-            return Plane.HORIZONTAL;
+            return HORIZONTAL;
         } else if (MadxElementType.VKICKER.equals(type) || MadxElementType.VMONITOR.equals(type)) {
-            return Plane.VERTICAL;
+            return VERTICAL;
         } else {
             return null;
         }
@@ -659,9 +669,9 @@ public class MachineElementsManagerImpl implements MachineElementsManager {
         double tiltTolerance = 1e-5;
         double tilt = Optional.ofNullable(bend.getAttribute("tilt")).orElse(0.0);
         if (Math.abs(Math.abs(tilt) - Math.PI / 2) < tiltTolerance) {
-            return Plane.VERTICAL;
+            return VERTICAL;
         } else if (Math.abs(tilt) < tiltTolerance) {
-            return Plane.HORIZONTAL;
+            return HORIZONTAL;
         } else {
             return null;
         }

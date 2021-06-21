@@ -1,15 +1,16 @@
 /*
  * $Id: ResponseTrajAnalyzer.java,v 1.1 2009-02-25 18:48:41 kfuchsbe Exp $
- * 
- * $Date: 2009-02-25 18:48:41 $ 
- * $Revision: 1.1 $ 
+ *
+ * $Date: 2009-02-25 18:48:41 $
+ * $Revision: 1.1 $
  * $Author: kfuchsbe $
- * 
+ *
  * Copyright CERN, All Rights Reserved.
  */
 package cern.accsoft.steering.aloha.plugin.kickresp.analyzer;
 
 import static cern.accsoft.steering.jmad.util.ListUtil.createOneElementOrEmptyList;
+import static cern.accsoft.steering.util.gui.dv.ds.ColorConstants.COLOR_MEAS_DATA_TRAJECTORY;
 
 import java.util.List;
 
@@ -27,159 +28,152 @@ import cern.accsoft.steering.util.gui.dv.ds.Aloha2DChart;
 import cern.accsoft.steering.util.gui.dv.ds.DvUtils;
 import cern.accsoft.steering.util.gui.dv.ds.MatrixColumnDataSet;
 import cern.accsoft.steering.util.meas.data.Plane;
+import cern.jdve.Style;
 import cern.jdve.viewer.DVView;
 
 /**
  * This analyzer displays the measured trajectories which were used to calc the
  * actually displayed response-matrix column.
- * 
+ *
  * @author kfuchsbe
- * 
  */
-public class ResponseTrajAnalyzer extends
-		AbstractAnalyzer<KickResponseMeasurement> implements
-		MachineElementsManagerAware {
+public class ResponseTrajAnalyzer extends AbstractAnalyzer<KickResponseMeasurement>
+        implements MachineElementsManagerAware {
 
-	/** the name of the analyzer */
-	private final static String ANALYZER_NAME = "Response trajectory";
+    /**
+     * the name of the analyzer
+     */
+    private final static String ANALYZER_NAME = "Response trajectory";
 
-	/** the displayed dataviews */
-	private DVView dvView = new DVView(ANALYZER_NAME, DVView.GRID_LAYOUT);
+    /**
+     * the displayed dataviews
+     */
+    private DVView dvView = new DVView(ANALYZER_NAME, DVView.GRID_LAYOUT);
 
-	private MatrixColumnDataSet dataHUp = new MatrixColumnDataSet(
-			"Trajectory H up");
-	private MatrixColumnDataSet dataHDown = new MatrixColumnDataSet(
-			"Trajectory H down");
-	private MatrixColumnDataSet dataVUp = new MatrixColumnDataSet(
-			"Trajectory V up");
-	private MatrixColumnDataSet dataVDown = new MatrixColumnDataSet(
-			"Trajectory V down");
+    private MatrixColumnDataSet dataHUp = new MatrixColumnDataSet("Trajectory H up");
+    private MatrixColumnDataSet dataHDown = new MatrixColumnDataSet("Trajectory H down");
+    private MatrixColumnDataSet dataVUp = new MatrixColumnDataSet("Trajectory V up");
+    private MatrixColumnDataSet dataVDown = new MatrixColumnDataSet("Trajectory V down");
 
-	/** the manager, which keeps track of all selected elements */
-	private MachineElementsManager machineElementsManager;
+    /**
+     * the manager, which keeps track of all selected elements
+     */
+    private MachineElementsManager machineElementsManager;
 
-	/**
-	 * the init method
-	 */
-	@InitMethod
-	public void init() {
-		initDataViews();
-	}
+    /**
+     * the init method
+     */
+    @InitMethod
+    public void init() {
+        initDataViews();
+    }
 
-	/**
-	 * creates the DataViews
-	 */
-	private void initDataViews() {
-		this.dvView.removeAllDataViews();
+    /**
+     * creates the DataViews
+     */
+    private void initDataViews() {
+        this.dvView.removeAllDataViews();
 
-		Aloha2DChart chart;
-		chart = getChartFactory().createBarChart(this.dataHUp, null, null,
-				"mux [2pi]", "pos x [m]");
-		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
-				.getPhase(elementName, Plane.HORIZONTAL)));
-		this.dvView.addDataView(DvUtils.createDataView(chart));
+        Style trajectoryStyle = new Style(COLOR_MEAS_DATA_TRAJECTORY, COLOR_MEAS_DATA_TRAJECTORY);
 
-		chart = getChartFactory().createBarChart(this.dataHDown, null, null,
-				"mux [2pi]", "pos x [m]");
-		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
-				.getPhase(elementName, Plane.HORIZONTAL)));
-		this.dvView.addDataView(DvUtils.createDataView(chart));
+        Aloha2DChart chart;
+        chart = getChartFactory().createBarChart(this.dataHUp, null, null, "mux [2pi]", "pos x [m]");
+        chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+        chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(
+                getModelOpticsData().getPhase(elementName, Plane.HORIZONTAL)));
+        this.dvView.addDataView(DvUtils.createDataView(chart));
 
-		chart = getChartFactory().createBarChart(this.dataVUp, null, null,
-				"muy [2pi]", "pos y [m]");
-		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
-				.getPhase(elementName, Plane.VERTICAL)));
-		this.dvView.addDataView(DvUtils.createDataView(chart));
+        chart = getChartFactory().createBarChart(this.dataHDown, null, null, "mux [2pi]", "pos x [m]");
+        chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+        chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(
+                getModelOpticsData().getPhase(elementName, Plane.HORIZONTAL)));
+        this.dvView.addDataView(DvUtils.createDataView(chart));
 
-		chart = getChartFactory().createBarChart(this.dataVDown, null, null,
-				"muy [2pi]", "pos y [m]");
-		chart.setMarkerXProvider(elementName -> createOneElementOrEmptyList(getModelOpticsData()
-				.getPhase(elementName, Plane.VERTICAL)));
-		this.dvView.addDataView(DvUtils.createDataView(chart));
-	}
+        chart = getChartFactory().createBarChart(this.dataVUp, null, null, "muy [2pi]", "pos y [m]");
+        chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+        chart.setMarkerXProvider(
+                elementName -> createOneElementOrEmptyList(getModelOpticsData().getPhase(elementName, Plane.VERTICAL)));
+        this.dvView.addDataView(DvUtils.createDataView(chart));
 
-	/**
-	 * configures all dataSets
-	 */
-	private void configureDataSets() {
-		configureDataSet(dataHUp, Plane.HORIZONTAL, DeflectionSign.PLUS);
-		configureDataSet(dataVUp, Plane.VERTICAL, DeflectionSign.PLUS);
-		configureDataSet(dataHDown, Plane.HORIZONTAL, DeflectionSign.MINUS);
-		configureDataSet(dataVDown, Plane.VERTICAL, DeflectionSign.MINUS);
-	}
+        chart = getChartFactory().createBarChart(this.dataVDown, null, null, "muy [2pi]", "pos y [m]");
+        chart.getRenderer(Aloha2DChart.ChartRendererRole.MEAS_DATA).setStyle(0, trajectoryStyle);
+        chart.setMarkerXProvider(
+                elementName -> createOneElementOrEmptyList(getModelOpticsData().getPhase(elementName, Plane.VERTICAL)));
+        this.dvView.addDataView(DvUtils.createDataView(chart));
+    }
 
-	/**
-	 * calculates the actual data and sets it to the dataset
-	 * 
-	 * @param dataSet
-	 *            the dataSet to configure
-	 * @param plane
-	 *            the plane which to display
-	 * @param sign
-	 *            which trajectory to be contained.
-	 */
-	private void configureDataSet(MatrixColumnDataSet dataSet, Plane plane,
-			DeflectionSign sign) {
-		KickResponseData kickResponseData = getKickResponseData();
-		if (kickResponseData == null) {
-			return;
-		}
-		List<String> monitorNames = getMachineElementsManager()
-				.getActiveMonitorNames(plane);
+    /**
+     * configures all dataSets
+     */
+    private void configureDataSets() {
+        configureDataSet(dataHUp, Plane.HORIZONTAL, DeflectionSign.PLUS);
+        configureDataSet(dataVUp, Plane.VERTICAL, DeflectionSign.PLUS);
+        configureDataSet(dataHDown, Plane.HORIZONTAL, DeflectionSign.MINUS);
+        configureDataSet(dataVDown, Plane.VERTICAL, DeflectionSign.MINUS);
+    }
 
-		dataSet.setLabels(monitorNames);
-		dataSet.setValidityMatrix(kickResponseData.getTrajectoryValidity(plane,
-				sign));
-		dataSet.setMatrix(kickResponseData.getTrajectoryMatrix(plane, sign),
-				getModelOpticsData().getMonitorPhases(plane));
-	}
+    /**
+     * calculates the actual data and sets it to the dataset
+     *
+     * @param dataSet the dataSet to configure
+     * @param plane   the plane which to display
+     * @param sign    which trajectory to be contained.
+     */
+    private void configureDataSet(MatrixColumnDataSet dataSet, Plane plane, DeflectionSign sign) {
+        KickResponseData kickResponseData = getKickResponseData();
+        if (kickResponseData == null) {
+            return;
+        }
+        List<String> monitorNames = getMachineElementsManager().getActiveMonitorNames(plane);
 
-	/**
-	 * @return the modelOpticsData
-	 */
-	private ModelOpticsData getModelOpticsData() {
-		return getMeasurement().getModelDelegate().getModelOpticsData();
-	}
+        dataSet.setLabels(monitorNames);
+        dataSet.setValidityMatrix(kickResponseData.getTrajectoryValidity(plane, sign));
+        dataSet.setMatrix(kickResponseData.getTrajectoryMatrix(plane, sign),
+                getModelOpticsData().getMonitorPhases(plane));
+    }
 
-	/**
-	 * @param machineElementsManager
-	 *            the machineElementsManager to set
-	 */
-	@Override
-	public void setMachineElementsManager(
-			MachineElementsManager machineElementsManager) {
-		this.machineElementsManager = machineElementsManager;
-		this.machineElementsManager
-				.addListener(new MachineElementsManagerListener() {
-					@Override
-					public void changedActiveCorrector(int number,
-							Corrector corrector) {
-						dataHUp.setColumn(number);
-						dataHDown.setColumn(number);
-						dataVUp.setColumn(number);
-						dataVDown.setColumn(number);
-					}
-				});
-	}
+    /**
+     * @return the modelOpticsData
+     */
+    private ModelOpticsData getModelOpticsData() {
+        return getMeasurement().getModelDelegate().getModelOpticsData();
+    }
 
-	/**
-	 * @return the machineElementsManager
-	 */
-	private MachineElementsManager getMachineElementsManager() {
-		return machineElementsManager;
-	}
+    /**
+     * @param machineElementsManager the machineElementsManager to set
+     */
+    @Override
+    public void setMachineElementsManager(MachineElementsManager machineElementsManager) {
+        this.machineElementsManager = machineElementsManager;
+        this.machineElementsManager.addListener(new MachineElementsManagerListener() {
+            @Override
+            public void changedActiveCorrector(int number, Corrector corrector) {
+                dataHUp.setColumn(number);
+                dataHDown.setColumn(number);
+                dataVUp.setColumn(number);
+                dataVDown.setColumn(number);
+            }
+        });
+    }
 
-	@Override
-	public void refresh() {
-		configureDataSets();
-	}
+    /**
+     * @return the machineElementsManager
+     */
+    private MachineElementsManager getMachineElementsManager() {
+        return machineElementsManager;
+    }
 
-	private KickResponseData getKickResponseData() {
-		return getMeasurement().getData();
-	}
+    @Override
+    public void refresh() {
+        configureDataSets();
+    }
 
-	@Override
-	public DVView getDVView() {
-		return dvView;
-	}
+    private KickResponseData getKickResponseData() {
+        return getMeasurement().getData();
+    }
+
+    @Override
+    public DVView getDVView() {
+        return dvView;
+    }
 }

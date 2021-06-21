@@ -22,11 +22,9 @@ public interface ChartFactory {
 	 *            the title of the y-axis
 	 * @return the chart
 	 */
-	public abstract Aloha2DChart createBarChart(DataSet measuredDataSet,
-			DataSet modelDataSet, DataSource measuredErrorDataSource,
+	Aloha2DChart createBarChart(DataSet measuredDataSet, DataSet modelDataSet, DataSource measuredErrorDataSource,
 			String xtitle, String ytitle);
 
-	public abstract Aloha2DChart createBarChart(DataSet measuredDataSet,
-			DataSet modelDataSet, String xtitle, String ytitle);
+	Aloha2DChart createBarChart(DataSet measuredDataSet, DataSet modelDataSet, String xtitle, String ytitle);
 
 }

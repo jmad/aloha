@@ -22,5 +22,5 @@ public interface ModelKickResponseData extends DynamicData {
 	 * 
 	 * @return the last calculated response-matrix.
 	 */
-	public Matrix getResponseMatrix();
+	Matrix getResponseMatrix();
 }

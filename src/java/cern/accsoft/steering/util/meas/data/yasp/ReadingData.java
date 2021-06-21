@@ -10,7 +10,6 @@ package cern.accsoft.steering.util.meas.data.yasp;
 import java.util.Collection;
 import java.util.List;
 
-import cern.accsoft.steering.util.acc.BeamNumber;
 import cern.accsoft.steering.util.meas.data.Plane;
 
 /**
@@ -57,24 +56,6 @@ public interface ReadingData extends MeasuredData<MonitorValue> {
      * @return the corrector-values
      */
     List<MonitorValue> getMonitorValues(List<String> monitorNames, Plane plane);
-
-    /**
-     * returns all the corrector values for the plane
-     * 
-     * @param plane the plane for which to get the corrector values
-     * @param beamNumber The beam number for which to get the values
-     * @return the {@link CorrectorValue}s
-     */
-    List<CorrectorValue> getCorrectorValues(Plane plane, BeamNumber beamNumber);
-
-    /**
-     * returns all the {@link MonitorValue}s for one plane
-     * 
-     * @param plane the plane for which to return the {@link MonitorValue}s
-     * @param beamNumber the beam number for which to get the values
-     * @return all the {@link MonitorValue}s for the given plane
-     */
-    List<MonitorValue> getMonitorValues(Plane plane, BeamNumber beamNumber);
 
     /**
      * @return the yasp header data in this reading data
