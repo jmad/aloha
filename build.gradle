@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.jmad', name: 'jmad-gui', version: '0.11.8'
+    compile group: 'io.jmad', name: 'jmad-gui', version: '0.11.9'
 
     compile group: 'cern.dm', name: 'jdataviewer', version: '1.8.8'
 
