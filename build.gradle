@@ -43,15 +43,15 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.jmad', name: 'jmad-gui', version: '0.12.1'
+    compile group: 'io.jmad', name: 'jmad-gui', version: '0.13.1'
 
     compile group: 'cern.dm', name: 'jdataviewer', version: '1.8.8'
 
-    compile group: 'org.springframework', name: 'spring-core', version: '5.2.0.RELEASE'
-    compile group: 'org.springframework', name: 'spring-context', version: '5.2.0.RELEASE'
+    compile group: 'org.springframework', name: 'spring-core', version: '5.3.12'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.3.12'
 
     compile group: 'gov.nist.math', name: 'jama', version: '1.0.3'
-    compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
 
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
@@ -67,11 +67,11 @@ dependencies {
     compile group: 'org.swinglabs', name: 'swingx', version: '1.6.1'
     compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.11.1'
+    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.18'
 
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
-    testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.0.RELEASE'
+    testCompile group: 'org.springframework', name: 'spring-test', version: '5.3.12'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
     testCompile group: 'junit', name: 'junit', version: '4.13'
     testCompile group: 'org.easymock', name: 'easymock', version: '4.0.2'
