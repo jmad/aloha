@@ -45,7 +45,7 @@ repositories {
 dependencies {
     compile group: 'io.jmad', name: 'jmad-gui', version: '0.13.1'
 
-    compile group: 'cern.dm', name: 'jdataviewer', version: '1.8.8'
+    compile group: 'cern.dm', name: 'jdataviewer', version: '2.3.0'
 
     compile group: 'org.springframework', name: 'spring-core', version: '5.3.12'
     compile group: 'org.springframework', name: 'spring-context', version: '5.3.12'
